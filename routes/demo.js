@@ -68,34 +68,18 @@ router.post('/schedule',(req,res)=>{
 })
 router.post('/findDoctor', (req,res)=>{
     const {Faculty, Date, Shift} = req.body.shift;
-    var sql = "SELECT * FROM doctor join shifts on ID=DoctorID WHERE Date=?";
-    if (Faculty != "*") {
-        sql += " and Faculty=?";
-        if (Shift != "*")sql += " and Shift=?";
-        mysql.query(sql,[Date,Faculty,Shift], (err,result)=>{
-            if (err) throw err;
-            var sql = "SELECT DISTINCT Faculty FROM doctor";
-            th = result
-            mysql.query(sql,(err,result)=>{
-                console.log(result);
-                res.render('demo/findDoctor',{Faculty:result, theories: th})
-            })
+    var sql = "SELECT * FROM doctor join shifts on ID=DoctorID WHERE Date=\'" + Date +"\'";
+    if (Faculty != "*") sql += " and Faculty=\'" + Faculty +"\'";
+    if (Shift != "*")sql += " and Shift=\'" + Shift +"\'";
+    mysql.query(sql, (err,result)=>{
+        if (err) throw err;
+        var sql = "SELECT DISTINCT Faculty FROM doctor";
+        th = result
+        mysql.query(sql,(err,result)=>{
+            console.log(result);
+            res.render('demo/findDoctor',{Faculty:result, theories: th})
         })
-    }
-    else {
-        if (Shift != "*")sql += " and Shift=?";
-        mysql.query(sql,[Date,Shift], (err,result)=>{
-            if (err) throw err;
-            var sql = "SELECT DISTINCT Faculty FROM doctor";
-            th = result
-            mysql.query(sql,(err,result)=>{
-                console.log(result);
-                res.render('demo/findDoctor',{Faculty:result, theories: th})
-            })
-        })
-    }
-    
-
+    })
 })
 
 module.exports = router;
