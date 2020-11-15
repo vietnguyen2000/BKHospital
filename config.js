@@ -17,12 +17,14 @@ const dbconfigAzure = {
     password: DB_PASSWORD,
     port: 3306,
     ssl: true,
+    database:'hospital'
 }
 
 const dbconfigLocal = {
     host: DB_HOST_LOCAL,
     user: DB_USER_LOCAL,
     password: DB_PASSWORD_LOCAL,
+    database: 'hospital'
 }
 if (process.argv.includes("--localDatabase")){
     console.log("Database local selected");

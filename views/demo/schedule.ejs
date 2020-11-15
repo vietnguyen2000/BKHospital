@@ -1,0 +1,22 @@
+<%- include("../partials/header") %> 
+<form action="/demo/schedule" method="POST">
+    <div class="form-group">
+        <label>Doctor name</label>
+        <select class="form-control" name="doctor[ID]">
+            <% for (let i = 0; i < doctors.length; i++){%>
+                <option value= <%=doctors[i].ID%> ><%=doctors[i].Name%></option>
+            <%}%>
+        </select>
+        <label>Date</label>
+        <input type = "date" class = "form-control" name="doctor[Date]" placeholder="Date">
+        <label>Shift</label>
+        <select class="form-control" name="doctor[Shift]">
+            <option value="Morning">Morning</option>
+            <option value="Afternoon">Afternoon</option>
+            <option value="Everning">Everning</option>
+            <option value="Over Night">Over Night</option>
+        </select>
+    </div>
+    <button class="btn btn-primary w-100">Submit</button>
+</form>
+<%- include("../partials/footer") %> 

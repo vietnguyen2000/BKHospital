@@ -1,0 +1,47 @@
+<%- include("../partials/header") %> 
+<form action="/demo/findDoctor" method="POST">
+    <div class="form-group">
+        <label>Faculty</label>
+        <select class="form-control" name="shift[Faculty]">
+            <option value="*">ALL</option>
+            <% if(Faculty){
+                Faculty.forEach(element => {%>
+                    <option><%=element.Faculty%></option>
+                <%});
+            }%>
+        </select>
+        <label>Date</label>
+        <input type = "date" class = "form-control" name="shift[Date]" placeholder="Date">
+        <label>Shift</label>
+        <select class="form-control" name="shift[Shift]">
+            <option value="*">ALL</option>
+            <option value="Morning">Morning</option>
+            <option value="Afternoon">Afternoon</option>
+            <option value="Everning">Everning</option>
+            <option value="Over Night">Over Night</option>
+        </select>
+    </div>
+    <button class="btn btn-primary w-100">Submit</button>
+</form>
+<% if(theories) { console.log(theories)%>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tên</th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                <% for(let i = 0; i < theories.length; i++) { %>
+                    <tr>
+                        <th><%= theories[i].ID %> </th>
+                        <td><%= theories[i].Name %></td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+<%}%>
+<%- include("../partials/footer") %> 
