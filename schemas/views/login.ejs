@@ -1,0 +1,13 @@
+<%- include("../partials/header") %>
+<form action="/demo/create" method="POST">
+    <label>Doctor's name</label>
+    <div class="form-group">
+        <input type="text" placeholder="Doctor's name" name="doctor[Name]" class="form-control">
+    </div>
+    <label>Doctor's Faculty</label>
+    <div class="form-group">
+        <input type="text" placeholder="Doctor's faculty" name="doctor[Faculty]" class="form-control">
+    </div>
+    <button class="btn btn-primary w-100">Submit</button>
+</form>
+<%- include("../partials/footer") %>
