@@ -1,0 +1,66 @@
+<%- include("../partials/header") %> 
+<div class="container">
+    <main role="main" class="pb-3" style="margin-top: 100px;">
+        <form action="/BSQuanLy/schedule" method="POST">
+            <div class="form-group">
+                <Label>Khoa điều trị</Label>
+                <select class="form-control" name="doctor[ID]" onchange="filter(this,'BacSiTheoKhoa');">
+                        <option value = "*"> Chọn khoa điều trị...</option>
+                    <% for (let i = 0; i < faculties.length; i++){%>
+                        <option value= <%=faculties[i].MaKhoaDieuTri%> ><%=faculties[i].TenKhoa%></option>
+                    <%}%>
+                </select>
+                <label>Tên bác sĩ</label>
+                <select id="BacSiTheoKhoa" class="form-control" name="doctor[ID]" disabled>
+                    <option> Hãy chọn khoa điều trị</option>
+                    <% for (let i = 0; i < doctors.length; i++){%>
+                        <option data-province=<%= doctors[i].MaKhoaDieuTri%> value= <%=doctors[i].MaNhanVien%>><%= doctors[i].MaNhanVien%> - <%=doctors[i].HoVaTenLot%> <%=doctors[i].Ten%></option>
+                    <%}%>
+                </select>
+                <label>Ngày</label>
+                <input type = "date" class = "form-control" name="doctor[Date]" placeholder="Date" id = "_today">
+                <label>Ca trực</label>
+                <select class="form-control" name="doctor[Shift]">
+                    <option >Buổi sáng</option>
+                    <option >Buổi trưa</option>
+                    <option >Buổi chiều</option>
+                    <option >Buổi tối</option>
+                </select>
+            </div>
+            <button class="btn btn-primary w-100">Submit</button>
+        </form>
+    </main>
+</div>
+<%- include("../partials/footer") %> 
+<script>
+    function filter(filter, id){
+        var province = filter.value;
+        id = "#" + id;
+        $(id).find("option").hide();
+        accept = $(id).find("[data-province=" + province + "]");
+        accept.show();
+        $(id).removeAttr("disabled"); // enables select
+        filter.children[0].hidden= true;
+        $(id).val(accept[0].value);
+
+};
+</script>
+<script>
+    function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}
+    var today = new Date();
+    document.getElementById("_today").value = formatDate(today);
+
+</script>
+<%- include("../partials/ending") %>

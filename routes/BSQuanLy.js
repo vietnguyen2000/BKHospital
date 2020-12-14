@@ -17,7 +17,6 @@ router.get('/schedule', (req,res)=>{
             res.render('BSQuanLy/schedule',{doctors: nhanvien, faculties: khoa});
         })
     })
-
 })
 router.get('/findDoctor', (req,res)=>{
     var sql = "SELECT * FROM KhoaDieuTri";
