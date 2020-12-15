@@ -1,0 +1,23 @@
+<%- include("../partials/header") %> 
+<div class="container">
+  <main role="main" class="pb-3" style="margin-top: 100px;">
+    <% if (isLoged) {%>
+      <h1>Bạn đã đăng nhập</h1>
+      <h2>Role: <%=role%></h2>
+    <%} else {%>
+      <h1>Đăng nhập</h1>
+      <form action="/Authentication/login" method="POST">
+        <div class="form-group">
+          <label>Tài khoản</label>
+          <input type = "text" class = "form-control" name="TaiKhoan">
+          <label>Mật Khẩu</label>
+          <input type = "password" class = "form-control" name="MatKhau">
+        </div>
+        <button class="btn btn-primary w-100">Submit</button>
+      </form>
+      </main>
+      <%}%>
+</div>
+<%- include("../partials/footer") %> 
+
+<%- include("../partials/ending") %>

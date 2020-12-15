@@ -1,69 +1,95 @@
 const express = require('express');
 const router = express.Router();
-const mysql = require ('../conn');
+const {dbconfigQuanLy} = require('../config');
+const mysqldb = require('mysql');
+const mysql = mysqldb.createConnection(dbconfigQuanLy);
+const { isAuth} = require('../middlewares/auth.middleware');
+
+mysql.connect(err=>{
+    if (err){
+        console.log("FAILED TO CONNECT TO DATABASE!");
+        throw(err);
+    }
+    else{
+        console.log("Database Quan Ly Connected!");
+    }
+})
 
 const CATRUC = ['Buổi sáng', 'Buổi trưa', 'Buổi chiều', 'Buổi tối'];
-
-router.get('/', (req, res)=>{
-    res.render('BSQuanLy/index');
+Authenticate = (req,res,next)=>{
+  isAuth(req,res, ()=>{
+    console.log(req.Role);
+    if (req.role == "QuanLy"){
+      next();
+    }
+    else{
+      res.redirect('err',"Bạn không có quyền làm việc này");
+    }
+  })
+}
+router.get('/',Authenticate , (req, res) =>
+{
+  res.render('BSQuanLy/index');
 })
 
-router.get('/schedule', (req,res)=>{
-    var sql = "SELECT * FROM nhanvienview;";
-    mysql.query(sql, (err,nhanvien)=>{
-        if (err) throw err;
-        sql = "SELECT * FROM KhoaDieuTri";
-        mysql.query(sql,(err,khoa)=>{
-            res.render('BSQuanLy/schedule',{doctors: nhanvien, faculties: khoa});
-        })
-    })
-
-})
-router.get('/findDoctor', (req,res)=>{
-    var sql = "SELECT * FROM KhoaDieuTri";
-    mysql.query(sql,(err,result)=>{
-        res.render('BSQuanLy/findDoctor',{Faculty:result, theories:null});
+router.get('/schedule',Authenticate , (req, res) =>
+{
+  var sql = "SELECT * FROM nhanvienview;";
+  mysql.query(sql, (err, nhanvien) =>
+  {
+    if (err) throw err;
+    sql = "SELECT DISTINCT TenKhoa,MaKhoaDieuTri FROM hospital.nhanvienview;";
+    mysql.query(sql,(err,khoa)=>{
+      if (err) throw err;
+      res.render('BSQuanLy/schedule', { DSBacSi: nhanvien, Khoa:khoa});
     })
     
+  })
+
+})
+router.get('/findDoctor',Authenticate , (req, res) =>
+{
+  res.render('BSQuanLy/findDoctor', { KhoaDieuTri: result, DSBacSi: null });
 })
 
-router.post('/schedule',(req,res)=>{
-    const {ID,Date,Shift} = req.body.doctor;
-    if (!(CATRUC.includes(Shift))) return render('err', {err:"Ca trực chỉ có thể là" + CATRUC});
-    var sql = 'call themCaTruc(?,?,?,?)';
-    console.log(ID[1],Date,Shift);
-    // chỗ này là có thêm ID của thằng quản lý thêm ca của nó vào nữa mà chưa hiện thực tài khoản nên để sau.
-    mysql.query(sql, [Date,Shift,ID[1],1],(err, result)=>{ 
-        if (err) {
-            console.log(err);
-            return res.render('err',{err:err});
+router.post('/schedule',Authenticate , (req, res) =>
+{
+  const {MaNhanVien,NgayTruc, CaTruc } = req.body.doctor;
+  if (!(CATRUC.includes(CaTruc))) return render('err', { err: "Ca trực chỉ có thể là" + CATRUC });
+  var sql = 'call themCaTruc(?,?,?,?)';
+  console.log(MaNhanVien, NgayTruc, CaTruc);
+  // chỗ này là có thêm ID của thằng quản lý thêm ca của nó vào nữa mà chưa hiện thực tài khoản nên để sau.
+  mysql.query(sql, [NgayTruc, CaTruc, MaNhanVien, req.user.MaNhanVien], (err, result) =>
+  {
+    if (err)
+    {
+      console.log(err);
+      return res.render('err', { err: err });
 
-        }
-        res.redirect('schedule');
-    })
+    }
+    res.redirect('schedule');
+  })
 })
-router.post('/findDoctor', (req,res)=>{
-    const {Faculty, Date, Shift} = req.body.shift;
-    var sql = "SELECT * FROM KhoaDieuTri";
-    mysql.query(sql, (err,result)=>{
-        if (err) throw err;
-        th = result
-        var sql;
-        if (Shift != "*" && Faculty != "*") 
-            sql = "call DSBacSi_CaTruc_Khoa('" + Date +"', '" + Shift + "', '" + Faculty + "')";
-            
-        else if (Shift != "*")
-            sql = "call DSBacSi_CaTruc( '" + Date + "', '" + Shift + "')";
-        else if (Faculty != "*")
-            sql = "call DSBacSi_Khoa( '" + Date + "', '" + Faculty + "')";
-        else 
-            sql = "call DSBacSi_NgayTruc( '" + Date + "')";
-        mysql.query(sql, (err, result)=>{
-            if (err) return res.render('err',{err:err});
-            return res.render('BSQuanLy/findDoctor',{Faculty:th, theories: result[0]});
-        })
-            
-    })
+router.post('/findDoctor',Authenticate , (req, res) =>
+{
+  const { KhoaDieuTri, NgayTruc, CaTruc } = req.body.CaTruc;
+  if (err) throw err;
+  th = result
+  var sql;
+  if (CaTruc != "*" && KhoaDieuTri != "*")
+    sql = "call DSBacSi_CaTruc_Khoa('" + NgayTruc + "', '" + CaTruc + "', '" + KhoaDieuTri + "')";
+
+  else if (CaTruc != "*")
+    sql = "call DSBacSi_CaTruc( '" + NgayTruc + "', '" + CaTruc + "')";
+  else if (KhoaDieuTri != "*")
+    sql = "call DSBacSi_Khoa( '" + NgayTruc + "', '" + KhoaDieuTri + "')";
+  else
+    sql = "call DSBacSi_NgayTruc( '" + NgayTruc + "')";
+  mysql.query(sql, (err, result) =>
+  {
+    if (err) return res.render('err', { err: err });
+    return res.render('BSQuanLy/findDoctor', {DSBacSi: result[0]});
+  })
 })
 
 module.exports = router;
