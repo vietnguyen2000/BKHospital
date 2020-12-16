@@ -1,0 +1,38 @@
+<%- include("../partials/header") %>
+  <div class="container">
+    <main role="main" class="pb-3" style="margin-top: 100px;">
+      <form action="/BSQuanLy/schedule" method="POST">
+        <div class="form-group">
+          <Label>Khoa điều trị</Label>
+            <select class="form-control" name="doctor[MaKhoaDieuTri]" onchange="filter(this,'BacSiTheoKhoa');">
+                <% for (let i = 0; i < Khoa.length; i++){%>
+                    <% if (Khoa[i].MaKhoaDieuTri == user.MaKhoaDieuTri) {%>
+                      <option value= <%=Khoa[i].MaKhoaDieuTri%> selected ><%=Khoa[i].TenKhoa%></option>
+                    <%}else{%>
+                      <option value= <%=Khoa[i].MaKhoaDieuTri%> ><%=Khoa[i].TenKhoa%></option>
+                    <%}%>
+                <%}%>
+            </select>
+            <label>Tên bác sĩ</label>
+          <select id="BacSiTheoKhoa" class="form-control" name="doctor[MaNhanVien]">
+            <% for (let i=0; i < DSBacSi.length; i++){%>
+                <option data-provine= <%=DSBacSi[i].MaKhoaDieuTri%> value= <%=DSBacSi[i].MaNhanVien%>><%= DSBacSi[i].MaNhanVien%> - <%=DSBacSi[i].HoVaTenLot%> <%=DSBacSi[i].Ten%>
+                </option>
+            <%}%>
+          </select>
+          <label>Ngày</label>
+          <input type="date" class="form-control" name="doctor[NgayTruc]" placeholder="Date" id="_today">
+          <label>Ca trực</label>
+          <select class="form-control" name="doctor[CaTruc]">
+            <option>Buổi sáng</option>
+            <option>Buổi trưa</option>
+            <option>Buổi chiều</option>
+            <option>Buổi tối</option>
+          </select>
+        </div>
+        <button class="btn btn-primary w-100">Submit</button>
+      </form>
+    </main>
+  </div>
+  <%- include("../partials/footer") %>
+  <%- include("../partials/ending") %>

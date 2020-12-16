@@ -1,0 +1,16 @@
+<%- include("partials/header") %> 
+<div class="container">
+    <main role="main" class="pb-3" style="margin-top: 100px;">
+        <h1>ERROR</h1>
+
+        <p>Application run failed</p>
+        <div class="alert alert-dark" role="alert">
+            <%= err %>
+        </div>
+
+        <a href="/" class="btn btn-primary">Trở về trang chủ</a>
+    </main>
+</div>
+<%- include("partials/footer") %> 
+
+<%- include("partials/ending") %>
