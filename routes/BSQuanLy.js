@@ -22,7 +22,7 @@ Authenticate = (req,res,next)=>{
       next();
     }
     else{
-      res.redirect('err',"Bạn không có quyền làm việc này");
+      res.render('err',{err: "Bạn không có quyền làm việc này"} );
     }
   })
 }
@@ -62,7 +62,6 @@ router.post('/schedule',Authenticate , (req, res) =>
   if (!(CATRUC.includes(CaTruc))) return render('err', { err: "Ca trực chỉ có thể là" + CATRUC });
   var sql = 'call themCaTruc(?,?,?,?)';
   console.log(MaNhanVien, NgayTruc, CaTruc);
-  // chỗ này là có thêm ID của thằng quản lý thêm ca của nó vào nữa mà chưa hiện thực tài khoản nên để sau.
   mysql.query(sql, [NgayTruc, CaTruc, MaNhanVien, req.user.MaNhanVien], (err, result) =>
   {
     if (err)
@@ -94,4 +93,6 @@ router.post('/findDoctor',Authenticate , (req, res) =>
   })
 })
 
+// TODO: Viết router.get và router.post mỗi chức năng mà đề yêu cầu, vui lòng đọc qua hết các chức năng cần hiện thực và gom nhóm các chức năng lại một cách gọn gàng nhất.
+// ! Có một số chức năng nhỏ nằm trong 1 chức năng lớn, thì có thể gom thành 1 route và nhiều post để thực thi 
 module.exports = router;

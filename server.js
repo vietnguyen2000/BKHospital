@@ -22,7 +22,8 @@ app.use(session({
 app.use(require('./routes/index'));
 app.use('/Authentication', require('./routes/Authentication'));
 app.use('/BSQuanLy', require('./routes/BSQuanLy'));
-
+app.use('/BacSi', require('./routes/BacSi'));
+app.use('/BenhNhan', require('./routes/BenhNhan'));
 app.listen(config.port, () =>
 {
   console.log(`SERVER RUNNING AT PORT ${config.port}...`)
