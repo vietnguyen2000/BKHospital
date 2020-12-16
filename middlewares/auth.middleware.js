@@ -3,7 +3,7 @@ const session = require('express-session');
 
 module.exports ={
 isAuth: (req, res, next) => {
-  // const tokenFromClient = session.jwt;
+  const tokenFromClient = session.jwt;
   // !Bệnh nhan
   // const tokenFromClient = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJIb1ZhVGVuTG90IjoiTmd1eWVuIFZhbm4iLCJUZW4iOiJCaWVuMiIsIkVtYWlsIjoiYkBnbWFpbC5jb20iLCJTRFQiOiIwMTIzNDU2NzgwIiwiR2lvaVRpbmgiOiJOYW0iLCJOZ2F5U2luaCI6IjIwMDAtMDEtMTBUMTc6MDA6MDAuMDAwWiIsIkRhblRvYyI6IktpbmgiLCJNYUJlbmhOaGFuIjoxLCJMb2FpIjoiS2jDtG5nIiwiUm9sZSI6IkJlbmhOaGFuIiwiaWF0IjoxNjA4MDg1ODE4fQ.Cfnz5dJyDf1O7lsgqnjx_jjsVCUkbwTKkPjnUCf_P0w";
 
