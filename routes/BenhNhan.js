@@ -30,6 +30,23 @@ router.get('/',Authenticate , (req, res) =>{
   res.render('BenhNhan/index');
 })
 
+router.get('/DSThuoc', Authenticate, (req,res)=>{
+  res.render('BenhNhan/DSThuoc', {kq: null});
+})
+router.post('/DSThuoc', Authenticate, (req,res)=>{
+  const {Loai} = req.body;
+  const MaBenhNhan = req.user.MaBenhNhan;
+  if (Loai == "All")
+    var sql = "call DSThuoc(?)";
+  else
+    var sql = "call DSThuoc_GanNhat(?)";
+  mysql.query(sql,[MaBenhNhan],(err,result)=>{
+    if (err) throw err;
+    console.log(result[0]);
+    res.render('BenhNhan/DSThuoc', {kq: result[0]});
+  })
+})
+
 // TODO: Viết router.get và router.post mỗi chức năng mà đề yêu cầu, vui lòng đọc qua hết các chức năng cần hiện thực và gom nhóm các chức năng lại một cách gọn gàng nhất.
 // ! Có một số chức năng nhỏ nằm trong 1 chức năng lớn, thì có thể gom thành 1 route và nhiều post để thực thi 
 module.exports = router;
