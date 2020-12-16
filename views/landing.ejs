@@ -1,15 +1,17 @@
-<%- include("partials/header") %> 
-<div class="container">
+<%- include("partials/header") %>
+  <div class="container">
     <main role="main" class="pb-3" style="margin-top: 100px;">
 
-        <h1>Home Page</h1>
+      <h1>Home Page</h1>
 
-        <p>Welcome to our BK Hopital Site</p>
+      <p>Welcome to our BK Hopital Site</p>
+      <% if (!isLoged) {%>
         <a href="/Authentication/login" class="btn btn-primary">Login</a>
+      <%}%>
         <a href="/BSQuanLy" class="btn btn-primary">Start demo</a>
 
     </main>
-</div>
-<%- include("partials/footer") %> 
+  </div>
+<%- include("partials/footer") %>
 
 <%- include("partials/ending") %>

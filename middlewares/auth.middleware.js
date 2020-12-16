@@ -3,6 +3,7 @@ const session = require('express-session');
 
 module.exports ={
 isAuth: (req, res, next) => {
+  // const tokenFromClient = session.jwt;
   const tokenFromClient = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJIb1ZhVGVuTG90IjoiTmd1eWVuIEhvYW5nIiwiVGVuIjoiVmlldDEiLCJFbWFpbCI6InZpZXRAbmd1eWVuIiwiU0RUIjoiMDcwNzMwNzc0OCIsIkdpb2lUaW5oIjoiTmFtIiwiTmdheVNpbmgiOiIyMDAwLTA0LTIwVDE3OjAwOjAwLjAwMFoiLCJEYW5Ub2MiOm51bGwsIk1hUXVhbkx5IjoxLCJNYU5oYW5WaWVuIjoxLCJNYUtob2FEaWV1VHJpIjoxLCJUZW5LaG9hIjoiQ29tcHV0ZXIgU2NpZW5jZSIsIlJvbGUiOiJRdWFuTHkiLCJpYXQiOjE2MDgwNDYxNTN9.8XEo5MLG1yw8EBJp26OuBW6boOcAkKZDeISGEFEMJXA";
   // console.log(tokenFromClient);
   if (tokenFromClient) {

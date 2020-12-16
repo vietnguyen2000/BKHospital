@@ -16,13 +16,8 @@
             <label>Tên bác sĩ</label>
           <select id="BacSiTheoKhoa" class="form-control" name="doctor[MaNhanVien]">
             <% for (let i=0; i < DSBacSi.length; i++){%>
-              <% if (DSBacSi[i].MaKhoaDieuTri == user.MaKhoaDieuTri){%>
                 <option data-provine= <%=DSBacSi[i].MaKhoaDieuTri%> value= <%=DSBacSi[i].MaNhanVien%>><%= DSBacSi[i].MaNhanVien%> - <%=DSBacSi[i].HoVaTenLot%> <%=DSBacSi[i].Ten%>
                 </option>
-              <%}else{%>
-                <option data-provine= <%=DSBacSi[i].MaKhoaDieuTri%> value= <%=DSBacSi[i].MaNhanVien%> ><%= DSBacSi[i].MaNhanVien%> - <%=DSBacSi[i].HoVaTenLot%> <%=DSBacSi[i].Ten%>
-                </option>
-              <%}%>
             <%}%>
           </select>
           <label>Ngày</label>

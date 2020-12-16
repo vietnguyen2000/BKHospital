@@ -7,9 +7,19 @@ const { isAuth} = require('../middlewares/auth.middleware');
 
 router.get('/login', isAuth, (req, res) =>
 {
-  console.log(req.user);
+  // console.log(req.user);
   res.render('Authentication/login');
 });
+router.get('/logout', isAuth,(req,res)=>{
+  console.log(session.jwt);
+  if(req.isLoged){
+    session.jwt = '';
+    res.redirect('/');
+  }
+  else{
+    res.redirect('/');
+  }
+})
 router.post('/login', isAuth, (req,res)=>{
   const { TaiKhoan,MatKhau } = req.body;
   const user = req.user;
@@ -19,7 +29,7 @@ router.post('/login', isAuth, (req,res)=>{
     {
       if (err)
       {
-        console.log(err);
+        // console.log(err);
         return res.render('err', { err: err });
       }
       if(result[0][0]){

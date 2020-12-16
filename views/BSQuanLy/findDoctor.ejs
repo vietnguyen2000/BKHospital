@@ -8,12 +8,12 @@
 					<option value="*">Tất cả các khoa</option>
 					<% if(KhoaDieuTri){
 						KhoaDieuTri.forEach(element => {%>
-								<option value = <%= element.MaKhoaDieuTri %>><%=element.TenKhoa%></option>
+								<option value = <%= element.MaKhoaDieuTri %> <% if (element.MaKhoaDieuTri == user.MaKhoaDieuTri) {%> selected <%}%>><%=element.TenKhoa%></option>
 						<%});
 					}%>
 				</select>
 				<label>NgayTruc</label>
-				<input type = "date" class = "form-control" name="CaTruc[NgayTruc]" placeholder="Date">
+				<input type = "date" class = "form-control" name="CaTruc[NgayTruc]" placeholder="Date" id="_today">
 				<label>CaTruc</label>
 				<select class="form-control" name="CaTruc[CaTruc]">
 					<option value="*">Cả ngày</option>

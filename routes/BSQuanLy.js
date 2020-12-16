@@ -18,7 +18,6 @@ mysql.connect(err=>{
 const CATRUC = ['Buổi sáng', 'Buổi trưa', 'Buổi chiều', 'Buổi tối'];
 Authenticate = (req,res,next)=>{
   isAuth(req,res, ()=>{
-    console.log(req.Role);
     if (req.role == "QuanLy"){
       next();
     }
@@ -49,7 +48,12 @@ router.get('/schedule',Authenticate , (req, res) =>
 })
 router.get('/findDoctor',Authenticate , (req, res) =>
 {
-  res.render('BSQuanLy/findDoctor', { KhoaDieuTri: result, DSBacSi: null });
+  sql = "SELECT DISTINCT TenKhoa,MaKhoaDieuTri FROM hospital.nhanvienview;";
+    mysql.query(sql,(err,khoa)=>{
+      if (err) throw err;
+      res.render('BSQuanLy/findDoctor', { KhoaDieuTri: khoa, DSBacSi: null });
+    })
+  
 })
 
 router.post('/schedule',Authenticate , (req, res) =>
@@ -73,8 +77,6 @@ router.post('/schedule',Authenticate , (req, res) =>
 router.post('/findDoctor',Authenticate , (req, res) =>
 {
   const { KhoaDieuTri, NgayTruc, CaTruc } = req.body.CaTruc;
-  if (err) throw err;
-  th = result
   var sql;
   if (CaTruc != "*" && KhoaDieuTri != "*")
     sql = "call DSBacSi_CaTruc_Khoa('" + NgayTruc + "', '" + CaTruc + "', '" + KhoaDieuTri + "')";
@@ -88,7 +90,7 @@ router.post('/findDoctor',Authenticate , (req, res) =>
   mysql.query(sql, (err, result) =>
   {
     if (err) return res.render('err', { err: err });
-    return res.render('BSQuanLy/findDoctor', {DSBacSi: result[0]});
+    return res.render('BSQuanLy/findDoctor', {KhoaDieuTri: req.KhoaDieuTri, DSBacSi: result[0]});
   })
 })
 
