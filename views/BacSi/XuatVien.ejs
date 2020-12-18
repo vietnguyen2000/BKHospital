@@ -1,0 +1,53 @@
+<%- include("../partials/header") %> 
+<% if(Flag){ %>
+    <div class="alert alert-success">
+            <strong>Success!</strong> Bạn đã thêm xuất viện thành công
+          </div>
+ <% } %>
+ <% if(Error){ %>
+    <div class="alert alert-danger">
+        <strong>Error!</strong> <%=     Error  %> </div>
+ <% } %>
+<div class="container">
+    <main role="main" class="pb-3" style="margin-top: 100px;">
+        <h1>Thêm xuất viện</h1>
+        <form action="/BacSi/XuatVien" method="POST">
+			<div class="form-group">
+                    <label>Mã nhân viên (nhập viện)</label>
+                    <input type="text"  name="NVMaNhanVien" class="form-control">
+                <label>Mã bệnh nhân (nhập viện)</label>
+                    <input type="text" name="NVMaBenhNhan" class="form-control">
+                    <label>Thời gian khám bệnh (nhập viện)</label>
+                    <input type="text" name="NVThoiGianKhamBenh" class="form-control">
+                    <label>Thời gian ra kết quả (nhập viện)</label>
+                    <input type="text"  name="NVThoiGianRaKQ" class="form-control">
+                    <label>Thời gian nhập viện</label>
+                        <input type="text"  name="ThoiGianNhapVien" class="form-control">
+                        <label>Thời gian xuất viện</label>
+                        <input type="text"  name="ThoiGianXuatVien" class="form-control">
+                    <label>Tình trạng xuất viện</label>
+                        <input type="text" name="TinHTrangXuatVien" class="form-control">
+                    <label>Ghi chú xuất viện</label>
+                    <input type="text"  name="GhiChuXuatVien" class="form-control">
+                <label>Mã bệnh nhân (xuất viện)</label>
+                    <input type="text"  name="MaBenhNhan" class="form-control">
+                    <label>Thời gian khám bệnh (xuất viện)</label>
+                    <input type="text"  name="ThoiGianKhamBenh" class="form-control">
+                    <label>Thời gian ra kết quả (xuất viện)</label>
+                        <input type="text" name="ThoiGianRaKQ" class="form-control">
+
+               
+            </div>
+			<button class="btn btn-primary w-100">Submit</button>
+		</form>
+	</main>
+
+<%- include("../partials/footer") %>
+<%- include("../partials/ending") %>
+
+
+
+
+
+
+

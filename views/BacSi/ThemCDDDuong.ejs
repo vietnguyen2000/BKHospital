@@ -1,0 +1,31 @@
+<%- include("../partials/header") %> 
+<% if(Flag){ %>
+    <div class="alert alert-success">
+            <strong>Success!</strong> Bạn đã thêm chế độ dinh dưỡng thành công
+          </div>
+ <% } %>
+ <% if(Error){ %>
+    <div class="alert alert-danger">
+        <strong>Error!</strong> <%=     Error  %> </div>
+ <% } %>
+<div class="container">
+    <main role="main" class="pb-3" style="margin-top: 100px;">
+        <h1>Thêm chế độ dinh dưỡng</h1>
+        <form action="/BacSi/Thembenh" method="POST">
+			<div class="form-group">
+                <label>Chế độ ăn uống</label>
+                <input type="text" name="CheDoAnUong" class="form-control">    
+            </div>
+			<button class="btn btn-primary w-100">Submit</button>
+		</form>
+	</main>
+
+<%- include("../partials/footer") %>
+<%- include("../partials/ending") %>
+
+
+
+
+
+
+

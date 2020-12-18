@@ -1,0 +1,30 @@
+<%- include("../partials/header") %> 
+<% if(Flag){ %>
+    <div class="alert alert-success">
+            <strong>Success!</strong> Bạn đã thêm bệnh thành công
+          </div>
+ <% } %>
+ <% if(Error){ %>
+    <div class="alert alert-danger">
+        <strong>Error!</strong> <%=     Error  %> </div>
+ <% } %>
+<div class="container">
+    <main role="main" class="pb-3" style="margin-top: 100px;">
+        <h1>Thêm bệnh</h1>
+        <form action="/BacSi/Thembenh" method="POST">
+			<div class="form-group">
+                <label>Tên bệnh</label>
+                <input type="text" name="TenBenh" class="form-control">    
+            </div>
+			<button class="btn btn-primary w-100">Submit</button>
+		</form>
+	</main>
+
+<%- include("../partials/footer") %>
+<%- include("../partials/ending") %>
+
+
+
+
+
+

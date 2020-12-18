@@ -1,0 +1,58 @@
+<%- include("../partials/header") %> 
+<% if(Flag){ %>
+    <div class="alert alert-success">
+            <strong>Success!</strong> Bạn đã thêm bệnh án thành công
+          </div>
+ <% } %>
+ <% if(Error){ %>
+    <div class="alert alert-danger">
+        <strong>Error!</strong> <%=     Error  %> </div>
+ <% } %>
+<div class="container">
+    <main role="main" class="pb-3" style="margin-top: 100px;">
+        <h1>Thêm bệnh án</h1>
+        <form action="/BacSi/ThemBenhAn" method="POST">
+			<div class="form-group">
+                    <label>Thời gian nhập viện</label>
+                        <input type="text"  name="ThoiGianNhapVien" class="form-control">
+                    <label>Thời gian ra kết quả (nhập viện)</label>
+                        <input type="text"  name="NVThoiGianRaKQ" class="form-control">
+                    <label>Thời gian khám bệnh (nhập viện)</label>
+                        <input type="text" name="NVThoiGianKhamBenh" class="form-control">
+                    <label>Mã nhân viện (nhập viện)</label>
+                        <input type="text"  name="NVMaNhanVien" class="form-control">
+                    <label>Mã bệnh nhân (nhập viện)</label>
+                        <input type="text" name="NVMaBenhNhan" class="form-control">
+                    <label>Số giường</label>
+                        <input type="text"  name="SoGiuong" class="form-control">
+                    <label>Số buồng</label>
+                        <input type="text"  name="SoBuong" class="form-control">
+                    <label>Tình trạng nhập viện</label>
+                        <input type="text" name="TinhTrangNhapVien" class="form-control">
+                    <label>Thời gian xuất viện</label>
+                        <input type="text"  name="ThoiGianXuatVien" class="form-control">
+                    <label>Tình trạng xuất viện</label>
+                        <input type="text" name="TinHTrangXuatVien" class="form-control">
+                    <label>Ghi chú xuất viện</label>
+                        <input type="text"  name="GhiChuXuatVien" class="form-control">
+                    <label>Thời gian ra kết quả (xuất viện)</label>
+                        <input type="text" name="XVThoiGianRaKQ" class="form-control">
+                    <label>Thời gian khám bệnh (xuất viện)</label>
+                        <input type="text"  name="XVThoiGianKhamBenh" class="form-control">
+                    <label>Mã nhân viên (xuất viện)</label>
+                        <input type="text"  name="XVMaNhanVien" class="form-control">
+                    <label>Mã bệnh nhân (xuất viện)</label>
+                        <input type="text"  name="XVMaBenhNhan" class="form-control">
+            </div>
+			<button class="btn btn-primary w-100">Submit</button>
+		</form>
+	</main>
+
+<%- include("../partials/footer") %>
+<%- include("../partials/ending") %>
+
+
+
+
+
+

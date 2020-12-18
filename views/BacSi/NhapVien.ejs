@@ -1,0 +1,49 @@
+<%- include("../partials/header") %> 
+<% if(Flag){ %>
+    <div class="alert alert-success">
+            <strong>Success!</strong> Bạn đã thêm nhập viện thành công
+          </div>
+ <% } %>
+ <% if(Error){ %>
+    <div class="alert alert-danger">
+        <strong>Error!</strong> <%=     Error  %> </div>
+ <% } %>
+<div class="container">
+    <main role="main" class="pb-3" style="margin-top: 100px;">
+        <h1>Thêm nhập viện</h1>
+        <form action="/BacSi/NhapVien" method="POST">
+			<div class="form-group">
+                    <label>Mã bệnh nhân </label>
+                        <input type="text" name="MaBenhNhan" class="form-control">
+                        <label>Thời gian khám bệnh </label>
+                        <input type="text" name="ThoiGianKhamBenh" class="form-control">
+                        <label>Thời gian ra kết quả </label>
+                        <input type="text"  name="ThoiGianRaKQ" class="form-control">
+                    <label>Thời gian nhập viện</label>
+                        <input type="text"  name="ThoiGianNhapVien" class="form-control">
+                    <label>Số giường</label>
+                        <input type="text"  name="SoGiuong" class="form-control">
+                    <label>Số buồng</label>
+                        <input type="text"  name="SoBuong" class="form-control">
+                    <label>Tình trạng nhập viện</label>
+                        <input type="text" name="TinhTrangNhapVien" class="form-control">
+            </div>
+			<button class="btn btn-primary w-100">Submit</button>
+		</form>
+	</main>
+
+<%- include("../partials/footer") %>
+<%- include("../partials/ending") %>
+
+
+
+
+
+
+
+
+
+
+
+
+

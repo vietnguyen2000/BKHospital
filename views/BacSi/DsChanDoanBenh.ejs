@@ -1,0 +1,60 @@
+<%- include("../partials/header") %> 
+<% if(Error){ %>
+    <div class="alert alert-danger">
+        <strong>Error!</strong> <%=     Error  %> </div>
+<% } %>
+<div class="container">
+    <main role="main" class="pb-3" style="margin-top: 100px;">
+        <h1>Xem danh sách chẩn đoán bệnh</h1>
+        <form action="/BacSi/DsChanDoanBenh" method="POST">
+			<div class="form-group">
+                    <label>Mã bệnh nhân</label>
+                    <div class="form-group">
+                        <input type="text"  name="MaBenhNhan" class="form-control">
+                    </div>
+                    <label>Mã bệnh</label>
+                    <div class="form-group">
+                        <input type="text"  name="MaBenh" class="form-control">
+                    </div>
+               
+            </div>
+			<button class="btn btn-primary w-100">Submit</button>
+		</form>
+    </main>
+
+    <%if (DsChanDoanBenh) { %>
+        <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Thời gian ra kết quả</th>
+                            <th>Thời gian khám bệnh</th>
+                            <th>Mã Nhân viên</th>
+                            <th>Mã bệnh nhân</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody>
+                        <% for(let i = 0; i < DsChanDoanBenh[0].length; i++) { %>
+                            <tr>
+                                <th><%= formatDate(DsChanDoanBenh[0][i].ThoiGianRaKQ) %></th>
+                                <td><%= formatDate(DsChanDoanBenh[0][i].ThoiGianKhamBenh) %></td>
+                                <td><%= DsChanDoanBenh[0][i].MaNhanVien %></td>
+                                <td><%= DsChanDoanBenh[0][i].MaBenhNhan %></td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        <% } %>
+    </div>
+
+<%- include("../partials/footer") %>
+<%- include("../partials/ending") %>
+
+
+
+
+
+
+

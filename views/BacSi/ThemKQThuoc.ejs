@@ -1,0 +1,42 @@
+<%- include("../partials/header") %> 
+<% if(Flag){ %>
+    <div class="alert alert-success">
+            <strong>Success!</strong> Bạn đã thêm kết quả thuốc thành công
+          </div>
+ <% } %>
+ <% if(Error){ %>
+    <div class="alert alert-danger">
+        <strong>Error!</strong> <%=     Error  %> </div>
+ <% } %>
+<div class="container">
+    <main role="main" class="pb-3" style="margin-top: 100px;">
+        <h1>Thêm kết quả thuốc</h1>
+        <form action="/BacSi/ThemKQThuoc" method="POST">
+			<div class="form-group">
+                    <label>Mã bệnh nhân</label>
+                        <input type="text"  name="MaBenhNhan" class="form-control">
+                    <label>Thơi gian khám bệnh</label>
+                        <input type="text"  name="ThoiGianKhamBenh" class="form-control">
+                    <label>Thời gian ra kết quả</label>
+                        <input type="text"  name="ThoiGianRaKQ" class="form-control">
+                        <label>Mã thuốc</label>
+                        <input type="text"  name="MaThuoc" class="form-control">
+                        <label>Liều dùng</label>
+                        <input type="text"  name="LieuDung" class="form-control">
+                        <label>Cách dùng</label>
+                        <input type="text"  name="CachDung" class="form-control">
+                        <label>Thời gian dùng</label>
+                        <input type="text"  name="ThoiGianDung" class="form-control">
+            </div>
+			<button class="btn btn-primary w-100">Submit</button>
+		</form>
+	</main>
+
+<%- include("../partials/footer") %>
+<%- include("../partials/ending") %>
+
+
+
+
+
+
