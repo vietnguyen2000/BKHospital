@@ -1,0 +1,50 @@
+<%- include("../partials/header") %> 
+<div class="container">
+  <main role="main" class="pb-3" style="margin-top: 100px;">
+    <h1>Trang Bệnh nhân</h1>
+    <% if (isLoged) {%>
+      <form action="/BenhNhan/DSXetNghiem" method="POST">
+        <div class="form-group">
+          <label>Xem danh sách các lần xét nghiệm</label>
+          <select class="form-control" name="Loai">
+            <option value="All"> Tất cả các lần xét nghiệm</option>
+            <option value="Last">Ở lần xét nghiệm gần nhất</option>
+          </select>
+        </div>
+        <button class="btn btn-primary w-100">Submit</button>
+      </form>
+      <% if(kq){%>
+        <div class="table-responsive">
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th>Tên xét nghiệm</th>
+								<th>Thời gian khám bệnh</th>
+								<th>Mã bác sĩ khám</th>
+								<th>Mã bệnh nhân</th>
+								<th>Mã nhân viên thực hiện</th>
+								<th>Thời gian thực hiện</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+							<% for(let i = 0; i < kq.length; i++) { %>
+								<tr>
+									<th><%= kq[i].TenXetNghiem %> </th>
+									<td><%= kq[i].ThoiGianKhamBenh %></td>
+									<td><%= kq[i].MaNhanVien %></td>
+									<td><%= kq[i].MaBenhNhan %></td>
+									<td><%= kq[i].MaNhanVienThucHien%></td>
+									<td><%= kq[i].ThoiGianThucHien%></td>
+								</tr>
+							<% } %>
+						</tbody>
+					</table>
+				</div>
+      <%}%>
+		<%}%>
+  </main>
+</div>
+<%- include("../partials/footer") %> 
+
+<%- include("../partials/ending") %>
