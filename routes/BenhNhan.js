@@ -57,14 +57,18 @@ router.post('/DSXetNghiem', Authenticate, (req,res)=>{
   const MaBenhNhan = req.user.MaBenhNhan;
   if (Loai == "All")
     var sql = "call DSXetNghiem(?)";
-  else
+  else if (Loai == "Last")
     var sql = "call DSXetNghiemGanNhat(?)";
+  else
+  var sql = "call DSXetNghiem_BatThuong(?)";
   mysql.query(sql,[MaBenhNhan],(err,result)=>{
     if (err) throw err;
     console.log(result[0]);
     res.render('BenhNhan/DSXetNghiem', {kq: result[0]});
   })
 })
+
+
 
 
 // TODO: Viết router.get và router.post mỗi chức năng mà đề yêu cầu, vui lòng đọc qua hết các chức năng cần hiện thực và gom nhóm các chức năng lại một cách gọn gàng nhất.
