@@ -48,7 +48,7 @@ router.post('/DSThuoc', Authenticate, (req,res)=>{
   })
 })
 
-// (iii.4, iii.5). Xem kết quả xét nghiệm (gần nhất và tất cả các lần)
+// (iii.4, iii.5, iii.6). Xem kết quả xét nghiệm (gần nhất và tất cả các lần)
 router.get('/DSXetNghiem', Authenticate, (req,res)=>{
   res.render('BenhNhan/DSXetNghiem', {kq: null});
 })
@@ -68,7 +68,41 @@ router.post('/DSXetNghiem', Authenticate, (req,res)=>{
   })
 })
 
+// (iii.7, iii.8). Xem danh sách bác sĩ điều trị (gần nhất và tất cả các lần)
+router.get('/DSBacSi', Authenticate, (req,res)=>{
+  res.render('BenhNhan/DSBacSi', {kq: null});
+})
+router.post('/DSBacSi', Authenticate, (req,res)=>{
+  const {Loai} = req.body;
+  const MaBenhNhan = req.user.MaBenhNhan;
+  if (Loai == "All")
+    var sql = "call DSBacSi_DieuTriBenhNhan(?)";
+  else
+    var sql = "call DSBacSi_DieuTriBenhNhanGanNhat(?)";
+  mysql.query(sql,[MaBenhNhan],(err,result)=>{
+    if (err) throw err;
+    console.log(result[0]);
+    res.render('BenhNhan/DSBacSi', {kq: result[0]});
+  })
+})
 
+// (iii.9, iii.10). Xem danh sách chế độ dinh dượng (gần nhất và tất cả các lần)
+router.get('/DSCDDDuong', Authenticate, (req,res)=>{
+  res.render('BenhNhan/DSCDDDuong', {kq: null});
+})
+router.post('/DSCDDDuong', Authenticate, (req,res)=>{
+  const {Loai} = req.body;
+  const MaBenhNhan = req.user.MaBenhNhan;
+  if (Loai == "All")
+    var sql = "call DSCDDDuong(?)";
+  else
+    var sql = "call DSCDDDuongGanNhat(?)";
+  mysql.query(sql,[MaBenhNhan],(err,result)=>{
+    if (err) throw err;
+    console.log(result[0]);
+    res.render('BenhNhan/DSCDDDuong', {kq: result[0]});
+  })
+})
 
 
 // TODO: Viết router.get và router.post mỗi chức năng mà đề yêu cầu, vui lòng đọc qua hết các chức năng cần hiện thực và gom nhóm các chức năng lại một cách gọn gàng nhất.
