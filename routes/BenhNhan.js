@@ -128,7 +128,6 @@ router.post('/DSCDDDuong', Authenticate, (req,res)=>{
 })
 
 // (iii.0). Thêm tài khoản
-
 router.get("/taoBenhNhan", Authenticate, (req, res) => {
   res.render("BenhNhan/taoBenhNhan", { Flag: false, Error: false });
 });
@@ -173,5 +172,83 @@ router.post("/taoBenhNhan", Authenticate, (req, res) => {
     }
   );
 });
+
+
+// (iii.1a). Cập nhật thông tin nhân khẩu học
+router.get("/CapNhatNhanKhauHoc", Authenticate, (req, res) => {
+  res.render("BenhNhan/CapNhatNhanKhauHoc", { Flag: false, Error: false });
+});
+
+router.post("/CapNhatNhanKhauHoc", Authenticate, (req, res) => {
+  const { value, error } = Joi.validate(req.body, CapNhatNhanKhauHoc);
+  if (error) {
+    res.render("BenhNhan/CapNhatNhanKhauHoc", {
+      Flag: false,
+      Error: error.details[0].message,
+    });
+  }
+  const {
+    MaBenhNhan,
+    HoVaTenLot,
+    Ten,
+    SDT,
+    NgaySinh,
+    DanToc,
+  } = value;
+  var sql = "call CapNhatNhanKhauHoc(?,?,?,?,?,?)";
+  mysql.query(
+    sql,
+    [
+      MaBenhNhan,
+      HoVaTenLot,
+      Ten,
+      SDT,
+      NgaySinh,
+      DanToc,
+    ],
+    (err, result) => {
+      if (err) return res.render("err", { err: err });
+
+      res.render("BenhNhan/CapNhatNhanKhauHoc", { Flag: true, Error: false });
+    }
+  );
+});
+
+// (iii.1b). Cập nhật thông tin bảo hiểm y tế
+router.get("/themBHYTe_BenhNhan", Authenticate, (req, res) => {
+  res.render("BenhNhan/themBHYTe_BenhNhan", { Flag: false, Error: false });
+});
+
+router.post("/themBHYTe_BenhNhan", Authenticate, (req, res) => {
+  const { value, error } = Joi.validate(req.body, themBHYTe_BenhNhan);
+  if (error) {
+    res.render("BenhNhan/themBHYTe_BenhNhan", {
+      Flag: false,
+      Error: error.details[0].message,
+    });
+  }
+  const {
+    MaBenhNhan,
+    MaTheBHYTe,
+    NgayDangKy,
+    NgayHetHan
+  } = value;
+  var sql = "call themBHYTe_BenhNhan(?,?,?,?)";
+  mysql.query(
+    sql,
+    [
+      MaBenhNhan,
+      MaTheBHYTe,
+      NgayDangKy,
+      NgayHetHan
+    ],
+    (err, result) => {
+      if (err) return res.render("err", { err: err });
+
+      res.render("BenhNhan/themBHYTe_BenhNhan", { Flag: true, Error: false });
+    }
+  );
+});
+
 
 module.exports = router;

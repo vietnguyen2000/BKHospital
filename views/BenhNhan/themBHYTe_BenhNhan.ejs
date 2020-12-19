@@ -1,0 +1,45 @@
+<%- include("../partials/header") %> 
+<% if(Flag){ %>
+    <div class="alert alert-success">
+            <strong>Success!</strong>  Bạn đã thêm thông tin thành công
+          </div>
+ <% } %>
+ <% if(Error){ %>
+    <div class="alert alert-danger">
+        <strong>Error!</strong> <%=     Error  %> </div>
+<% } %>
+<div class="container">
+    <main role="main" class="pb-3" style="margin-top: 100px;">
+        <h1>Tạo chỉ số</h1>
+        <form action="/BenhNhan/themBHYTe_BenhNhan" method="POST">
+			<div class="form-group">
+				<label>Mã bệnh nhân</label>
+					<input type="text"  name="MaBenhNhan" class="form-control">
+				<label>Mã thẻ bảo hiểm y tế</label>
+					<input type="text"  name="MaTheBHYTe" class="form-control">
+				<label>Ngày đăng ký</label>
+					<input type="date"  name="NgayDangKy" class="form-control">
+				<label>Ngày hết hạn</label>
+					<input type="date"  name="NgayHetHan" class="form-control">
+            </div>
+			<button class="btn btn-primary w-100">Submit</button>
+		</form>
+	</main>
+
+<%- include("../partials/footer") %>
+<%- include("../partials/ending") %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
