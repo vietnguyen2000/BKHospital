@@ -4,6 +4,11 @@ const {dbconfigBenhNhan} = require('../config');
 const mysqldb = require('mysql');
 const mysql = mysqldb.createConnection(dbconfigBenhNhan);
 const { isAuth} = require('../middlewares/auth.middleware');
+const Joi = require("joi");
+
+const taoBenhNhan = require("../schemas/taoBenhNhan");
+const CapNhatNhanKhauHoc = require("../schemas/CapNhatNhanKhauHoc");
+
 
 mysql.connect(err=>{
     if (err){
@@ -104,7 +109,69 @@ router.post('/DSCDDDuong', Authenticate, (req,res)=>{
   })
 })
 
+// (iii.9, iii.10). Xem danh sách chế độ dinh dượng (gần nhất và tất cả các lần)
+router.get('/DSCDDDuong', Authenticate, (req,res)=>{
+  res.render('BenhNhan/DSCDDDuong', {kq: null});
+})
+router.post('/DSCDDDuong', Authenticate, (req,res)=>{
+  const {Loai} = req.body;
+  const MaBenhNhan = req.user.MaBenhNhan;
+  if (Loai == "All")
+    var sql = "call DSCDDDuong(?)";
+  else
+    var sql = "call DSCDDDuongGanNhat(?)";
+  mysql.query(sql,[MaBenhNhan],(err,result)=>{
+    if (err) throw err;
+    console.log(result[0]);
+    res.render('BenhNhan/DSCDDDuong', {kq: result[0]});
+  })
+})
 
-// TODO: Viết router.get và router.post mỗi chức năng mà đề yêu cầu, vui lòng đọc qua hết các chức năng cần hiện thực và gom nhóm các chức năng lại một cách gọn gàng nhất.
-// ! Có một số chức năng nhỏ nằm trong 1 chức năng lớn, thì có thể gom thành 1 route và nhiều post để thực thi 
+// (iii.0). Thêm tài khoản
+
+router.get("/taoBenhNhan", Authenticate, (req, res) => {
+  res.render("BenhNhan/taoBenhNhan", { Flag: false, Error: false });
+});
+
+router.post("/taoBenhNhan", Authenticate, (req, res) => {
+  const { value, error } = Joi.validate(req.body, taoBenhNhan);
+  if (error) {
+    res.render("BenhNhan/taoBenhNhan", {
+      Flag: false,
+      Error: error.details[0].message,
+    });
+  }
+  const {
+    TaiKhoan,
+    MatKhau,
+    HoVaTenLot,
+    Ten,
+    Email,
+    SDT,
+    GioiTinh,
+    NgaySinh,
+    DanToc,
+  } = value;
+  var sql = "call taoBenhNhan(?,?,?,?,?,?,?,?,?)";
+  mysql.query(
+    sql,
+    [
+      TaiKhoan,
+      MatKhau,
+      HoVaTenLot,
+      Ten,
+      Email,
+      SDT,
+      GioiTinh,
+      NgaySinh,
+      DanToc,
+    ],
+    (err, result) => {
+      if (err) return res.render("err", { err: err });
+
+      res.render("BenhNhan/taoBenhNhan", { Flag: true, Error: false });
+    }
+  );
+});
+
 module.exports = router;
