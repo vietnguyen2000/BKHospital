@@ -1,0 +1,20 @@
+<%- include("../partials/header") %>
+    <div class="container">
+        <main role="main" class="pb-3" style="margin-top: 100px;">
+            <h1>Xem danh sách của bác sĩ</h1>
+            <form action="/BacSi/BenhAn" method="POST">
+                <div class="form-group">
+                    <label>Chọn loại</label>
+                    <select class="form-control" name="Loai">
+                        <option value="ThemBenhAn">Thêm bệnh án</option>
+                        <option value="NhapVien">Nhập viện</option>
+                        <option value="XuatVien">Xuất viện</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary w-100">Submit</button>
+            </form>
+        </main>
+    </div>
+    <%- include("../partials/footer") %>
+
+        <%- include("../partials/ending") %>

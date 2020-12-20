@@ -53,6 +53,95 @@ router.get("/", Authenticate, (req, res) => {
   res.render("BacSi/index");
 });
 
+router.get("/DSBacSi", Authenticate, (req, res) => {
+  res.render("BacSi/DSBacSi");
+});
+router.post("/DSBacSi", Authenticate, (req, res) => {
+  const { Loai } = req.body;
+  if (Loai == "DanhSachBenhNhanPhuTrach") {
+    res.redirect("DsBenhNhanPhuTrach");
+  }
+  if (Loai == "DanhSachChanDoanBenh") {
+    res.redirect("DsChanDoanBenh");
+  }
+  if (Loai == "DanhSachThuocBacSi") {
+    res.redirect("DsThuocBacSi");
+  }
+  if (Loai == "DanhSachChanDoanBenh") {
+    res.redirect("DsChanDoanBenh");
+  }
+  if (Loai == "DanhSachXetNghiemBacSi") {
+    res.redirect("DsXetNghiemBacSi");
+  }
+  if (Loai == "DanhSachBenhNhanCungBenh") {
+    res.redirect("DSBenhNhanCungBenh");
+  }
+  if (Loai == "DanhSachBenhNhanXuatVien") {
+    res.redirect("DSBenhNhanXV");
+  }
+  if (Loai == "DanhSachChupPhimBacSi") {
+    res.redirect("DSChupPhimBacSi");
+  }
+  res.redirect("DSBenhNhanBatThuong");
+});
+
+router.get("/ThemKetQuaBenh", Authenticate, (req, res) => {
+  res.render("BacSi/ThemKetQuaBenh");
+});
+router.post("/ThemKetQuaBenh", Authenticate, (req, res) => {
+  const { Loai } = req.body;
+  if (Loai == "KhamBenhBSBenhNhan") {
+    res.redirect("KhambenhBacSiBenhNhan");
+  }
+  if (Loai == "DuaRaKQBSBenhNhan") {
+    res.redirect("DuaRaKQ");
+  }
+  if (Loai == "ThemThuoc") {
+    res.redirect("Themthuoc");
+  }
+  if (Loai == "ThemThuocVaoKQ") {
+    res.redirect("ThemThuocVaoKQ");
+  }
+  if (Loai == "ThemBenh") {
+    res.redirect("Thembenh");
+  }
+  if (Loai == "ThemKQBenh") {
+    res.redirect("ThemKQBenh");
+  }
+  if (Loai == "ThemCDDDuong") {
+    res.redirect("ThemCDDDuong");
+  }
+  res.redirect("ThemKQCDDDuong");
+});
+
+router.get("/BenhAn", Authenticate, (req, res) => {
+  res.render("BacSi/BenhAn");
+});
+router.post("/BenhAn", Authenticate, (req, res) => {
+  const { Loai } = req.body;
+  if (Loai == "ThemBenhAn") {
+    res.redirect("ThemBenhAn");
+  }
+  if (Loai == "NhapVien") {
+    res.redirect("NhapVien");
+  }
+  res.redirect("XuatVien");
+});
+
+router.get("/HoatDongKhac", Authenticate, (req, res) => {
+  res.render("BacSi/HoatDongKhac");
+});
+router.post("/HoatDongKhac", Authenticate, (req, res) => {
+  const { Loai } = req.body;
+  if (Loai == "TaoChiSoXN") {
+    res.redirect("TaoChiSoXN");
+  }
+  if (Loai == "TaoChiSo") {
+    res.redirect("TaoChiSo");
+  }
+  res.redirect("TaoPhim");
+});
+
 router.get("/KhambenhBacSiBenhNhan", Authenticate, (req, res) => {
   res.render("BacSi/khambenhBacSiBenhNhan", { Flag: false, Error: false });
 });
@@ -553,6 +642,7 @@ router.get("/DSChupPhimBacSi", Authenticate, (req, res) => {
 });
 
 router.post("/DSChupPhimBacSi", Authenticate, (req, res) => {
+  console.log("123");
   const { value, error } = Joi.validate(req.body, DSChupPhimBacSi);
   if (error) {
     res.render("BacSi/DSChupPhimBacSi", {
