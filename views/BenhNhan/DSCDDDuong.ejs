@@ -1,11 +1,11 @@
 <%- include("../partials/header") %> 
 <div class="container">
   <main role="main" class="pb-3" style="margin-top: 100px;">
-    <h1>Trang Bệnh nhân</h1>
+    <h1>Xem danh sách chế độ dinh dưỡng</h1>
     <% if (isLoged) {%>
       <form action="/BenhNhan/DSCDDDuong" method="POST">
         <div class="form-group">
-          <label>Xem danh sách chế độ dinh dưỡng</label>
+          <label>Chọn loại</label>
           <select class="form-control" name="Loai">
             <option value="All"> Tất cả các lần điều trị</option>
             <option value="Last">Ở lần điều trị gần nhất</option>

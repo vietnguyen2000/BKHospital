@@ -7,6 +7,7 @@ const { isAuth} = require('../middlewares/auth.middleware');
 const Joi = require("joi");
 
 const taoBenhNhan = require("../schemas/taoBenhNhan");
+const themBHYTe_BenhNhan = require("../schemas/themBHYTe_BenhNhan");
 const CapNhatNhanKhauHoc = require("../schemas/CapNhatNhanKhauHoc");
 
 
