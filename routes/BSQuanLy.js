@@ -4,7 +4,9 @@ const {dbconfigQuanLy} = require('../config');
 const mysqldb = require('mysql');
 const mysql = mysqldb.createConnection(dbconfigQuanLy);
 const { isAuth} = require('../middlewares/auth.middleware');
+const Joi = require("joi");
 
+const TongBenhNhan_CaTruc = require("../schemas/TongBenhNhan_CaTruc");
 mysql.connect(err=>{
     if (err){
         console.log("FAILED TO CONNECT TO DATABASE!");
@@ -26,6 +28,7 @@ Authenticate = (req,res,next)=>{
     }
   })
 }
+// get index
 router.get('/',Authenticate , (req, res) =>
 {
   res.render('BSQuanLy/index');
@@ -73,6 +76,7 @@ router.post('/schedule',Authenticate , (req, res) =>
     res.redirect('schedule');
   })
 })
+
 router.post('/findDoctor',Authenticate , (req, res) =>
 {
   const { KhoaDieuTri, NgayTruc, CaTruc } = req.body.CaTruc;
@@ -92,6 +96,63 @@ router.post('/findDoctor',Authenticate , (req, res) =>
     return res.render('BSQuanLy/findDoctor', {KhoaDieuTri: req.KhoaDieuTri, DSBacSi: result[0]});
   })
 })
+
+// i.11 i.12
+router.get("/TongBenhNhan_CaTruc", Authenticate, (req, res) => {
+  res.render("BSQuanLy/TongBenhNhan_CaTruc", { Flag: false, Error: false });
+});
+
+router.post("/TongBenhNhan_CaTruc", Authenticate, (req, res) => {
+  const { value, error } = Joi.validate(req.body, TongBenhNhan_CaTruc);
+  if (error) {
+    res.render("BSQuanLy/TongBenhNhan_CaTruc", {
+      Flag: false,
+      Error: error.details[0].message,
+    });
+  }
+
+  var sql = "call TongBenhNhan_CaTruc(?,?)";
+  mysql.query(
+    sql,
+    [req.user.MaBenhNhan, ...Object.values(value)],
+    (err, result) => {
+      if (err) return res.render("err", { err: err });
+      res.render("\BSQuanLy/TongBenhNhan_CaTruc", {
+        TongBenhNhan_CaTruc: result,
+        Error: false,
+      });
+    }
+  );
+});
+// ````````````````~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+router.get('/TongBenhNhan_CaTruc_Khoa',Authenticate , (req, res) => {
+  res.render('BSQuanLy/TongBenhNhan_CaTruc_Khoa', { Flag: false, Error: false });
+});
+
+router.post("/TongBenhNhan_CaTruc_Khoa", Authenticate, (req, res) => {
+  const { value, error } = Joi.validate(req.body, TongBenhNhan);
+  if (error) {
+    res.render("BSQuanLy/TongBenhNhan_CaTruc_Khoa", {
+      Flag: false,
+      Error: error.details[0].message,
+    });
+  }
+
+  var sql = "call TongBenhNhan_CaTruc_Khoa(?,?,?)";
+  mysql.query(
+    sql,
+    [req.user.TongBenhNhan, ...Object.values(value)],
+    (err, result) => {
+      if (err) return res.render("err", { err: err });
+      res.render("\BSQuanLy/TongBenhNhan_CaTruc_Khoa", {
+        TongBenhNhan: result,
+        Error: false,
+      });
+    }
+  );
+});
 
 // TODO: Viết router.get và router.post mỗi chức năng mà đề yêu cầu, vui lòng đọc qua hết các chức năng cần hiện thực và gom nhóm các chức năng lại một cách gọn gàng nhất.
 // ! Có một số chức năng nhỏ nằm trong 1 chức năng lớn, thì có thể gom thành 1 route và nhiều post để thực thi 

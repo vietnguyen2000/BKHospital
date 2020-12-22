@@ -1,0 +1,51 @@
+<%- include("../partials/header") %> 
+<% if(Error){ %>
+    <div class="alert alert-danger">
+        <strong>Error!</strong> <%=     Error  %> </div>
+<% } %>
+<div class="container">
+    <main role="main" class="pb-3" style="margin-top: 100px;">
+        <h1>Thay đổi header ở đây</h1>
+        <form action="/BSQuanLy/TongBenhNhan_CaTruc_Khoa" method="POST">
+			<div class="form-group">
+                <label>Ca trực</label>
+                    <input type="text" name="CaTruc" class="form-control">
+				<lable>Ngày trực</lable>
+                    <input type="text" name="NgayTruc" class="form-control">
+                <lable>MaKhoaDieuTri</lable>
+                    <input type="text" name="MaKhoaDieuTri" class="form-control">
+            </div>
+			<button class="btn btn-primary w-100">Submit</button>
+		</form>
+    </main>
+
+    <%if (TongBenhNhan_CaTruc_Khoa) { %>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Tổng số bệnh nhân</th>
+                    </tr>
+                </thead>
+                    
+                <tbody>
+                    <% for(let i = 0; i < (TongBenhNhan_CaTruc_Khoa.length; i++) { %>
+                        <tr>
+                            <th><%= (TongBenhNhan_CaTruc_Khoa[i].TongBenhNhan %> </th>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+        <% } %>
+    </div>
+
+<%- include("../partials/footer") %>
+<%- include("../partials/ending") %>
+
+
+
+
+
+
+
