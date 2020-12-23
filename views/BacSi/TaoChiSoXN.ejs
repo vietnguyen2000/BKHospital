@@ -1,33 +1,26 @@
-<%- include("../partials/header") %> 
-<% if(Flag){ %>
-    <div class="alert alert-success">
+<%- include("../partials/header") %>
+    <% if(Flag){ %>
+        <div class="alert alert-success">
             <strong>Success!</strong> Bạn đã tạo chỉ số xét nghiệm thành công
-          </div>
- <% } %>
- <% if(Error){ %>
+        </div>
+        <% } %>
+            <!-- <% if(Error){ %>
     <div class="alert alert-danger">
         <strong>Error!</strong> <%=     Error  %> </div>
-<% } %>
-<div class="container">
-    <main role="main" class="pb-3" style="margin-top: 100px;">
-        <h1>Tạo chỉ số xét nghiệm</h1>
-        <form action="/BacSi/TaoChiSoXN" method="POST">
-			<div class="form-group">
-                    <label>Ngưỡng min</label>
-                        <input type="text" name="NguongMin" class="form-control">
-                    <label>Ngưỡng max </label>
-                        <input type="text"  name="NguongMax" class="form-control">
-            </div>
-			<button class="btn btn-primary w-100">Submit</button>
-		</form>
-	</main>
+<% } %> -->
+            <div class="container">
+                <main role="main" class="pb-3" style="margin-top: 100px;">
+                    <h1>Tạo chỉ số xét nghiệm</h1>
+                    <form action="/BacSi/TaoChiSoXN" method="POST">
+                        <div class="form-group">
+                            <label>Ngưỡng min</label>
+                            <input type="text" name="NguongMin" class="form-control">
+                            <label>Ngưỡng max </label>
+                            <input type="text" name="NguongMax" class="form-control">
+                        </div>
+                        <button class="btn btn-primary w-100">Submit</button>
+                    </form>
+                </main>
 
-<%- include("../partials/footer") %>
-<%- include("../partials/ending") %>
-
-
-
-
-
-
-
+                <%- include("../partials/footer") %>
+                    <%- include("../partials/ending") %>

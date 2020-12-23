@@ -1,28 +1,33 @@
-<%- include("../partials/header") %> 
-<% if(Error){ %>
+<%- include("../partials/header") %>
+    <!-- <% if(Error){ %>
     <div class="alert alert-danger">
         <strong>Error!</strong> <%=     Error  %> </div>
-<% } %>
-<div class="container">
-    <main role="main" class="pb-3" style="margin-top: 100px;">
-        <h1>Xem danh sách chụp phim</h1>
-        <form action="/BacSi/DSChupPhimBacSi" method="POST">
-			<div class="form-group">
+<% } %> -->
+    <div class="container">
+        <main role="main" class="pb-3" style="margin-top: 100px;">
+            <h1>Xem danh sách chụp phim</h1>
+            <form action="/BacSi/DSChupPhimBacSi" method="POST">
+                <div class="form-group">
                     <label>Mã bệnh nhân</label>
-                        <input type="text"  name="MaBenhNhan" class="form-control">
+                    <select class="form-control" name="MaBenhNhan">
+                        <% for ( var i=0; i < ListBenhNhan.length; i++ ) { %>
+                            <option value="<%=ListBenhNhan[i].MaBenhNhan%>">
+                                <%= ListBenhNhan[i].HoVaTenLot + " " + ListBenhNhan[i].Ten %>
+                            </option>
+                            <% } %>
+                    </select>
                     <label>FromDate</label>
-                    <input type="text"  name="FromDate" class="form-control">
+                    <input type="text" name="FromDate" value="2020-01-01" class="form-control">
+                    <label>ToDate</label>
+                    <input type="text" name="ToDate" value="2020-01-01" class="form-control">
 
-    <label>ToDate</label>
-        <input type="text"  name="ToDate" class="form-control">
-               
-            </div>
-			<button class="btn btn-primary w-100">Submit</button>
-		</form>
-    </main>
+                </div>
+                <button class="btn btn-primary w-100">Submit</button>
+            </form>
+        </main>
 
-    <%if (DSChupPhimBacSi) { %>
-        <div class="table-responsive">
+        <%if (DSChupPhimBacSi) { %>
+            <div class="table-responsive">
                 <table class="table table-hover">
                     <thead>
                         <tr>
@@ -32,33 +37,37 @@
                             <th>Mã bệnh nhân</th>
                             <th>Mã Nhân viên thực hiện</th>
                             <th>Thời gian thực hiện</th>
-
                         </tr>
                     </thead>
-                    
+
                     <tbody>
-                        <% for(let i = 0; i < DSChupPhimBacSi[0].length; i++) { %>
+                        <% for(let i=0; i < DSChupPhimBacSi[0].length; i++) { %>
                             <tr>
-                                    <td><%= DSChupPhimBacSi[0][i].KetQua %></td>
-                                <th><%= formatDate(DSChupPhimBacSi[0][i].ThoiGianKhamBenh) %></th>
-                                <td><%= DSChupPhimBacSi[0][i].MaNhanVien %></td>
-                                <td><%= DSChupPhimBacSi[0][i].MaBenhNhan  %></td>
-                                <td><%= DSChupPhimBacSi[0][i].MaNhanVienThucHien %></td>
-                                <td><%= formatDate(DSChupPhimBacSi[0][i].ThoiGianThucHien) %></td>
+                                <td>
+                                    <%= DSChupPhimBacSi[0][i].KetQua %>
+                                </td>
+                                <th>
+                                    <%= formatDate(DSChupPhimBacSi[0][i].ThoiGianKhamBenh) %>
+                                </th>
+                                <td>
+                                    <%= DSChupPhimBacSi[0][i].MaNhanVien %>
+                                </td>
+                                <td>
+                                    <%= DSChupPhimBacSi[0][i].MaBenhNhan %>
+                                </td>
+                                <td>
+                                    <%= DSChupPhimBacSi[0][i].MaNhanVienThucHien %>
+                                </td>
+                                <td>
+                                    <%= formatDate(DSChupPhimBacSi[0][i].ThoiGianThucHien) %>
+                                </td>
                             </tr>
-                        <% } %>
+                            <% } %>
                     </tbody>
                 </table>
             </div>
-        <% } %>
+            <% } %>
     </div>
 
-<%- include("../partials/footer") %>
-<%- include("../partials/ending") %>
-
-
-
-
-
-
-
+    <%- include("../partials/footer") %>
+        <%- include("../partials/ending") %>

@@ -1,26 +1,26 @@
 <%- include("../partials/header") %>
-    <div class="container">
-        <main role="main" class="pb-3" style="margin-top: 100px;">
-            <h1>Xem danh sách của bác sĩ</h1>
-            <form action="/BacSi/DSBacSi" method="POST">
-                <div class="form-group">
-                    <label>Chọn loại</label>
-                    <select class="form-control" name="Loai">
-                        <option value="DanhSachBenhNhanPhuTrach"> Danh sách bệnh nhân phụ trách</option>
-                        <option value="DanhSachChanDoanBenh">Danh sách chẩn đoán bệnh</option>
-                        <option value="DanhSachThuocBacSi"> Danh sách thuốc bác sĩ</option>
-                        <option value="DanhSachChanDoanBenh">Danh sách chẩn đoán bệnh</option>
-                        <option value="DanhSachXetNghiemBacSi"> Danh sách xét nghiệm bác sĩ</option>
-                        <option value="DanhSachChupPhimBacSi">Danh sách chụp phim bác sĩ</option>
-                        <option value="DanhSachBenhNhanCungBenh">Danh sách bệnh nhân cùng bệnh</option>
-                        <option value="DanhSachBenhNhanXuatVien"> Danh sách bệnh nhân xuất viện</option>
-                        <option value="DanhSachBenhNhanBatThuong">Danh sách bệnh nhân bất thường</option>
-                    </select>
-                </div>
-                <button class="btn btn-primary w-100">Submit</button>
-            </form>
-        </main>
-    </div>
-    <%- include("../partials/footer") %>
+  <div class="container">
+    <main role="main" class="pb-3" style="margin-top: 100px;">
+      <h1>Xem danh sách của bác sĩ</h1>
+      <form action="/BacSi/DSBacSi" method="POST">
+        <div class="form-group">
+          <label>Chọn loại</label>
+          <select class="form-control" name="Loai">
+            <option value="DanhSachBenhNhanPhuTrach"> Danh sách bệnh nhân phụ trách</option>
+            <option value="DanhSachChanDoanBenh">Danh sách chẩn đoán bệnh</option>
+            <option value="DanhSachThuocBacSi"> Danh sách thuốc bác sĩ</option>
+            <option value="DanhSachChanDoanBenh">Danh sách chẩn đoán bệnh</option>
+            <option value="DanhSachXetNghiemBacSi"> Danh sách xét nghiệm bác sĩ</option>
+            <option value="DanhSachChupPhimBacSi">Danh sách chụp phim bác sĩ</option>
+            <option value="DanhSachBenhNhanCungBenh">Danh sách bệnh nhân cùng bệnh</option>
+            <option value="DanhSachBenhNhanXuatVien"> Danh sách bệnh nhân xuất viện</option>
+            <option value="DanhSachBenhNhanBatThuong">Danh sách bệnh nhân bất thường</option>
+          </select>
+        </div>
+        <button class="btn btn-primary w-100">Submit</button>
+      </form>
+    </main>
+  </div>
+  <%- include("../partials/footer") %>
 
-        <%- include("../partials/ending") %>
+    <%- include("../partials/ending") %>

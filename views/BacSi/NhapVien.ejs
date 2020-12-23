@@ -1,49 +1,54 @@
-<%- include("../partials/header") %> 
-<% if(Flag){ %>
-    <div class="alert alert-success">
+<%- include("../partials/header") %>
+    <% if(Flag){ %>
+        <div class="alert alert-success">
             <strong>Success!</strong> Bạn đã thêm nhập viện thành công
-          </div>
- <% } %>
- <% if(Error){ %>
+        </div>
+        <% } %>
+            <!-- <% if(Error){ %>
     <div class="alert alert-danger">
         <strong>Error!</strong> <%=     Error  %> </div>
- <% } %>
-<div class="container">
-    <main role="main" class="pb-3" style="margin-top: 100px;">
-        <h1>Thêm nhập viện</h1>
-        <form action="/BacSi/NhapVien" method="POST">
-			<div class="form-group">
-                    <label>Mã bệnh nhân </label>
-                        <input type="text" name="MaBenhNhan" class="form-control">
-                        <label>Thời gian khám bệnh </label>
-                        <input type="text" name="ThoiGianKhamBenh" class="form-control">
-                        <label>Thời gian ra kết quả </label>
-                        <input type="text"  name="ThoiGianRaKQ" class="form-control">
-                    <label>Thời gian nhập viện</label>
-                        <input type="text"  name="ThoiGianNhapVien" class="form-control">
-                    <label>Số giường</label>
-                        <input type="text"  name="SoGiuong" class="form-control">
-                    <label>Số buồng</label>
-                        <input type="text"  name="SoBuong" class="form-control">
-                    <label>Tình trạng nhập viện</label>
-                        <input type="text" name="TinhTrangNhapVien" class="form-control">
-            </div>
-			<button class="btn btn-primary w-100">Submit</button>
-		</form>
-	</main>
+ <% } %> -->
+            <div class="container">
+                <main role="main" class="pb-3" style="margin-top: 100px;">
+                    <h1>Thêm nhập viện</h1>
+                    <form action="/BacSi/NhapVien" method="POST">
+                        <div class="form-group">
+                            <label>Tên bệnh nhân</label>
+                            <select class="form-control" name="MaBenhNhan">
+                                <% for ( var i=0; i < ListBenhNhan.length; i++ ) { %>
+                                    <option value="<%=ListBenhNhan[i].MaBenhNhan%>">
+                                        <%= ListBenhNhan[i].HoVaTenLot + " " + ListBenhNhan[i].Ten %>
+                                    </option>
+                                    <% } %>
+                            </select>
+                            <label>Thời gian khám bệnh</label>
+                            <select class="form-control" name="ThoiGianKhamBenh">
+                                <% for ( var i=0; i < ListThoiGianKhamBenh.length; i++ ) { %>
+                                    <option value="<%=ListThoiGianKhamBenh[i]%>">
+                                        <%= ListThoiGianKhamBenh[i]%>
+                                    </option>
+                                    <% } %>
+                            </select>
+                            <label>Thời gian ra kết quả</label>
+                            <select class="form-control" name="ThoiGianRaKQ">
+                                <% for ( var i=0; i < ListThoiGianRaKQ.length; i++ ) { %>
+                                    <option value="<%=ListThoiGianRaKQ[i]%>">
+                                        <%= ListThoiGianRaKQ[i]%>
+                                    </option>
+                                    <% } %>
+                            </select>
+                            <label>Thời gian nhập viện</label>
+                            <input type="text" name="ThoiGianNhapVien" value="yyyy-mm-dd hh:mm:ss" class="form-control">
+                            <label>Số giường</label>
+                            <input type="text" name="SoGiuong" class="form-control">
+                            <label>Số buồng</label>
+                            <input type="text" name="SoBuong" class="form-control">
+                            <label>Tình trạng nhập viện</label>
+                            <input type="text" name="TinhTrangNhapVien" class="form-control">
+                        </div>
+                        <button class="btn btn-primary w-100">Submit</button>
+                    </form>
+                </main>
 
-<%- include("../partials/footer") %>
-<%- include("../partials/ending") %>
-
-
-
-
-
-
-
-
-
-
-
-
-
+                <%- include("../partials/footer") %>
+                    <%- include("../partials/ending") %>

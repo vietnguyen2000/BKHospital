@@ -1,22 +1,28 @@
-<%- include("../partials/header") %> 
-<% if(Error){ %>
+<%- include("../partials/header") %>
+    <!-- <% if(Error){ %>
     <div class="alert alert-danger">
         <strong>Error!</strong> <%=     Error  %> </div>
-<% } %>
-<div class="container">
-    <main role="main" class="pb-3" style="margin-top: 100px;">
-        <h1>Xem danh sách bệnh nhân phụ trách</h1>
-        <form action="/BacSi/DsBenhNhanPhuTrach" method="POST">
-			<div class="form-group">
-                <label>Ngày</label>
-                    <input type="text" name="Ngay" class="form-control">
-            </div>
-			<button class="btn btn-primary w-100">Submit</button>
-		</form>
-    </main>
+<% } %> -->
+    <div class="container">
+        <main role="main" class="pb-3" style="margin-top: 100px;">
+            <h1>Xem danh sách bệnh nhân phụ trách</h1>
+            <form action="/BacSi/DsBenhNhanPhuTrach" method="POST">
+                <div class="form-group">
+                    <label>Ngày</label>
+                    <select class="form-control" name="Ngay">
+                        <% for ( var i=0; i < ListThoiGianKhamBenh.length; i++ ) { %>
+                            <option value="<%=ListThoiGianKhamBenh[i]%>">
+                                <%= ListThoiGianKhamBenh[i]%>
+                            </option>
+                            <% } %>
+                    </select>
+                </div>
+                <button class="btn btn-primary w-100">Submit</button>
+            </form>
+        </main>
 
-    <%if (DsBenhNhanPhuTrach) { %>
-        <div class="table-responsive">
+        <%if (DsBenhNhanPhuTrach) { %>
+            <div class="table-responsive">
                 <table class="table table-hover">
                     <thead>
                         <tr>
@@ -26,27 +32,29 @@
                             <th>Loại</th>
                         </tr>
                     </thead>
-                    
+
                     <tbody>
-                        <% for(let i = 0; i < DsBenhNhanPhuTrach[0].length; i++) { %>
+                        <% for(let i=0; i < DsBenhNhanPhuTrach[0].length; i++) { %>
                             <tr>
-                                <th><%= DsBenhNhanPhuTrach[0][i].MaBenhNhan %></th>
-                                <td><%= DsBenhNhanPhuTrach[0][i].DanToc %></td>
-                                <td><%= DsBenhNhanPhuTrach[0][i].TaiKhoan %></td>
-                                <td><%= DsBenhNhanPhuTrach[0][i].Loai %></td>
+                                <th>
+                                    <%= DsBenhNhanPhuTrach[0][i].MaBenhNhan %>
+                                </th>
+                                <td>
+                                    <%= DsBenhNhanPhuTrach[0][i].DanToc %>
+                                </td>
+                                <td>
+                                    <%= DsBenhNhanPhuTrach[0][i].TaiKhoan %>
+                                </td>
+                                <td>
+                                    <%= DsBenhNhanPhuTrach[0][i].Loai %>
+                                </td>
                             </tr>
-                        <% } %>
+                            <% } %>
                     </tbody>
                 </table>
             </div>
-        <% } %>
+            <% } %>
     </div>
 
-<%- include("../partials/footer") %>
-<%- include("../partials/ending") %>
-
-
-
-
-
-
+    <%- include("../partials/footer") %>
+        <%- include("../partials/ending") %>
