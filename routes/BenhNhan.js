@@ -189,7 +189,7 @@ router.post("/CapNhatNhanKhauHoc", Authenticate, (req, res) => {
     });
   }
   const {
-    MaBenhNhan,
+    MaBenhNhan = req.user.MaBenhNhan,
     HoVaTenLot,
     Ten,
     SDT,
@@ -229,7 +229,7 @@ router.post("/themBHYTe_BenhNhan", Authenticate, (req, res) => {
     });
   }
   const {
-    MaBenhNhan,
+    MaBenhNhan = req.user.MaBenhNhan,
     MaTheBHYTe,
     NgayDangKy,
     NgayHetHan
