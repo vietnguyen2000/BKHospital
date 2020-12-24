@@ -9,13 +9,7 @@
             <form action="/BacSi/DsBenhNhanPhuTrach" method="POST">
                 <div class="form-group">
                     <label>Ngày</label>
-                    <select class="form-control" name="Ngay">
-                        <% for ( var i=0; i < ListThoiGianKhamBenh.length; i++ ) { %>
-                            <option value="<%=ListThoiGianKhamBenh[i]%>">
-                                <%= ListThoiGianKhamBenh[i]%>
-                            </option>
-                            <% } %>
-                    </select>
+                    <input class="form-control" type="date" name = "Ngay" value = <%=Ngay%>>
                 </div>
                 <button class="btn btn-primary w-100">Submit</button>
             </form>
@@ -27,9 +21,10 @@
                     <thead>
                         <tr>
                             <th>Mã bệnh nhân</th>
+                            <th>Họ và tên lót</th>
+                            <th>Tên</th>
                             <th>Dân tộc</th>
-                            <th>Tài khoản</th>
-                            <th>Loại</th>
+
                         </tr>
                     </thead>
 
@@ -40,14 +35,15 @@
                                     <%= DsBenhNhanPhuTrach[0][i].MaBenhNhan %>
                                 </th>
                                 <td>
+                                    <%= DsBenhNhanPhuTrach[0][i].HoVaTenLot %>
+                                </td>
+                                <td>
+                                    <%= DsBenhNhanPhuTrach[0][i].Ten %>
+                                </td>
+                                <td>
                                     <%= DsBenhNhanPhuTrach[0][i].DanToc %>
                                 </td>
-                                <td>
-                                    <%= DsBenhNhanPhuTrach[0][i].TaiKhoan %>
-                                </td>
-                                <td>
-                                    <%= DsBenhNhanPhuTrach[0][i].Loai %>
-                                </td>
+                                
                             </tr>
                             <% } %>
                     </tbody>
