@@ -1225,13 +1225,16 @@ router.post("/TaoChiSo", Authenticate, (req, res) =>
 
 router.get("/DsXetNghiemBacSi", Authenticate, (req, res) =>
 {
-  sql = "select MaBenhNhan from XetNghiem"
-  mysql.query(sql, (err, ListBenhNhan) =>
+  sql = "call DSBenhNhanNoiTru_PhuTrach_All(?)"
+  mysql.query(sql, [req.user.MaNhanVien], (err, ListBenhNhan) =>
   {
     if (err) return res.render("err", { err: err });
     res.render("BacSi/DsXetNghiemBacSi", {
       DsXetNghiemBacSi: null,
-      ListBenhNhan,
+      ListBenhNhan: ListBenhNhan[0],
+      MaBenhNhan: null,
+      FromDate: null,
+      ToDate: null,
     });
   })
 })
@@ -1246,14 +1249,14 @@ router.post("/DsXetNghiemBacSi", Authenticate, (req, res) =>
     (err, result) =>
     {
       if (err) return res.render("err", { err: err });
-      sql = "select MaBenhNhan from XetNghiem"
-      mysql.query(sql, (err, ListBenhNhan) =>
+      sql = "call DSBenhNhanNoiTru_PhuTrach_All(?)"
+      mysql.query(sql, [req.user.MaNhanVien], (err, ListBenhNhan) =>
       {
         if (err) return res.render("err", { err: err });
-        res.render("BacSi/DsXetNghiemBacSi", {
+        res.render("BacSi/DsXetNghiemBacSi", Object.assign({
           DsXetNghiemBacSi: result,
-          ListBenhNhan,
-        });
+          ListBenhNhan: ListBenhNhan[0],
+        },req.body));
       })
     })
 }
