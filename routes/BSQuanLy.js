@@ -9,6 +9,7 @@ const Joi = require("joi");
 const TongBenhNhan_CaTruc = require("../schemas/TongBenhNhan_CaTruc");
 const themKhoaMoi = require("../schemas/themKhoaMoi");
 const taoBacSi = require("../schemas/taoBacSi");
+const taoBSQuanly = require("../schemas/taoBSQuanly");
 
 mysql.connect(err=>{
     if (err){
@@ -233,6 +234,37 @@ router.post("/taoBacSi", Authenticate, (req, res) => {
     }
   );
 });
+
+// (iii.0c). chuyển 1 tài khoản bác sĩ thành bác sĩ quản lý
+router.get("/taoBSQuanly", Authenticate, (req, res) => {
+  res.render("BSQuanLy/taoBSQuanly", { Flag: false, Error: false });
+});
+
+router.post("/taoBSQuanly", Authenticate, (req, res) => {
+  const { value, error } = Joi.validate(req.body, taoBSQuanly);
+  if (error) {
+    res.render("BSQuanLy/taoBSQuanly", {
+      Flag: false,
+      Error: error.details[0].message,
+    });
+  }
+  const {
+    MaNhanVien,
+  } = value;
+  var sql = "call taoBSQuanly(?)";
+  mysql.query(
+    sql,
+    [
+      MaNhanVien,
+    ],
+    (err, result) => {
+      if (err) return res.render("err", { err: err });
+
+      res.render("BSQuanLy/taoBSQuanly", { Flag: true, Error: false });
+    }
+  );
+});
+
 
 // TODO: Viết router.get và router.post mỗi chức năng mà đề yêu cầu, vui lòng đọc qua hết các chức năng cần hiện thực và gom nhóm các chức năng lại một cách gọn gàng nhất.
 // ! Có một số chức năng nhỏ nằm trong 1 chức năng lớn, thì có thể gom thành 1 route và nhiều post để thực thi 
