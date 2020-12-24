@@ -1,7 +1,7 @@
 <%- include("../partials/header") %>
     <div class="container">
         <main role="main" class="pb-3" style="margin-top: 100px;">
-            <h1>Xem danh sách bệnh nhân xuất viện</h1>
+            <h1>Xem danh sách bệnh nhân đã xuất viện</h1>
         </main>
 
         <%if (DSBenhNhanXV) { %>
@@ -10,9 +10,8 @@
                     <thead>
                         <tr>
                             <th>Mã bệnh nhân</th>
+                            <th>Họ và tên</th>
                             <th>Dân tộc</th>
-                            <th>Tài khoản</th>
-                            <th>Loại</th>
                         </tr>
                     </thead>
 
@@ -23,13 +22,10 @@
                                     <%= DSBenhNhanXV[0][i].MaBenhNhan %>
                                 </td>
                                 <td>
+                                    <%= DSBenhNhanXV[0][i].HoVaTenLot + " " + DSBenhNhanXV[0][i].Ten %>
+                                </td>
+                                <td>
                                     <%= DSBenhNhanXV[0][i].DanToc %>
-                                </td>
-                                <td>
-                                    <%= DSBenhNhanXV[0][i].TaiKhoan %>
-                                </td>
-                                <td>
-                                    <%= DSBenhNhanXV[0][i].Loai %>
                                 </td>
                             </tr>
                             <% } %>
