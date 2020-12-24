@@ -930,72 +930,53 @@ router.post("/DsBenhNhanPhuTrach", Authenticate, (req, res) =>
     {
       console.log(Object.assign({
         DsBenhNhanPhuTrach: result
-      },req.body))
+      }, req.body))
       if (err) return res.render("err", { err: err });
       res.render("BacSi/DsBenhNhanPhuTrach", Object.assign({
         DsBenhNhanPhuTrach: result
-      },req.body));
+      }, req.body));
     })
 });
 
 
 router.get("/DsChanDoanBenh", Authenticate, (req, res) =>
 {
-  var sql = "select k.MaBenh, b.TenBenh from KQBenh k join Benh b on b.MaBenh = k.MaBenh";
-  mysql.query(
-    sql,
-    (err, ListMaBenh) =>
+  sql = 'call DSBenhNhan_PhuTrach_All(?)';
+  mysql.query(sql, [req.user.MaNhanVien],
+    (err, ListBenhNhan) =>
     {
       if (err) return res.render("err", { err: err });
-      sql = `select k.MaBenhNhan, n.HoVaTenLot, n.Ten from KQChanDoan k join BenhNhan b on 
-      b.MaBenhNhan = k.MaBenhNhan join NguoiDung n on b.TaiKhoan = n.TaiKhoan`;
-      mysql.query(sql,
-        (err, ListBenhNhan) =>
-        {
-          if (err) return res.render("err", { err: err });
-          res.render("BacSi/DsChanDoanBenh", {
-            ListMaBenh,
-            ListBenhNhan,
-            DsChanDoanBenh: null,
-          });
-        })
-    }
-  );
-});
+      res.render("BacSi/DsChanDoanBenh", {
+        ListBenhNhan: ListBenhNhan[0],
+        DsChanDoanBenh: null,
+        MaBenhNhan: null
+      });
+    })
+}
+);
 
 router.post("/DsChanDoanBenh", Authenticate, (req, res) =>
 {
-  var sql = "call DSChanDoan_Benh(?,?,?)";
+  var sql = "call DSChanDoan_Benh(?,?)";
   mysql.query(
     sql,
     [req.user.MaNhanVien, ...Object.values(req.body)],
     (err, result) =>
     {
       if (err) return res.render("err", { err: err });
-
-      var sql = "select k.MaBenh, b.TenBenh from KQBenh k join Benh b on b.MaBenh = k.MaBenh";
-      mysql.query(
-        sql,
-        (err, ListMaBenh) =>
+      sql = 'call DSBenhNhan_PhuTrach_All(?)';
+      mysql.query(sql, [req.user.MaNhanVien],
+        (err, ListBenhNhan) =>
         {
           if (err) return res.render("err", { err: err });
-          sql = `select k.MaBenhNhan, n.HoVaTenLot, n.Ten from KQChanDoan k join BenhNhan b on 
-          b.MaBenhNhan = k.MaBenhNhan join NguoiDung n on b.TaiKhoan = n.TaiKhoan`;
-          mysql.query(sql,
-            (err, ListBenhNhan) =>
-            {
-              if (err) return res.render("err", { err: err });
-              res.render("BacSi/DsChanDoanBenh", {
-                ListMaBenh,
-                ListBenhNhan,
-                DsChanDoanBenh: result,
-              });
-            })
-        }
-      );
-    }
-  );
-});
+          console.log(result);
+          res.render("BacSi/DsChanDoanBenh", Object.assign({
+            ListBenhNhan: ListBenhNhan[0],
+            DsChanDoanBenh: result[0],
+          }, req.body));
+        })
+}
+)})
 
 router.get("/DsThuocBacSi", Authenticate, (req, res) =>
 {

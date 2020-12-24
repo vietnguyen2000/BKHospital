@@ -26,6 +26,7 @@ const dbconfigAzure = {
   port: 3306,
   ssl: true,
   database: "hospital",
+  dateStrings: true
 };
 
 const dbconfigLocalAnDanh = {
@@ -33,12 +34,14 @@ const dbconfigLocalAnDanh = {
   user: DB_USER_LOCAL_ANDANH,
   password: DB_PASSWORD_LOCAL_ANDANH,
   database: "hospital",
+  dateStrings: true
 };
 const dbconfigLocalBenhNhan = {
   host: DB_HOST_LOCAL,
   user: DB_USER_LOCAL_BENHNHAN,
   password: DB_PASSWORD_LOCAL_BENHNHAN,
   database: "hospital",
+  dateStrings: true
 };
 const dbconfigLocalBacSi = {
   host: DB_HOST_LOCAL,
@@ -46,12 +49,14 @@ const dbconfigLocalBacSi = {
   password: DB_PASSWORD_LOCAL_BACSI,
   database: "hospital",
   timezone: "utc",
+  dateStrings: true
 };
 const dbconfigLocalQuanLy = {
   host: DB_HOST_LOCAL,
   user: DB_USER_LOCAL_QUANLY,
   password: DB_PASSWORD_LOCAL_QUANLY,
   database: "hospital",
+  dateStrings: true
 };
 function selectDbconfig() {
   if (process.argv.includes("--localDatabase")) {
