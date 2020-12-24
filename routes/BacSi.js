@@ -1350,14 +1350,16 @@ router.post("/TaoPhim", Authenticate, (req, res) =>
 
 router.get("/DSChupPhimBacSi", Authenticate, (req, res) =>
 {
-  var sql = `select p.MaBenhNhan, n.HoVaTenLot, n.Ten from Phim p join BenhNhan b on 
-  b.MaBenhNhan = p.MaBenhNhan join NguoiDung n on b.TaiKhoan = n.TaiKhoan`;
-  mysql.query(sql, (err, ListBenhNhan) =>
+  sql = "call DSBenhNhanNoiTru_PhuTrach_All(?)"
+  mysql.query(sql, [req.user.MaNhanVien], (err, ListBenhNhan) =>
   {
     if (err) return res.render("err", { err: err });
     res.render("BacSi/DSChupPhimBacSi", {
-      ListBenhNhan,
       DSChupPhimBacSi: null,
+      ListBenhNhan: ListBenhNhan[0],
+      MaBenhNhan: null,
+      FromDate: null,
+      ToDate: null,
     });
   })
 })
@@ -1371,17 +1373,16 @@ router.post("/DSChupPhimBacSi", Authenticate, (req, res) =>
     (err, result) =>
     {
       if (err) return res.render("err", { err: err });
-      var sql = `select p.MaBenhNhan, n.HoVaTenLot, n.Ten from Phim p join BenhNhan b on 
-  b.MaBenhNhan = p.MaBenhNhan join NguoiDung n on b.TaiKhoan = n.TaiKhoan`;
+      var sql = `call DSBenhNhanNoiTru_PhuTrach_All(?)`;
       mysql.query(
-        sql,
+        sql, [req.user.MaNhanVien],
         (err, ListBenhNhan) =>
         {
           if (err) return res.render("err", { err: err });
-          res.render("BacSi/DSChupPhimBacSi", {
-            ListBenhNhan,
+          res.render("BacSi/DSChupPhimBacSi", Object.assign({
+            ListBenhNhan: ListBenhNhan[0],
             DSChupPhimBacSi: result,
-          });
+          },req.body));
         })
     }
   );
