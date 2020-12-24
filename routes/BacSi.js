@@ -975,8 +975,9 @@ router.post("/DsChanDoanBenh", Authenticate, (req, res) =>
             DsChanDoanBenh: result[0],
           }, req.body));
         })
-}
-)})
+    }
+  )
+})
 
 router.get("/DsThuocBacSi", Authenticate, (req, res) =>
 {
@@ -987,7 +988,7 @@ router.get("/DsThuocBacSi", Authenticate, (req, res) =>
       if (err) return res.render("err", { err: err });
       res.render("BacSi/DsThuocBacSi", {
         Error: false,
-        ListBenhNhan : ListBenhNhan[0],
+        ListBenhNhan: ListBenhNhan[0],
         DsThuocBacSi: null,
         MaBenhNhan: null,
         FromDate: null,
@@ -1256,7 +1257,7 @@ router.post("/DsXetNghiemBacSi", Authenticate, (req, res) =>
         res.render("BacSi/DsXetNghiemBacSi", Object.assign({
           DsXetNghiemBacSi: result,
           ListBenhNhan: ListBenhNhan[0],
-        },req.body));
+        }, req.body));
       })
     })
 }
@@ -1382,7 +1383,7 @@ router.post("/DSChupPhimBacSi", Authenticate, (req, res) =>
           res.render("BacSi/DSChupPhimBacSi", Object.assign({
             ListBenhNhan: ListBenhNhan[0],
             DSChupPhimBacSi: result,
-          },req.body));
+          }, req.body));
         })
     }
   );
@@ -1429,36 +1430,21 @@ router.get("/DSBenhNhanCungBenh", Authenticate, (req, res) =>
     (err, ListMaBenh) =>
     {
       if (err) return res.render("err", { err: err });
-      sql = `select b.MaBenhNhan, n.HoVaTenLot, n.Ten from BenhNhan b join NguoiDung n
-      on b.TaiKhoan = n.TaiKhoan`;
-      mysql.query(sql,
-        (err, ListBenhNhan) =>
-        {
-          if (err) return res.render("err", { err: err });
-          res.render("BacSi/DSBenhNhanCungBenh", {
-            ListMaBenh,
-            ListBenhNhan,
-            DSBenhNhanCungBenh: null,
-          });
-        })
-    }
-  );
+      res.render("BacSi/DSBenhNhanCungBenh", {
+        ListMaBenh,
+        DSBenhNhanCungBenh: null,
+        MaBenh: null
+      });
+    })
 });
 
 router.post("/DSBenhNhanCungBenh", Authenticate, (req, res) =>
 {
-  const { value, error } = Joi.validate(req.body, DSBenhNhanCungBenh);
-  if (error)
-  {
-    res.render("BacSi/DSBenhNhanCungBenh", {
-      Flag: false,
-      Error: error.details[0].message,
-    });
-  }
-  var sql = "call DSBenhNhan_CungBenhBenhNhan_CungBenh(?, ?, ?)";
+
+  var sql = "call DSBenhNhan_CungBenhBenhNhan_CungBenh(?, ?)";
   mysql.query(
     sql,
-    [req.user.MaNhanVien, ...Object.values(value)],
+    [req.user.MaNhanVien, ...Object.values(req.body)],
     (err, result) =>
     {
       if (err) return res.render("err", { err: err });
@@ -1468,22 +1454,15 @@ router.post("/DSBenhNhanCungBenh", Authenticate, (req, res) =>
         (err, ListMaBenh) =>
         {
           if (err) return res.render("err", { err: err });
-          sql = `select b.MaBenhNhan, n.HoVaTenLot, n.Ten from BenhNhan b join NguoiDung n
-          on b.TaiKhoan = n.TaiKhoan`;
-          mysql.query(sql, (err, ListBenhNhan) =>
-          {
-            if (err) return res.render("err", { err: err });
-            res.render("BacSi/DSBenhNhanCungBenh", {
-              ListMaBenh,
-              ListBenhNhan,
-              DSBenhNhanCungBenh: result,
-            });
-          })
-        }
-      );
+          res.render("BacSi/DSBenhNhanCungBenh", Object.assign({
+            ListMaBenh,
+            DSBenhNhanCungBenh: result,
+          }, req.body));
+        })
     }
   );
-});
+}
+);
 
 
 
