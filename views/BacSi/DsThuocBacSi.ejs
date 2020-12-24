@@ -7,21 +7,21 @@
         <% } %>
             <div class="container">
                 <main role="main" class="pb-3" style="margin-top: 100px;">
-                    <h1>Xem danh sách thuốc của bác sĩ</h1>
+                    <h1>Xem danh sách thuốc bác sĩ đã chỉ định cho bệnh nhân dùng theo ngày</h1>
                     <form action="/BacSi/DsThuocBacSi" method="POST">
                         <div class="form-group">
                             <label>Bệnh nhân</label>
                             <select class="form-control" name="MaBenhNhan">
                                 <% for ( var i=0; i < ListBenhNhan.length; i++ ) { %>
-                                    <option value="<%=ListBenhNhan[i].MaBenhNhan%>">
-                                        <%= ListBenhNhan[i].HoVaTenLot + " " + ListBenhNhan[i].Ten %>
+                                    <option value="<%=ListBenhNhan[i].MaBenhNhan%>" <%if (ListBenhNhan[i].MaBenhNhan == MaBenhNhan) {%> selected <%}%>>
+                                        <%= ListBenhNhan[i].HoVaTenLot + " " + ListBenhNhan[i].Ten + " - " + ListBenhNhan[i].MaBenhNhan%>
                                     </option>
                                     <% } %>
                             </select>
-                            <label>FromDate</label>
-                            <input type="text" name="FromDate" value="2020-01-01" class="form-control">
-                            <label>ToDate</label>
-                            <input type="text" name="ToDate" value="2020-01-01" class="form-control">
+                            <label>Từ ngày</label>
+                            <input type="date" name="FromDate" <% if(FromDate!=null) {%> value = <%=FromDate %> <%}%> class="form-control">
+                            <label>Đến ngày</label>
+                            <input type="date" name="ToDate" <% if(FromDate!=null) {%> value = <%=ToDate%> <%}%> class="form-control">
                         </div>
                         <button class="btn btn-primary w-100">Submit</button>
                     </form>

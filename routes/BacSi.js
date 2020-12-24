@@ -980,48 +980,49 @@ router.post("/DsChanDoanBenh", Authenticate, (req, res) =>
 
 router.get("/DsThuocBacSi", Authenticate, (req, res) =>
 {
-  var sql = `select k.MaBenhNhan, n.HoVaTenLot, n.Ten from KQThuoc k join BenhNhan b on 
-  b.MaBenhNhan = k.MaBenhNhan join NguoiDung n on b.TaiKhoan = n.TaiKhoan`;
-  mysql.query(sql,
+  var sql = 'CALL DSBenhNhan_PhuTrach_All(?)';
+  mysql.query(sql, [req.user.MaNhanVien],
     (err, ListBenhNhan) =>
     {
       if (err) return res.render("err", { err: err });
       res.render("BacSi/DsThuocBacSi", {
         Error: false,
-        ListBenhNhan,
+        ListBenhNhan : ListBenhNhan[0],
         DsThuocBacSi: null,
+        MaBenhNhan: null,
+        FromDate: null,
+        ToDate: null,
       });
     })
 })
 
 router.post("/DsThuocBacSi", Authenticate, (req, res) =>
 {
-  const { value, error } = Joi.validate(req.body, DsThuocBacSi);
-  if (error)
-  {
-    res.render("BacSi/DsThuocBacSi", {
-      Flag: false,
-      Error: error.details[0].message,
-    });
-  }
+  // const { value, error } = Joi.validate(req.body, DsThuocBacSi);
+  // if (error)
+  // {
+  //   res.render("BacSi/DsThuocBacSi", {
+  //     Flag: false,
+  //     Error: error.details[0].message,
+  //   });
+  // }
   var sql = "call DSThuoc_BacSi(?,?,?,?)";
   mysql.query(
     sql,
-    [req.user.MaNhanVien, ...Object.values(value)],
+    [req.user.MaNhanVien, ...Object.values(req.body)],
     (err, result) =>
     {
       if (err) return res.render("err", { err: err });
-      var sql = `select k.MaBenhNhan, n.HoVaTenLot, n.Ten from KQThuoc k join BenhNhan b on 
-      b.MaBenhNhan = k.MaBenhNhan join NguoiDung n on b.TaiKhoan = n.TaiKhoan`;
-      mysql.query(sql,
+      var sql = `CALL DSBenhNhan_PhuTrach_All(?)`;
+      mysql.query(sql, [req.user.MaNhanVien],
         (err, ListBenhNhan) =>
         {
           if (err) return res.render("err", { err: err });
-          res.render("BacSi/DsThuocBacSi", {
+          res.render("BacSi/DsThuocBacSi", Object.assign({
             Error: false,
-            ListBenhNhan,
+            ListBenhNhan: ListBenhNhan[0],
             DsThuocBacSi: result,
-          });
+          }, req.body));
         })
     })
 })
