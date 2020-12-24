@@ -7,6 +7,8 @@ const { isAuth} = require('../middlewares/auth.middleware');
 const Joi = require("joi");
 
 const TongBenhNhan_CaTruc = require("../schemas/TongBenhNhan_CaTruc");
+const themKhoaMoi = require("../schemas/themKhoaMoi");
+
 mysql.connect(err=>{
     if (err){
         console.log("FAILED TO CONNECT TO DATABASE!");
@@ -153,6 +155,38 @@ router.post("/TongBenhNhan_CaTruc_Khoa", Authenticate, (req, res) => {
     }
   );
 });
+
+
+// (iii.0a). Thêm khoa mới
+router.get("/themKhoaMoi", Authenticate, (req, res) => {
+  res.render("BSQuanLy/themKhoaMoi", { Flag: false, Error: false });
+});
+
+router.post("/themKhoaMoi", Authenticate, (req, res) => {
+  const { value, error } = Joi.validate(req.body, themKhoaMoi);
+  if (error) {
+    res.render("BSQuanLy/themKhoaMoi", {
+      Flag: false,
+      Error: error.details[0].message,
+    });
+  }
+  const {
+    TenKhoa,
+  } = value;
+  var sql = "call themKhoaMoi(?)";
+  mysql.query(
+    sql,
+    [
+      TenKhoa,
+    ],
+    (err, result) => {
+      if (err) return res.render("err", { err: err });
+
+      res.render("BSQuanLy/themKhoaMoi", { Flag: true, Error: false });
+    }
+  );
+});
+
 
 // TODO: Viết router.get và router.post mỗi chức năng mà đề yêu cầu, vui lòng đọc qua hết các chức năng cần hiện thực và gom nhóm các chức năng lại một cách gọn gàng nhất.
 // ! Có một số chức năng nhỏ nằm trong 1 chức năng lớn, thì có thể gom thành 1 route và nhiều post để thực thi 

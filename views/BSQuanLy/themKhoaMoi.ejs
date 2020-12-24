@@ -1,0 +1,39 @@
+<%- include("../partials/header") %> 
+<% if(Flag){ %>
+    <div class="alert alert-success">
+            <strong>Success!</strong>  Bạn đã thêm khoa mới thành công
+          </div>
+ <% } %>
+ <% if(Error){ %>
+    <div class="alert alert-danger">
+        <strong>Error!</strong> <%=     Error  %> </div>
+<% } %>
+<div class="container">
+    <main role="main" class="pb-3" style="margin-top: 100px;">
+        <h1>Thêm khoa mới</h1>
+        <form action="/BSQuanLy/themKhoaMoi" method="POST">
+			<div class="form-group">
+                    <label>Nhập tên khoa mới</label>
+                        <input type="text"  name="TenKhoa" class="form-control">
+            </div>
+			<button class="btn btn-primary w-100">Submit</button>
+		</form>
+	</main>
+
+<%- include("../partials/footer") %>
+<%- include("../partials/ending") %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
