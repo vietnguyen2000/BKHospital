@@ -1,0 +1,40 @@
+<%- include("../partials/header") %> 
+<div class="container">
+	<main role="main" class="pb-3" style="margin-top: 100px;">
+		<h1>Số lượng xét nghiệm</h1>
+		<form action="/BSQuanLy/tongSoXetNghiem" method="POST">
+			<div class="form-group">
+				<label>Khoa điều trị</label>
+				<select class="form-control" name="Ngay[KhoaDieuTri]">
+					<option value="a">Tất cả các khoa</option>
+					<% if(KhoaDieuTri){
+						KhoaDieuTri.forEach(element => {%>
+								<option value = <%= element.MaKhoaDieuTri %> <% if (element.MaKhoaDieuTri == user.MaKhoaDieuTri) {%> selected <%}%>><%=element.TenKhoa%></option>
+						<%});
+					}%>
+				</select>
+				<label>Ngày</label>
+				<input type = "date" class = "form-control" name="Ngay[Ngay]" placeholder="Date" id="_today">
+			</div>
+			<button class="btn btn-primary w-100">Submit</button>
+		</form>
+		<% if(tongSoXetNghiem) { %>
+				<div class="table-responsive">
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th>Tổng số xét nghiệm</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+                            <td><%= tongSoXetNghiem[0].TongXetNghiem %></td>
+						</tbody>
+					</table>
+				</div>
+		<%}%>
+	</main>
+</div>
+<%- include("../partials/footer") %> 
+
+<%- include("../partials/ending") %>
