@@ -8,6 +8,7 @@ const Joi = require("joi");
 
 const TongBenhNhan_CaTruc = require("../schemas/TongBenhNhan_CaTruc");
 const themKhoaMoi = require("../schemas/themKhoaMoi");
+const taoBacSi = require("../schemas/taoBacSi");
 
 mysql.connect(err=>{
     if (err){
@@ -187,6 +188,51 @@ router.post("/themKhoaMoi", Authenticate, (req, res) => {
   );
 });
 
+// (iii.0b). Thêm tài khoản bác sĩ
+router.get("/taoBacSi", Authenticate, (req, res) => {
+  res.render("BSQuanLy/taoBacSi", { Flag: false, Error: false });
+});
+
+router.post("/taoBacSi", Authenticate, (req, res) => {
+  const { value, error } = Joi.validate(req.body, taoBacSi);
+  if (error) {
+    res.render("BSQuanLy/taoBacSi", {
+      Flag: false,
+      Error: error.details[0].message,
+    });
+  }
+  const {
+    TaiKhoan,
+    MatKhau,
+    HoVaTenLot,
+    Ten,
+    Email,
+    SDT,
+    GioiTinh,
+    NgaySinh,
+    MaKhoaDieuTri,
+  } = value;
+  var sql = "call taoBacSi(?,?,?,?,?,?,?,?,?)";
+  mysql.query(
+    sql,
+    [
+      TaiKhoan,
+      MatKhau,
+      HoVaTenLot,
+      Ten,
+      Email,
+      SDT,
+      GioiTinh,
+      NgaySinh,
+      MaKhoaDieuTri,
+    ],
+    (err, result) => {
+      if (err) return res.render("err", { err: err });
+
+      res.render("BSQuanLy/taoBacSi", { Flag: true, Error: false });
+    }
+  );
+});
 
 // TODO: Viết router.get và router.post mỗi chức năng mà đề yêu cầu, vui lòng đọc qua hết các chức năng cần hiện thực và gom nhóm các chức năng lại một cách gọn gàng nhất.
 // ! Có một số chức năng nhỏ nằm trong 1 chức năng lớn, thì có thể gom thành 1 route và nhiều post để thực thi 
