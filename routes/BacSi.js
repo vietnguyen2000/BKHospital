@@ -1134,33 +1134,20 @@ router.post("/TaoChiSoXN", Authenticate, (req, res) =>
 
 router.get("/TaoChiSo", Authenticate, (req, res) =>
 {
-  var sql = "select TenXetNghiem from XetNghiem";
-  mysql.query(sql, (err, result) =>
+  var sql = "select * from XetNghiem Where MaNhanVienThucHien = ?";
+  mysql.query(sql, [req.user.MaNhanVien], (err, result) =>
   {
     if (err) return res.render("err", { err: err });
-    sql = "select ThoiGianKhamBenh from XetNghiem";
-    mysql.query(sql, (err, ThoiGianKhamBenh) =>
+    sql = "select * from ChiSoXN ORDER BY MaChiSoXetNghiem";
+    mysql.query(sql, (err, MaChiSoXetNghiem) =>
     {
       if (err) return res.render("err", { err: err });
-      const convert = ThoiGianKhamBenh.map((e) => formatDate(JSON.stringify(e.ThoiGianKhamBenh)))
-      sql = "select MaChiSoXetNghiem from ChiSoXN";
-      mysql.query(sql, (err, MaChiSoXetNghiem) =>
-      {
-        if (err) return res.render("err", { err: err });
-        sql = `select x.MaBenhNhan, n.HoVaTenLot, n.Ten from XetNghiem x join BenhNhan b on 
-        b.MaBenhNhan = x.MaBenhNhan join NguoiDung n on b.TaiKhoan = n.TaiKhoan`;
-        mysql.query(sql, (err, BenhNhan) =>
-        {
-          if (err) return res.render("err", { err: err });
-          res.render("BacSi/TaoChiSo", {
-            Flag: false,
-            result,
-            ThoiGianKhamBenh: convert,
-            MaChiSoXetNghiem,
-            BenhNhan
-          });
-        })
-      })
+
+      res.render("BacSi/TaoChiSo", {
+        Flag: false,
+        XetNghiem: result,
+        MaChiSoXetNghiem,
+      });
     })
   })
 
@@ -1171,57 +1158,42 @@ router.post("/TaoChiSo", Authenticate, (req, res) =>
 {
   const {
     TenChiSo,
-    TenXetNghiem,
-    ThoiGianKhamBenh,
-    MaBenhNhan,
+    XetNghiem,
     KetQua,
     MaChiSoXetNghiem,
   } = req.body;
+  console.log(XetNghiem)
   var sql = "call taoChiSo(?,?,?,?,?,?,?)";
+  xn = JSON.parse(XetNghiem)
   mysql.query(
     sql,
     [
       TenChiSo,
-      TenXetNghiem,
-      ThoiGianKhamBenh,
+      xn.TenXetNghiem,
+      xn.ThoiGianKhamBenh,
       req.user.MaNhanVien,
-      MaBenhNhan,
+      xn.MaBenhNhan,
       KetQua,
       MaChiSoXetNghiem,
     ],
     (err) =>
     {
-      var sql = "select TenXetNghiem from XetNghiem";
-      mysql.query(sql, (err, result) =>
+      var sql = "select * from XetNghiem Where MaNhanVienThucHien = ?";
+      mysql.query(sql, [req.user.MaNhanVien], (err, result) =>
       {
         if (err) return res.render("err", { err: err });
-        sql = "select ThoiGianKhamBenh from XetNghiem";
-        mysql.query(sql, (err, ThoiGianKhamBenh) =>
+        sql = "select * from ChiSoXN ORDER BY MaChiSoXetNghiem";
+        mysql.query(sql, (err, MaChiSoXetNghiem) =>
         {
           if (err) return res.render("err", { err: err });
-          const convert = ThoiGianKhamBenh.map((e) => formatDate(JSON.stringify(e.ThoiGianKhamBenh)))
-          sql = "select MaChiSoXetNghiem from ChiSoXN";
-          mysql.query(sql, (err, MaChiSoXetNghiem) =>
-          {
-            if (err) return res.render("err", { err: err });
-            sql = `select x.MaBenhNhan, n.HoVaTenLot, n.Ten from XetNghiem x join BenhNhan b on 
-            b.MaBenhNhan = x.MaBenhNhan join NguoiDung n on b.TaiKhoan = n.TaiKhoan`;
-            mysql.query(sql, (err, BenhNhan) =>
-            {
-              if (err) return res.render("err", { err: err });
-              res.render("BacSi/TaoChiSo", {
-                Flag: true,
-                result,
-                ThoiGianKhamBenh: convert,
-                MaChiSoXetNghiem,
-                BenhNhan
-              });
-            })
-          })
+          res.render("BacSi/TaoChiSo", {
+            Flag: true,
+            XetNghiem: result,
+            MaChiSoXetNghiem,
+          });
         })
       })
-    }
-  );
+    })
 });
 
 router.get("/DsXetNghiemBacSi", Authenticate, (req, res) =>

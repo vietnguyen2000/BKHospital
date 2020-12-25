@@ -1,7 +1,7 @@
 <%- include("../partials/header") %>
     <% if(Flag){ %>
         <div class="alert alert-success">
-            <strong>Success!</strong> Bạn đã tạo chỉ số thành công
+            <strong>Success!</strong> Bạn đã tạo chỉ số cho xét nghiệm thành công
         </div>
         <% } %>
             <!-- <% if(Error){ %>
@@ -10,46 +10,33 @@
 <% } %> -->
             <div class="container">
                 <main role="main" class="pb-3" style="margin-top: 100px;">
-                    <h1>Tạo chỉ số</h1>
+                    <h1>Kết quả xét nghiệm</h1>
                     <form action="/BacSi/TaoChiSo" method="POST">
                         <div class="form-group">
-                            <label>Tên chỉ số</label>
-                            <input type="text" name="TenChiSo" class="form-control">
-                            <label>Tên xét nghiệm</label>
-                            <select class="form-control" name="TenXetNghiem">
-                                <% for ( var i=0; i < result.length; i++ ) { %>
-                                    <option value="<%=result[i].TenXetNghiem%>">
-                                        <%= result[i].TenXetNghiem %>
-                                    </option>
-                                    <% } %>
-                            </select>
-                            <label>Thơi gian khám bệnh</label>
-                            <select class="form-control" name="ThoiGianKhamBenh">
-                                <% for ( var i=0; i < ThoiGianKhamBenh.length; i++ ) { %>
-                                    <option value="<%=ThoiGianKhamBenh[i]%>">
-                                        <%= ThoiGianKhamBenh[i]%>
-                                    </option>
-                                    <% } %>
-                            </select>
-                            <label>Bệnh nhân</label>
-                            <select class="form-control" name="MaBenhNhan">
-                                <% for ( var i=0; i < BenhNhan.length; i++ ) { %>
-                                    <option value="<%=BenhNhan.MaBenhNhan%>">
-                                        <%= BenhNhan[i].HoVaTenLot + " " + BenhNhan[i].Ten %>
-                                    </option>
-                                    <% } %>
-                            </select>
-                            <label>Kết quả</label>
-                            <input type="text" name="KetQua" class="form-control">
-                            <label>Mã chỉ số xét nghiệm </label>
-                            <select class="form-control" name="MaChiSoXetNghiem">
-                                <% for ( var i=0; i < result.length; i++ ) { %>
-                                    <option value="<%=MaChiSoXetNghiem[i].MaChiSoXetNghiem%>">
-                                        <%= MaChiSoXetNghiem[i].MaChiSoXetNghiem %>
+                            <label>Chọn xét nghiệm</label>
+                            <select class="form-control" name="XetNghiem">
+                                <% for ( var i=0; i < XetNghiem.length; i++ ) { %>
+                                    <option value="<%=JSON.stringify(XetNghiem[i])%>">
+                                        <% console.log(XetNghiem[i])%>
+                                        <%= XetNghiem[i].TenXetNghiem + " - " + XetNghiem[i].ThoiGianKhamBenh %>
                                     </option>
                                     <% } %>
                             </select>
 
+                            <label>Loại chỉ số xét nghiệm </label>
+                            <select class="form-control" name="MaChiSoXetNghiem">
+                                <% for ( var i=0; i < MaChiSoXetNghiem.length; i++ ) { %>
+                                    <option value="<%=MaChiSoXetNghiem[i].MaChiSoXetNghiem%>">
+                                        <%= "Mã chỉ số xét nghiệm " + MaChiSoXetNghiem[i].MaChiSoXetNghiem + " - Ngưỡng nhỏ nhất: " + MaChiSoXetNghiem[i].NguongMin + " - Ngưỡng Lớn Nhất: " + MaChiSoXetNghiem[i]. NguongMax%>
+                                    </option>
+                                    <% } %>
+                            </select>
+
+                            <label>Tên chỉ số</label>
+                            <input type="text" name="TenChiSo" class="form-control">
+                            
+                            <label>Kết quả</label>
+                            <input type="number" name="KetQua" class="form-control">
                         </div>
                         <button class="btn btn-primary w-100">Submit</button>
                     </form>
