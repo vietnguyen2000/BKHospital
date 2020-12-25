@@ -244,24 +244,35 @@ router.post("/KhambenhBacSiBenhNhan", Authenticate, (req, res) =>
 
 router.get("/DuaRaKQ", Authenticate, (req, res) =>
 {
-  var sql = `select b.MaBenhNhan, n.HoVaTenLot, n.Ten from BenhNhan b join NguoiDung n
-  on b.TaiKhoan = n.TaiKhoan`;
+  var sql = 'call DSBenhNhan_PhuTrach_All(?)';
   mysql.query(
-    sql,
+    sql, [req.user.MaNhanVien],
     (err, ListBenhNhan) =>
     {
       if (err) return res.render("err", { err: err });
-      sql = "select ThoiGianKhamBenh from KhamBenh";
+      sql = "select * from KhamBenh WHERE (ThoiGianKhamBenh,MaNhanVien,MaBenhNhan) NOT IN (SELECT ThoiGianKhamBenh,MaNhanVien,MaBenhNhan FROM kqchandoan)";
       mysql.query(sql,
-        (err, ListThoiGianKhamBenh) =>
+        (err, KhamBenh) =>
         {
           if (err) return res.render("err", { err: err });
-          const convert = ListThoiGianKhamBenh.map((e) => formatDate(JSON.stringify(e.ThoiGianKhamBenh)))
-          res.render("BacSi/duaraKQBacSiBenhNhan", {
-            ListThoiGianKhamBenh: convert,
-            ListBenhNhan,
-            Flag: false
-          });
+          sql = "SELECT * FROM Thuoc;";
+          mysql.query(sql ,(err,Thuoc)=>{
+            sql = "SELECT * FROM CDDDUONG;";
+            mysql.query(sql ,(err,CDDDuong)=>{
+              sql = "SELECT * FROM Benh;";
+              mysql.query(sql ,(err,Benh)=>{
+                res.render("BacSi/duaraKQBacSiBenhNhan", {
+                  KhamBenh,
+                  ListBenhNhan: ListBenhNhan[0],
+                  Thuoc,
+                  CDDDuong,
+                  Benh,
+                  Flag: false
+                });
+              })
+            })
+          })
+          
         })
     }
   );
@@ -269,35 +280,143 @@ router.get("/DuaRaKQ", Authenticate, (req, res) =>
 
 router.post("/DuaRaKQ", Authenticate, (req, res) =>
 {
-  var sql = "call DuaRaKQ_BacSi_BenhNhan(?,?,?,?)";
+  const{
+    ListBenh,
+    ListCDDDuong,
+    ListThuoc,
+    MaBenhNhan,
+    KhamBenh,
+    ThoiGianRaKQ,
+    Thuoc,
+    BenhAn,
+    BenhAnCheck
+  } = req.body
+  console.log(req.body);
+  if (ListBenh != '') 
+    listMaBenh = ListBenh.split(',');
+  else listMaBenh = [];
+  if (ListCDDDuong != '') 
+    listMaCDDDuong = ListCDDDuong.split(',');
+  else listMaCDDDuong = [];
+  if (ListThuoc != '') 
+    listMaThuoc = ListThuoc.split(',');
+  else listMaThuoc = [];
+  ThongTinKhamBenh = JSON.parse(KhamBenh);
+  BenhAnInfor = BenhAn;
+  BenhNhan = JSON.parse(MaBenhNhan);
+
+  sql = 'Call DuaRaKQ_BacSi_BenhNhan(?,?,?,?)';
+  mysql.query(sql,[ThongTinKhamBenh.MaNhanVien,ThongTinKhamBenh.MaBenhNhan,ThongTinKhamBenh.ThoiGianKhamBenh,ThoiGianRaKQ],(err,result)=>{
+    if (err) return res.render("err", { err: err });
+  })
+  console.log(listMaBenh,listMaCDDDuong,listMaThuoc,ThongTinKhamBenh,BenhAnInfor,BenhNhan);
+    sql = 'call ThemKQBenh(?,?,?,?,?);'
+    listMaBenh.forEach(MaBenh => {
+      mysql.query(sql,[
+        ThongTinKhamBenh.MaNhanVien,
+        ThongTinKhamBenh.MaBenhNhan,
+        ThongTinKhamBenh.ThoiGianKhamBenh,
+        ThoiGianRaKQ,
+        MaBenh],
+        (err,result)=>{
+        if (err) return res.render("err", { err: err });
+      })
+    });
+
+    sql = 'call ThemKQCDDDuong(?,?,?,?,?);'
+    listMaCDDDuong.forEach(MaCDDDuong => {
+      mysql.query(sql,
+        [ThongTinKhamBenh.MaNhanVien,
+          ThongTinKhamBenh.MaBenhNhan,
+          ThongTinKhamBenh.ThoiGianKhamBenh,
+          ThoiGianRaKQ,MaCDDDuong],
+        (err,result)=>{
+        if (err) return res.render("err", { err: err });
+      })
+    });
+
+    sql = 'call ThemKQThuoc(?,?,?,?,?,?,?,?);'
+    listMaThuoc.forEach((MaThuoc,index) => {
+      mysql.query(sql,
+        [ThongTinKhamBenh.MaNhanVien,
+          ThongTinKhamBenh.MaBenhNhan,
+          ThongTinKhamBenh.ThoiGianKhamBenh,
+          ThoiGianRaKQ,
+          MaThuoc,
+          Thuoc[index].LieuDung,
+          Thuoc[index].CachDung,
+          Thuoc[index].ThoiGianDung],
+        (err,result)=>{
+        if (err) return res.render("err", { err: err });
+      })
+    });
+  if (BenhAnCheck == 'on'){
+    if (BenhNhan.Loai == "Nội Trú"){ 
+      // Xuất viện
+      sql = 'call XuatVien(?,?,?,?,?,?,?,?);';
+      mysql.query(sql,
+        [
+          ThongTinKhamBenh.MaBenhNhan,
+          ThoiGianRaKQ,
+          BenhAnInfor.TinhTrangXuatVien,
+          BenhAnInfor.GhiChuXuatVien,
+          ThongTinKhamBenh.MaNhanVien,
+          ThongTinKhamBenh.MaBenhNhan,
+          ThongTinKhamBenh.ThoiGianKhamBenh,
+          ThoiGianRaKQ
+        ],
+        (err,result)=>{
+          if (err) return res.render("err", { err: err });
+        })
+    }
+    else{
+      // Nhập viện
+      sql = 'call NhapVien(?,?,?,?,?,?,?,?);'
+      mysql.query(sql,
+        [ThongTinKhamBenh.MaNhanVien,
+          ThongTinKhamBenh.MaBenhNhan,
+          ThongTinKhamBenh.ThoiGianKhamBenh,
+          ThoiGianRaKQ,
+          ThoiGianRaKQ,
+          BenhAnInfor.SoGiuong,
+          BenhAnInfor.SoBuong,
+          BenhAnInfor.TinhTrangNhapVien
+        ],
+        (err,result)=>{
+          if (err) return res.render("err", { err: err });
+        })
+    }
+  }
+  sql = 'call DSBenhNhan_PhuTrach_All(?)';
   mysql.query(
-    sql,
-    [req.user.MaNhanVien, ...Object.values(req.body)],
-    (err, result) =>
+    sql, [req.user.MaNhanVien],
+    (err, ListBenhNhan) =>
     {
       if (err) return res.render("err", { err: err });
-      var sql = `select b.MaBenhNhan, n.HoVaTenLot, n.Ten from BenhNhan b join NguoiDung n
-      on b.TaiKhoan = n.TaiKhoan`;
-      mysql.query(
-        sql,
-        (err, ListBenhNhan) =>
+      sql = "select * from KhamBenh WHERE (ThoiGianKhamBenh,MaNhanVien,MaBenhNhan) NOT IN (SELECT ThoiGianKhamBenh,MaNhanVien,MaBenhNhan FROM kqchandoan)";
+      mysql.query(sql,
+        (err, KhamBenh) =>
         {
           if (err) return res.render("err", { err: err });
-          sql = "select ThoiGianKhamBenh from KhamBenh";
-          mysql.query(sql,
-            (err, ListThoiGianKhamBenh) =>
-            {
-              if (err) return res.render("err", { err: err });
-              const convert = ListThoiGianKhamBenh.map((e) => formatDate(JSON.stringify(e.ThoiGianKhamBenh)))
-              res.render("BacSi/duaraKQBacSiBenhNhan", {
-                ListThoiGianKhamBenh: convert,
-                ListBenhNhan,
-                Flag: true
-              });
+          sql = "SELECT * FROM Thuoc;";
+          mysql.query(sql ,(err,Thuoc)=>{
+            sql = "SELECT * FROM CDDDUONG;";
+            mysql.query(sql ,(err,CDDDuong)=>{
+              sql = "SELECT * FROM Benh;";
+              mysql.query(sql ,(err,Benh)=>{
+                res.render("BacSi/duaraKQBacSiBenhNhan", {
+                  KhamBenh,
+                  ListBenhNhan: ListBenhNhan[0],
+                  Thuoc,
+                  CDDDuong,
+                  Benh,
+                  Flag: true
+                });
+              })
             })
-        }
-      );
-
+          })
+          
+        })
     }
   );
 });
@@ -878,7 +997,7 @@ router.post("/XuatVien", Authenticate, (req, res) =>
     NVThoiGianRaKQ,
     ThoiGianNhapVien,
     ThoiGianXuatVien,
-    TinHTrangXuatVien,
+    TinhTrangXuatVien,
     GhiChuXuatVien,
     MaBenhNhan,
     ThoiGianKhamBenh,
@@ -894,7 +1013,7 @@ router.post("/XuatVien", Authenticate, (req, res) =>
       NVThoiGianRaKQ,
       ThoiGianNhapVien,
       ThoiGianXuatVien,
-      TinHTrangXuatVien,
+      TinhTrangXuatVien,
       GhiChuXuatVien,
       req.user.MaNhanVien,
       MaBenhNhan,

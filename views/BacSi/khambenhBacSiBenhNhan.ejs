@@ -17,14 +17,14 @@
                             <select class="form-control" name="MaBenhNhan">
                                 <% for ( var i=0; i < ListBenhNhan.length; i++ ) { %>
                                     <option value="<%=ListBenhNhan[i].MaBenhNhan%>">
-                                        <%= ListBenhNhan[i].HoVaTenLot + " " + ListBenhNhan[i].Ten %>
+                                        <%= ListBenhNhan[i].MaBenhNhan + " - " + ListBenhNhan[i].HoVaTenLot + " " + ListBenhNhan[i].Ten %>
                                     </option>
                                     <% } %>
                             </select>
                             <label>Triệu chứng</label>
                             <input type="text" name="TrieuChung" class="form-control">
                             <label>Thời gian khám bệnh</label>
-                            <input type="text" id="time" name="ThoiGianKhamBenh" class="form-control">
+                            <input type="datetime-local" id="now" name="ThoiGianKhamBenh" class="form-control">
                         </div>
                         <button class="btn btn-primary w-100">Submit</button>
                     </form>
@@ -32,14 +32,3 @@
 
                 <%- include("../partials/footer") %>
                     <%- include("../partials/ending") %>
-
-                        <script>
-                            const formatedTimestamp = () => {
-                                const d = new Date()
-                                const date = d.toISOString().split('T')[0];
-                                const time = d.toTimeString().split(' ')[0];
-                                return `${date} ${time}`
-                            }
-                            var date = new Date()
-                            document.getElementById("time").value = formatedTimestamp()
-                        </script>

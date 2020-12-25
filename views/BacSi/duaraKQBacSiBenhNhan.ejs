@@ -1,50 +1,307 @@
 <%- include("../partials/header") %>
-    <% if(Flag){ %>
-        <div class="alert alert-success">
-            <strong>Success!</strong> Bạn đã đăng ký đưa ra kết quả bệnh nhân thành công
-        </div>
-        <% } %>
-            <!-- <% if(Error){ %>
+  <% if(Flag){ %>
+    <div class="alert alert-success">
+      <strong>Success!</strong> Bạn đã đăng ký đưa ra kết quả bệnh nhân thành công
+    </div>
+    <% } %>
+      <!-- <% if(Error){ %>
     <div class="alert alert-danger">
         <strong>Error!</strong> <%=     Error  %> </div>
  <% } %> -->
-            <div class="container">
-                <main role="main" class="pb-3" style="margin-top: 100px;">
-                    <h1>Kết quả khám bệnh </h1>
-                    <form action="/BacSi/DuaRaKQ" method="POST">
-                        <div class="form-group">
-                            <label>Tên bệnh nhân</label>
-                            <select class="form-control" name="MaBenhNhan">
-                                <% for ( var i=0; i < ListBenhNhan.length; i++ ) { %>
-                                    <option value="<%=ListBenhNhan[i].MaBenhNhan%>">
-                                        <%= ListBenhNhan[i].HoVaTenLot + " " + ListBenhNhan[i].Ten %>
-                                    </option>
-                                    <% } %>
-                            </select>
-                            <label>Thời gian khám bệnh</label>
-                            <select class="form-control" name="ThoiGianKhamBenh">
-                                <% for ( var i=0; i < ListThoiGianKhamBenh.length; i++ ) { %>
-                                    <option value="<%=ListThoiGianKhamBenh[i]%>">
-                                        <%= ListThoiGianKhamBenh[i]%>
-                                    </option>
-                                    <% } %>
-                            </select>
-                            <label>Thời gian ra kết quả</label>
-                            <input type="text" name="ThoiGianRaKQ" id="time" class="form-control">
-                        </div>
-                        <button class="btn btn-primary w-100">Submit</button>
-                    </form>
-                </main>
+      <div class="container">
+        <main id='main' role="main" class="pb-3" style="margin-top: 100px;">
+          <h1>Kết quả khám bệnh </h1>
+          <form action="/BacSi/DuaRaKQ" method="POST">
+            <div class="form-group">
+              <label>Tên bệnh nhân</label>
+              <select class="form-control" name="MaBenhNhan" id = "BenhNhan" onchange="filter2($(this),'KhamBenh');">
+                <% for ( var i=0; i < ListBenhNhan.length; i++ ) { %>
+                  <option loai="<%=ListBenhNhan[i].Loai%>" MaBenhNhan = <%=ListBenhNhan[i].MaBenhNhan%> value="<%=JSON.stringify(ListBenhNhan[i])%>">
+                    <%= ListBenhNhan[i].MaBenhNhan + " - " + ListBenhNhan[i].HoVaTenLot + " " + ListBenhNhan[i].Ten %>
+                  </option>
+                  <% } %>
+              </select>
+              <label>Thời gian khám bệnh</label>
+              <select class="form-control" name="KhamBenh" id = "KhamBenh" onchange="find();">
+                <% for ( var i=0; i < KhamBenh.length; i++ ) { %>
+                  <option data-province= <%=KhamBenh[i].MaBenhNhan%> value='<%=JSON.stringify(KhamBenh[i])%>'>
+                    <%= KhamBenh[i].ThoiGianKhamBenh%>
+                  </option>
+                  <% } %>
+              </select>
+              <label>Thời gian ra kết quả</label>
+              <input type="datetime-local" id="now" name="ThoiGianRaKQ" class="form-control">
+            </div>
+            <div id="addData" class = "form-group ">
+              <input type="checkbox" data-toggle="toggle" data-size="sm" data-onstyle="primary" id="BenhAnCheck" name ="BenhAnCheck" onchange="showBenhAn($(this))"> <label id="BenhAn">Nhập viện?</label>
+              <div id="BenhAnInfor" class ="form-group">
+                <div id="BenhAnNhapVien" class ="form-row">
+                  <div class = "form-group col-md-8">
+                    <label>Tình trạng nhập viện</label>
+                    <input class="form-control" type="text" name ="BenhAn[TinhTrangNhapVien]">
+                  </div>
+                  <div class = "form-group col-md-2">
+                    <label>Số giường</label>
+                    <input class="form-control" type="number" name ="BenhAn[SoGiuong]">
+                  </div>
+                  <div class = "form-group col-md-2">
+                    <label>Số buồng</label>
+                    <input class="form-control" type="number" name ="BenhAn[SoBuong]">
+                  </div>
+                </div>
+                <div id="BenhAnXuatVien" class ="form-row">
+                  <div class = "form-group col-md-8">
+                    <label>Tình trạng xuất viện</label>
+                    <input class="form-control" type="text" name ="BenhAn[TinhTrangXuatVien]">
+                  </div>
+                  <div class = "form-group col-md-4">
+                    <label>Ghi chú xuất viện</label>
+                    <input class="form-control" type="text" name ="BenhAn[GhiChuXuatVien]">
+                  </div>
+                </div>
+              
+              </div>
+              <div class = "form-group mx-sm-3 mb-2">
+                <label id = "Benh"> Các bệnh chẩn đoán: </label>
+                <span id="CacBenh" class="py-2">
 
-                <%- include("../partials/footer") %>
-                    <%- include("../partials/ending") %>
-                        <script>
-                            const formatedTimestamp = () => {
-                                const d = new Date()
-                                const date = d.toISOString().split('T')[0];
-                                const time = d.toTimeString().split(' ')[0];
-                                return `${date} ${time}`
-                            }
-                            var date = new Date()
-                            document.getElementById("time").value = formatedTimestamp()
-                        </script>
+                </span>
+                
+                <div class = "form-inline py-2">
+                  <select class="form-control" id = "LoaiBenh">
+                    <% for ( var i=0; i < Benh.length; i++ ) { %>
+                      <option value="<%=Benh[i].MaBenh%>">
+                        <%= Benh[i].TenBenh%>
+                      </option>
+                      <% } %>
+                  </select>
+                  <input type="text" name="ListBenh" id = "ListBenh" readonly hidden>
+                  <a class="btn btn-outline-primary" href="#" role="button" onclick="ThemBenh()">Thêm</a>
+                </div>
+                
+              </div>
+
+              <div class = "form-group mx-sm-3 mb-2">
+                <label id = "CDDDuong"> Các chế độ dinh dưỡng cần: </label>
+                <span id="CacCDDDuong" class="py-2">
+
+                </span>
+                
+                <div class = "form-inline py-2">
+                  <select class="form-control" id = "LoaiCDDDuong">
+                    <% for ( var i=0; i < CDDDuong.length; i++ ) { %>
+                      <option value="<%=CDDDuong[i].MaCDDDuong%>">
+                        <%= CDDDuong[i].CheDoAnUong%>
+                      </option>
+                      <% } %>
+                  </select>
+                  <input type="text" name="ListCDDDuong" id = "ListCDDDuong" readonly hidden>
+                  <a class="btn btn-outline-primary" href="#" role="button" onclick="ThemCDDDuong()">Thêm</a>
+                </div>
+                
+              </div>
+
+              <div class = "form-group mx-sm-3 mb-2">
+                <label id = "Thuoc"> Các thông tin về thuốc: </label>
+                <div class = "form-inline">
+                  <select class="form-control" id = "LoaiThuoc">
+                    <% for ( var i=0; i < Thuoc.length; i++ ) { %>
+                      <option value="<%=Thuoc[i].MaThuoc%>">
+                        <%= Thuoc[i].TenThuoc%>
+                      </option>
+                      <% } %>
+                  </select>
+                  <input type="text" name="ListThuoc" id = "ListThuoc" readonly hidden>
+                  <a class="btn btn-outline-primary" href="#" role="button" onclick="ThemThuoc()">Thêm</a>
+                </div>
+                <div id="CacThuoc" class = "py-2">
+                  
+                </div>
+              </div>
+
+              
+              <button class="btn btn-primary w-100">Submit</button>  
+            </div>
+            
+          </form>
+        </main>
+
+        <%- include("../partials/footer") %>
+          <%- include("../partials/ending") %>
+          <script>
+            filterBenhNhan();
+            
+            filter2(document.getElementById('BenhNhan'),'KhamBenh');
+            $('#BenhAnNhapVien').hide();
+            $('#BenhAnXuatVien').hide();
+            function filter2(filter,id){
+              var province = JSON.parse($('#BenhNhan').val()).MaBenhNhan;
+              id = "#" + id;
+              $(id).find("option").hide();
+              accept = $(id).find("[data-province=" + province + "]");
+              accept.show();
+              console.log(accept);
+              $(id).val(accept[0].value);
+              find();
+            }
+            function filterBenhNhan(){
+              listMaBenhNhan = []
+              accepts = []
+              for (let i = 0 ; i < $('#KhamBenh').find("option").length; i++){
+                listMaBenhNhan.push(JSON.parse($('#KhamBenh').find("option")[i].value).MaBenhNhan);
+              }
+              for (let i = 0 ; i < $('#BenhNhan').find("option").length; i++){
+                $('#BenhNhan').find("option")[i].hidden = true;
+                if (listMaBenhNhan.includes(JSON.parse($('#BenhNhan').find("option")[i].value).MaBenhNhan)){
+                  $('#BenhNhan').find("option")[i].hidden = false;
+                  accepts.push($('#BenhNhan').find("option")[i].value)
+                }
+              }
+              if (accepts.length == 0)
+              {
+                $('#main').empty();
+                $('#main').append('<h1>Bạn chưa đăng ký khám bệnh cho bất kỳ ai</h1>')
+                return;
+              }
+              $('#BenhNhan').val(accepts[0]);
+
+            }
+            function find(){
+              loai = $('#BenhNhan option:selected').attr('loai');
+              if (loai == "Không") {
+                $('#BenhAn').text('Chỉ định nhập viện?');
+              }
+              else if (loai == "Nội Trú"){
+                $('#BenhAn').text('Chỉ định xuất viện?');
+              }
+              $('#BenhAnCheck').prop('checked',false);
+              
+            }
+            function showBenhAn(check){
+              if (!(check.prop('checked'))){
+                $('#BenhAnNhapVien').hide();
+                $('#BenhAnXuatVien').hide();
+                return;
+              }
+              loai = $('#BenhNhan option:selected').attr('loai');
+              if (loai == "Không") {
+                $('#BenhAnNhapVien').show();
+                $('#BenhAnXuatVien').hide();
+              }
+              else if (loai == "Nội Trú"){
+                $('#BenhAnNhapVien').hide();
+                $('#BenhAnXuatVien').show();
+              }
+            }
+            function ThemBenh(){
+              selection = "#LoaiBenh"
+              selected = selection + ' option:selected';
+              parent = '#CacBenh';
+              input = '#ListBenh';
+              if ($(input).val())
+                listBenh = String($(input).val()).split(',');
+              else
+                listBenh = [];
+              if (listBenh.includes(String($(selection).val()))){
+                console.log("đã thêm bệnh này rồi")
+                return;
+              }
+                
+              listBenh.push($(selection).val());
+              $(input).val(listBenh.toString());
+              ele = '<a class="btn btn-outline-danger ml-1" href="#" role="button" at= ' + $(selection).val() +' onclick="XoaBenh($(this))">'+ $(selected).text() +'</a>'
+              $(parent).append(ele);
+            }
+            function XoaBenh(ele){
+              selection = "#LoaiBenh"
+              selected = selection + ' option:selected';
+              parent = '#CacBenh';
+              input = '#ListBenh';
+              listBenh = String($(input).val()).split(',');
+              console.log(ele.attr('at'));
+              listBenh = listBenh.filter(item => item != ele.attr('at'))
+              $(input).val(listBenh.toString());
+              ele.remove();
+            }
+
+            function ThemCDDDuong(){
+              selection = "#LoaiCDDDuong"
+              selected = selection + ' option:selected';
+              parent = '#CacCDDDuong';
+              input = '#ListCDDDuong';
+              if ($(input).val())
+                list = String($(input).val()).split(',');
+              else
+                list = [];
+              if (list.includes(String($(selection).val()))){
+                console.log("đã thêm bệnh này rồi")
+                return;
+              }
+                
+              list.push($(selection).val());
+              $(input).val(list.toString());
+              ele = '<a class="btn btn-outline-danger ml-1" href="#" role="button" at= ' + $(selection).val() +' onclick="XoaCDDDuong($(this))">'+ $(selected).text() +'</a>'
+              $(parent).append(ele);
+            }
+            function XoaCDDDuong(ele){
+              selection = "#LoaiCDDDuong"
+              selected = selection + ' option:selected';
+              parent = '#CacCDDDuong';
+              input = '#ListCDDDuong';
+              list = String($(input).val()).split(',');
+              console.log(ele.attr('at'));
+              list = list.filter(item => item != ele.attr('at'))
+              $(input).val(list.toString());
+              ele.remove();
+            }
+
+            function ThemThuoc(){
+              selection = "#LoaiThuoc"
+              selected = selection + ' option:selected';
+              parent = '#CacThuoc';
+              input = '#ListThuoc';
+              if ($(input).val())
+                list = String($(input).val()).split(',');
+              else
+                list = [];
+              if (list.includes(String($(selection).val()))){
+                console.log("đã thêm bệnh này rồi")
+                return;
+              }
+                
+              list.push($(selection).val());
+              $(input).val(list.toString());
+              ele = ` 
+              <div class = "border py-3 px-3 mb-1"> 
+                <div class = mb-2>
+                  <a class="btn btn-outline-danger" href="#" role="button" at= ` + $(selection).val() +` onclick="XoaThuoc($(this))">`+ $(selected).text() +`</a> 
+                </div>
+                <div class = "form-row">
+                  <div class = "form-group col-md-8">
+                    <label >Cách dùng</label>
+                    <input type="text" name="Thuoc[` + $(selection).val() +`][CachDung]" class="form-control">
+                  </div>
+                  <div class = "form-group col-md-2">
+                    <label >Liều dùng</label>
+                    <input type="number" name="Thuoc[` + $(selection).val() +`][LieuDung]" class="form-control">
+                  </div>
+                  <div class = "form-group col-md-2">
+                    <label >Ngày dùng</label>
+                    <input type="number" name="Thuoc[` + $(selection).val() +`][NgayDung]" class="form-control">
+                  </div>
+                </div>
+              </div> `;
+              $(parent).append(ele);
+            }
+            function XoaThuoc(ele){
+              selection = "#LoaiThuoc"
+              selected = selection + ' option:selected';
+              parent = '#CacThuoc';
+              input = '#ListThuoc';
+              list = String($(input).val()).split(',');
+              console.log(ele.attr('at'));
+              list = list.filter(item => item != ele.attr('at'))
+              $(input).val(list.toString());
+              ele.parent().parent().remove();
+            }
+          </script>
