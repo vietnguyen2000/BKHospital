@@ -1,0 +1,26 @@
+<%- include("../partials/header") %>
+    <div class="container">
+        <main role="main" class="pb-3" style="margin-top: 100px;">
+            <h1>Thêm kết quả bệnh</h1>
+            <form action="/BacSi/ThemKetQuaBenh" method="POST">
+                <div class="form-group">
+                    <label>Chọn loại</label>
+                    <select class="form-control" name="Loai">
+                        <option value="KhamBenhBSBenhNhan"> Bước 1: Khám bệnh</option>
+                        <option value="DuaRaKQBSBenhNhan">Bước 2: Kết quả khám bệnh</option>
+                        <option value="NhapVien">Bước 3: Nhập viện đối với bệnh nhân nội trú</option>
+                        <option value="ThemThuocVaoKQ">Bước 4: Thêm thuốc vào kết quả</option>
+                        <option value="ThemKQBenh">Bước 5: Thêm bệnh vào kết quả</option>
+                        <option value="ThemKQCDDDuong">Bước 6: Thêm chế độ dinh dưỡng vào kết quả</option>
+                        <!-- <option value="XuatVien">Bước 7: Thêm xuất viện đối với bệnh nhân nội trú</option> -->
+                        <option value="ThemBenhAn">Bước 7: Thêm bệnh án đối với bệnh nhân nội trú</option>
+
+                    </select>
+                </div>
+                <button class="btn btn-primary w-100">Submit</button>
+            </form>
+        </main>
+    </div>
+    <%- include("../partials/footer") %>
+
+        <%- include("../partials/ending") %>

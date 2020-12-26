@@ -1,0 +1,58 @@
+<%- include("../partials/header") %>
+    <% if(Error){ %>
+        <div class="alert alert-danger">
+            <strong>Error!</strong>
+            <%= Error %>
+        </div>
+        <% } %>
+            <div class="container">
+                <main role="main" class="pb-3" style="margin-top: 100px;">
+                    <h1>Xem danh sách thuốc bác sĩ đã chỉ định cho bệnh nhân dùng theo ngày</h1>
+                    <form action="/BacSi/DsThuocBacSi" method="POST">
+                        <div class="form-group">
+                            <label>Bệnh nhân</label>
+                            <select class="form-control" name="MaBenhNhan">
+                                <% for ( var i=0; i < ListBenhNhan.length; i++ ) { %>
+                                    <option value="<%=ListBenhNhan[i].MaBenhNhan%>" <%if (ListBenhNhan[i].MaBenhNhan == MaBenhNhan) {%> selected <%}%>>
+                                        <%= ListBenhNhan[i].HoVaTenLot + " " + ListBenhNhan[i].Ten + " - " + ListBenhNhan[i].MaBenhNhan%>
+                                    </option>
+                                    <% } %>
+                            </select>
+                            <label>Từ ngày</label>
+                            <input type="date" name="FromDate" <% if(FromDate!=null) {%> value = <%=FromDate %> <%}%> class="form-control">
+                            <label>Đến ngày</label>
+                            <input type="date" name="ToDate" <% if(FromDate!=null) {%> value = <%=ToDate%> <%}%> class="form-control">
+                        </div>
+                        <button class="btn btn-primary w-100">Submit</button>
+                    </form>
+                </main>
+
+                <%if (DsThuocBacSi) { %>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Mã thuốc</th>
+                                    <th>Tên thuốc</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <% for(let i=0; i < DsThuocBacSi[0].length; i++) { %>
+                                    <tr>
+                                        <td>
+                                            <%= DsThuocBacSi[0][i].MaThuoc %>
+                                        </td>
+                                        <td>
+                                            <%= DsThuocBacSi[0][i].TenThuoc %>
+                                        </td>
+                                    </tr>
+                                    <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <% } %>
+            </div>
+
+            <%- include("../partials/footer") %>
+                <%- include("../partials/ending") %>

@@ -1,0 +1,54 @@
+<%- include("../partials/header") %>
+    <div class="container">
+        <main role="main" class="pb-3" style="margin-top: 100px;">
+            <h1>Danh sách bệnh nhân có ghi chú "Bình thường" của một c hỉ số xét nghiệm trong kết quả xét nghiệm gần nhất nhưng có ghi chú "Bất thường" của cùng một chỉ số xét nghiệm trong kết quả xét nghiệm trước đó</h1>
+        </main>
+        <form action="/BacSi/DSBenhNhanCoGhiChuBinhThuong" method="POST">
+          <div class="form-group">
+              <label>Mã bệnh</label>
+              <select class="form-control" name="MaChiSo">
+                  <% for ( var i=0; i < DSChiSo.length; i++ ) { %>
+                      <option value="<%=DSChiSo[i].MaChiSoXetNghiem%>" <%if (DSChiSo[i].MaChiSoXetNghiem == MaChiSo) {%> selected <%}%>>
+                          Mã chỉ số xét nghiệm: <%=DSChiSo[i].MaChiSoXetNghiem %> - Ngưỡng Min: <%=DSChiSo[i].NguongMin %> - Ngưỡng Max: <%=DSChiSo[i].NguongMax%>
+                      </option>
+                      <% } %>
+              </select>
+          </div>
+          <button class="btn btn-primary w-100">Submit</button>
+        </form>
+        <%if (DSBenhNhan) { %>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Mã bệnh nhân</th>
+                            <th>Họ và tên</th>
+                            <th>Dân tộc</th>
+
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <% for(let i=0; i < DSBenhNhan.length; i++) { %>
+                          <%if (BenhNhanThoa.includes(DSBenhNhan[i].MaBenhNhan)){%>
+                            <tr>
+                                <td>
+                                    <%= DSBenhNhan[i].MaBenhNhan %>
+                                </td>
+                                <td>
+                                    <%= DSBenhNhan[i].HoVaTenLot + " " + DSBenhNhan[i].Ten %>
+                                </td>
+                                <td>
+                                    <%= DSBenhNhan[i].DanToc %>
+                                </td>
+                            </tr>
+                          <% } %>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+            <% } %>
+    </div>
+
+    <%- include("../partials/footer") %>
+        <%- include("../partials/ending") %>

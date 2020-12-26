@@ -1,0 +1,58 @@
+<%- include("../partials/header") %>
+    <% if(Flag){ %>
+        <div class="alert alert-success">
+            <strong>Success!</strong> Bạn đã tạo xét nghiệm thành công
+        </div>
+        <% } %>
+            <!-- <% if(Error){ %>
+    <div class="alert alert-danger">
+        <strong>Error!</strong> <%=     Error  %> </div>
+<% } %> -->
+            <div class="container">
+                <main role="main" class="pb-3" style="margin-top: 100px;">
+                    <h1>Tạo xét nghiệm</h1>
+                    <form action="/BacSi/TaoXN" method="POST">
+                        <div class="form-group">
+                            <label>Nhân viên</label>
+                            <select class="form-control" name="MaNhanVien">
+                                <% for ( var i=0; i < MaNhanVien.length; i++ ) { %>
+                                    <option value="<%=MaNhanVien[i].MaNhanVien%>">
+                                        <%= MaNhanVien[i].HoVaTenLot + " " + MaNhanVien[i].Ten %>
+                                    </option>
+                                    <% } %>
+                            </select>
+                            <label>Bệnh nhân</label>
+                            <select class="form-control" name="MaBenhNhan">
+                                <% for ( var i=0; i < MaBenhNhan.length; i++ ) { %>
+                                    <option value="<%=MaBenhNhan[i].MaBenhNhan%>">
+                                        <%= MaBenhNhan[i].HoVaTenLot + " " + MaBenhNhan[i].Ten%>
+                                    </option>
+                                    <% } %>
+                            </select>
+                            <label>Thời gian khám bệnh</label>
+                            <select class="form-control" name="ThoiGianKhamBenh">
+                                <% for ( var i=0; i < ThoiGianKhamBenh.length; i++ ) { %>
+                                    <option value="<%=ThoiGianKhamBenh[i]%>">
+                                        <%= ThoiGianKhamBenh[i] %>
+                                    </option>
+                                    <% } %>
+                            </select>
+                            <label>Tên xét nghiệm</label>
+                            <input type="text" name="TenXetNghiem" class="form-control">
+                            <label>Nhân viên thực hiện</label>
+                            <select class="form-control" name="MaNhanVienThucHien">
+                                <% for ( var i=0; i < MaNhanVienThucHien.length; i++ ) { %>
+                                    <option value="<%=MaNhanVienThucHien[i].MaNhanVien%>">
+                                        <%= MaNhanVienThucHien[i].HoVaTenLot + " " + MaNhanVienThucHien[i].Ten %>
+                                    </option>
+                                    <% } %>
+                            </select>
+                            <label>Thời gian thực hiện</label>
+                            <input type="text" name="ThoiGianThucHien" value="yyyy-mm-dd hh:mm-ss" class="form-control">
+                        </div>
+                        <button class="btn btn-primary w-100">Submit</button>
+                    </form>
+                </main>
+
+                <%- include("../partials/footer") %>
+                    <%- include("../partials/ending") %>

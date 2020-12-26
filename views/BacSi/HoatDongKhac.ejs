@@ -1,0 +1,22 @@
+<%- include("../partials/header") %>
+    <div class="container">
+        <main role="main" class="pb-3" style="margin-top: 100px;">
+            <h1>Hoạt động khác</h1>
+            <form action="/BacSi/HoatDongKhac" method="POST">
+                <div class="form-group">
+                    <label>Chọn loại</label>
+                    <select class="form-control" name="Loai">
+                        <option value="TaoChiSoXN">Tạo chỉ số xét nghiệm</option>
+                        <option value="ThemThuoc">Thêm thuốc</option>
+                        <option value="ThemBenh">Thêm bệnh</option>
+                        <option value="ThemCDDDuong">Thêm chế độ dinh dưỡng</option>
+
+                    </select>
+                </div>
+                <button class="btn btn-primary w-100">Submit</button>
+            </form>
+        </main>
+    </div>
+    <%- include("../partials/footer") %>
+
+        <%- include("../partials/ending") %>

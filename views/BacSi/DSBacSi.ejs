@@ -1,0 +1,28 @@
+<%- include("../partials/header") %>
+  <div class="container">
+    <main role="main" class="pb-3" style="margin-top: 100px;">
+      <h1>Xem danh sách của bác sĩ</h1>
+      <form action="/BacSi/DSBacSi" method="POST">
+        <div class="form-group">
+          <label>Chọn loại</label>
+          <select class="form-control" name="Loai">
+            <option value="DanhSachBenhNhanPhuTrach"> Danh sách bệnh nhân phụ trách</option>
+            <option value="DanhSachChanDoanBenh">Danh sách các lần chẩn đoán</option>
+            <option value="DanhSachThuocBacSi"> Danh sách thuốc đã chỉ định cho bệnh nhân dùng</option>
+            <!-- <option value="DanhSachChanDoanBenh">Danh sách chẩn đoán bệnh</option> -->
+            <option value="DanhSachXetNghiemBacSi"> Danh sách xét nghiệm đã chỉ định</option>
+            <option value="DanhSachChupPhimBacSi">Danh sách chụp phim đã chỉ định</option>
+            <option value="DanhSachBenhNhanCungBenh">Danh sách bệnh nhân có cùng bệnh chẩn đoán</option>
+            <option value="DanhSachBenhNhanXuatVien"> Danh sách bệnh nhân xuất viện</option>
+            <option value="DanhSachBenhNhanBatThuong">Danh sách bệnh nhân có ghi chú "Bất thường" trong kết quả xét nghiệm của cùng một bệnh mà mình đã chẩn đoán</option>
+            <option value="DSBenhNhanThuocGiamDan">Danh sách bệnh nhân có số lượng dùng thuốc giảm dần trong 3 lần dùng thuốc liên tiếp</option>
+            <option value="DSBenhNhanCoGhiChuBinhThuong">Danh sách bệnh nhân có ghi chú "Bình thường" của một c hỉ số xét nghiệm trong kết quả xét nghiệm gần nhất nhưng có ghi chú "Bất thường" của cùng một chỉ số xét nghiệm trong kết quả xét nghiệm trước đó</option>
+          </select>
+        </div>
+        <button class="btn btn-primary w-100">Submit</button>
+      </form>
+    </main>
+  </div>
+  <%- include("../partials/footer") %>
+
+    <%- include("../partials/ending") %>

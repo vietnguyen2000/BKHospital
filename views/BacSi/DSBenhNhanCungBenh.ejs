@@ -1,0 +1,56 @@
+<%- include("../partials/header") %>
+    <!-- <% if(Error){ %>
+    <div class="alert alert-danger">
+        <strong>Error!</strong> <%=     Error  %> </div>
+<% } %> -->
+    <div class="container">
+        <main role="main" class="pb-3" style="margin-top: 100px;">
+            <h1>Xem danh sách bệnh nhân cùng bệnh</h1>
+            <form action="/BacSi/DSBenhNhanCungBenh" method="POST">
+                <div class="form-group">
+                    <label>Chọn loại bệnh</label>
+                    <select class="form-control" name="MaBenh">
+                        <% for ( var i=0; i < ListMaBenh.length; i++ ) { %>
+                            <option value="<%=ListMaBenh[i].MaBenh%>">
+                                <%= ListMaBenh[i].TenBenh %>
+                            </option>
+                            <% } %>
+                    </select>
+                </div>
+                <button class="btn btn-primary w-100">Submit</button>
+            </form>
+        </main>
+
+        <%if (DSBenhNhanCungBenh) { %>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Mã bệnh nhân</th>
+                            <th>Họ và tên</th>
+                            <th>Dân tộc</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <% for(let i=0; i < DSBenhNhanCungBenh[0].length; i++) { %>
+                            <tr>
+                                <td>
+                                    <%= DSBenhNhanCungBenh[0][i].MaBenhNhan %>
+                                </td>
+                                <td>
+                                    <%= DSBenhNhanCungBenh[0][i].HoVaTenLot + " " + DSBenhNhanCungBenh[0][i].Ten %>
+                                </td>
+                                <td>
+                                    <%= DSBenhNhanCungBenh[0][i].DanToc %>
+                                </td>
+                            </tr>
+                            <% } %>
+                    </tbody>
+                </table>
+            </div>
+            <% } %>
+    </div>
+
+    <%- include("../partials/footer") %>
+        <%- include("../partials/ending") %>

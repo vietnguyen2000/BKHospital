@@ -1,0 +1,101 @@
+<%- include("../partials/header") %>
+    <% if(Flag){ %>
+        <div class="alert alert-success">
+            <strong>Success!</strong> Bạn đã thêm bệnh án thành công
+        </div>
+        <% } %>
+            <!-- <% if(Error){ %>
+    <div class="alert alert-danger">
+        <strong>Error!</strong> <%=     Error  %> </div>
+ <% } %> -->
+            <div class="container">
+                <main role="main" class="pb-3" style="margin-top: 100px;">
+                    <h1>Thêm bệnh án</h1>
+                    <form action="/BacSi/ThemBenhAn" method="POST">
+                        <div class="form-group">
+                            <label>Thời gian nhập viện</label>
+                            <input type="text" name="ThoiGianNhapVien" value="yyyy-mm-dd hh:mm:ss" class="form-control">
+                            <label>Thời gian ra kết quả (nhập viện)</label>
+                            <select class="form-control" name="NVThoiGianRaKQ">
+                                <% for ( var i=0; i < ListThoiGianRaKQ.length; i++ ) { %>
+                                    <option value="<%=ListThoiGianRaKQ[i]%>">
+                                        <%= ListThoiGianRaKQ[i]%>
+                                    </option>
+                                    <% } %>
+                            </select>
+                            <label>Thời gian khám bệnh (nhập viện)</label>
+                            <select class="form-control" name="NVThoiGianKhamBenh">
+                                <% for ( var i=0; i < ListThoiGianKhamBenh.length; i++ ) { %>
+                                    <option value="<%=ListThoiGianKhamBenh[i]%>">
+                                        <%= ListThoiGianKhamBenh[i]%>
+                                    </option>
+                                    <% } %>
+                            </select>
+                            <label>Tên nhân viên (nhập viện)</label>
+                            <select class="form-control" name="NVMaNhanVien">
+                                <% for ( var i=0; i < ListNhanVien.length; i++ ) { %>
+                                    <option value="<%=ListNhanVien[i].MaNhanVien%>">
+                                        <%= ListNhanVien[i].HoVaTenLot + " " + ListNhanVien[i].Ten %>
+                                    </option>
+                                    <% } %>
+                            </select>
+                            <label>Tên bệnh nhân (nhập viện)</label>
+                            <select class="form-control" name="NVMaBenhNhan">
+                                <% for ( var i=0; i < ListBenhNhan.length; i++ ) { %>
+                                    <option value="<%=ListBenhNhan[i].MaBenhNhan%>">
+                                        <%= ListBenhNhan[i].HoVaTenLot + " " + ListBenhNhan[i].Ten %>
+                                    </option>
+                                    <% } %>
+                            </select>
+                            <label>Số giường</label>
+                            <input type="text" name="SoGiuong" class="form-control">
+                            <label>Số buồng</label>
+                            <input type="text" name="SoBuong" class="form-control">
+                            <label>Tình trạng nhập viện</label>
+                            <input type="text" name="TinhTrangNhapVien" class="form-control">
+                            <label>Thời gian xuất viện</label>
+                            <input type="text" name="ThoiGianXuatVien" class="form-control">
+                            <label>Tình trạng xuất viện</label>
+                            <input type="text" name="TinHTrangXuatVien" value="yyyy-mm-dd hh:mm:ss"
+                                class="form-control">
+                            <label>Ghi chú xuất viện</label>
+                            <input type="text" name="GhiChuXuatVien" class="form-control">
+                            <label>Thời gian ra kết quả (xuất viện)</label>
+                            <select class="form-control" name="XVThoiGianRaKQ">
+                                <% for ( var i=0; i < ListThoiGianRaKQ.length; i++ ) { %>
+                                    <option value="<%=ListThoiGianRaKQ[i]%>">
+                                        <%= ListThoiGianRaKQ[i]%>
+                                    </option>
+                                    <% } %>
+                            </select>
+                            <label>Thời gian khám bệnh (xuất viện)</label>
+                            <select class="form-control" name="XVThoiGianKhamBenh">
+                                <% for ( var i=0; i < ListThoiGianKhamBenh.length; i++ ) { %>
+                                    <option value="<%=ListThoiGianKhamBenh[i]%>">
+                                        <%= ListThoiGianKhamBenh[i]%>
+                                    </option>
+                                    <% } %>
+                            </select>
+                            <label>Tên nhân viên (xuất viện)</label>
+                            <select class="form-control" name="XVMaNhanVien">
+                                <% for ( var i=0; i < ListNhanVien.length; i++ ) { %>
+                                    <option value="<%=ListNhanVien[i].MaNhanVien%>">
+                                        <%= ListNhanVien[i].HoVaTenLot + " " + ListNhanVien[i].Ten %>
+                                    </option>
+                                    <% } %>
+                            </select>
+                            <label>Tên bệnh nhân (xuất viện)</label>
+                            <select class="form-control" name="XVMaBenhNhan">
+                                <% for ( var i=0; i < ListBenhNhan.length; i++ ) { %>
+                                    <option value="<%=ListBenhNhan[i].MaBenhNhan%>">
+                                        <%= ListBenhNhan[i].HoVaTenLot + " " + ListBenhNhan[i].Ten %>
+                                    </option>
+                                    <% } %>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary w-100">Submit</button>
+                    </form>
+                </main>
+
+                <%- include("../partials/footer") %>
+                    <%- include("../partials/ending") %>

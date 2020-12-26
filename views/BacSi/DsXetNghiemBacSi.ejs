@@ -1,0 +1,72 @@
+<%- include("../partials/header") %>
+    <!-- <% if(Error){ %>
+    <div class="alert alert-danger">
+        <strong>Error!</strong> <%=     Error  %> </div>
+<% } %> -->
+    <div class="container">
+        <main role="main" class="pb-3" style="margin-top: 100px;">
+            <h1>Xem danh sách xét nghiệm chỉ định cho các bệnh nhân nội trú phụ trách</h1>
+            <form action="/BacSi/DsXetNghiemBacSi" method="POST">
+                <div class="form-group">
+                    <label>Bệnh nhân</label>
+                    <select class="form-control" name="MaBenhNhan">
+                        <% for ( var i=0; i < ListBenhNhan.length; i++ ) { %>
+                            <option value="<%=ListBenhNhan[i].MaBenhNhan%>" <%if (ListBenhNhan[i].MaBenhNhan == MaBenhNhan) {%> selected <%}%>>
+                                <%= ListBenhNhan[i].HoVaTenLot + " " + ListBenhNhan[i].Ten + " - " + ListBenhNhan[i].MaBenhNhan%>
+                            </option>
+                            <% } %>
+                    </select>
+                    <label>Từ ngày</label>
+                    <input type="date" name="FromDate" <% if(FromDate!=null) {%> value = <%=FromDate %> <%}%> class="form-control">
+                    <label>Đến ngày</label>
+                    <input type="date" name="ToDate" <% if(FromDate!=null) {%> value = <%=ToDate%> <%}%> class="form-control">
+                </div>
+                <button class="btn btn-primary w-100">Submit</button>
+            </form>
+        </main>
+
+        <%if (DsXetNghiemBacSi) { %>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Tên xét nghiệm</th>
+                            <th>Thời gian khám bệnh</th>
+                            <th>Mã Nhân viên</th>
+                            <th>Mã bệnh nhân</th>
+                            <th>Mã Nhân viên thực hiện</th>
+                            <th>Thời gian thực hiện</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <% for(let i=0; i < DsXetNghiemBacSi[0].length; i++) { %>
+                            <tr>
+                                <td>
+                                    <%= DsXetNghiemBacSi[0][i].TenXetNghiem %>
+                                </td>
+                                <td>
+                                    <%= DsXetNghiemBacSi[0][i].ThoiGianKhamBenh %>
+                                </td>
+                                <td>
+                                    <%= DsXetNghiemBacSi[0][i].MaNhanVien %>
+                                </td>
+                                <td>
+                                    <%= DsXetNghiemBacSi[0][i].MaBenhNhan %>
+                                </td>
+                                <td>
+                                    <%= DsXetNghiemBacSi[0][i].MaNhanVienThucHien %>
+                                </td>
+                                <td>
+                                    <%= DsXetNghiemBacSi[0][i].ThoiGianThucHien%>
+                                </td>
+                            </tr>
+                            <% } %>
+                    </tbody>
+                </table>
+            </div>
+            <% } %>
+    </div>
+
+    <%- include("../partials/footer") %>
+        <%- include("../partials/ending") %>

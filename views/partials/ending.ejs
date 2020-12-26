@@ -12,6 +12,7 @@
     $(id).val(accept[0].value);
 
   };
+
 </script>
 <script>
   function formatDate(date)
@@ -28,6 +29,12 @@
 
     return [year, month, day].join('-');
   }
+  function now(){
+    var date = new Date(); // Or the date you'd like converted.
+    var isoDateTime = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString();
+    return isoDateTime.slice(0,-8);
+  }
+  document.getElementById('now').value = now();
   var today = new Date();
   document.getElementById("_today").value = formatDate(today);
 </script>
