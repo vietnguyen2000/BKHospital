@@ -1,0 +1,46 @@
+<%- include("../partials/header") %> 
+<div class="container">
+  <main role="main" class="pb-3" style="margin-top: 100px;">
+    <h1>Xem danh sách bác sĩ điều trị</h1>
+    <% if (isLoged) {%>
+      <form action="/BenhNhan/DSBacSi" method="POST">
+        <div class="form-group">
+          <label>Chọn loại</label>
+          <select class="form-control" name="Loai">
+            <option value="All"> Tất cả các lần điều trị</option>
+            <option value="Last">Ở lần điều trị gần nhất</option>
+          </select>
+        </div>
+        <button class="btn btn-primary w-100">Submit</button>
+      </form>
+      <% if(kq){%>
+        <div class="table-responsive">
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th>Họ và tên đệm</th>
+								<th>Tên</th>
+								<th>Mã bác sĩ khám</th>
+								<th>Thời gian khám bệnh</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+							<% for(let i = 0; i < kq.length; i++) { %>
+								<tr>
+									<th><%= kq[i].HoVaTenLot%> </th>
+									<td><%= kq[i].Ten %></td>
+									<td><%= kq[i].MaNhanVien %></td>
+									<td><%= kq[i].ThoiGianKhamBenh %></td>
+								</tr>
+							<% } %>
+						</tbody>
+					</table>
+				</div>
+      <%}%>
+		<%}%>
+  </main>
+</div>
+<%- include("../partials/footer") %> 
+
+<%- include("../partials/ending") %>
