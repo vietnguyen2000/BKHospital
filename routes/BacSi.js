@@ -152,6 +152,9 @@ router.post("/DSBacSi", Authenticate, (req, res) =>
   {
     return res.redirect("DSChupPhimBacSi");
   }
+  if (Loai == "DSBenhNhanThuocGiamDan"){
+    return res.redirect("DSBenhNhanThuocGiamDan")
+  }
   return res.redirect("DSBenhNhanBatThuong");
 });
 
@@ -1133,6 +1136,60 @@ router.post("/DSBenhNhanBatThuong", Authenticate, (req, res) =>
     }
   );
 });
+router.get("/DSBenhNhanThuocGiamDan", Authenticate, (req, res) =>
+{
+  var sql = " SELECT * FROM Thuoc";
+  mysql.query(sql,(err,Thuoc)=>{
+    res.render('BacSi/DSBenhNhanThuocGiamDan',{
+      DSThuoc: Thuoc,
+      MaThuoc: null,
+      DSBenhNhan: null,
+    })
+  })
+});
+router.post("/DSBenhNhanThuocGiamDan", Authenticate, (req, res) =>
+{
+  const{
+    MaThuoc
+  } = req.body
+  var sql = "call DSBenhNhan_PhuTrach_All(?)"
+  var accepts = []
+  mysql.query(
+    sql, [req.user.MaNhanVien], (err, BenhNhan) =>
+    {
+      if (err) return res.render("err", { err: err });
+      BenhNhan[0].forEach((bn,index,array) =>
+      {
+        sql = "SELECT *, (LieuDung*ThoiGianDung) as LuongDung FROM kqThuoc natural join benhnhanview natural join thuoc WHERE MaBenhNhan = ? and MaThuoc = ? ORDER BY ThoiGianRaKQ"
+        mysql.query(sql, [bn.MaBenhNhan, MaThuoc], (err, kqthuoc) =>
+        {
+          
+          if (err) return res.render("err", { err: err });
+          for( let i = 0 ; i < kqthuoc.length-2; i++){
+            if (kqthuoc[i+2].LuongDung < kqthuoc[i+1].LuongDung < kqthuoc[i].LuongDung){
+              accepts.push(bn.MaBenhNhan)
+              break;
+            }
+          }
+          if (index == array.length-1){
+            var sql = " SELECT * FROM Thuoc";
+            mysql.query(sql,(err,Thuoc)=>{
+              return res.render('BacSi/DSBenhNhanThuocGiamDan',{
+                DSThuoc: Thuoc,
+                MaThuoc: MaThuoc,
+                BenhNhanThoa: accepts,
+                DSBenhNhan: BenhNhan[0],
+              })
+            })
+          }
+        });
+        
+      })
+      
+    }
+  )
+  
+})
 
 // TODO: Viết router.get và router.post mỗi chức năng mà đề yêu cầu, vui lòng đọc qua hết các chức năng cần hiện thực và gom nhóm các chức năng lại một cách gọn gàng nhất.
 // ! Có một số chức năng nhỏ nằm trong 1 chức năng lớn, thì có thể gom thành 1 route và nhiều post để thực thi
