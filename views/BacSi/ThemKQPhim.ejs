@@ -1,0 +1,34 @@
+<%- include("../partials/header") %>
+  <% if(Flag){ %>
+    <div class="alert alert-success">
+      <strong>Success!</strong> Bạn đã thêm kết quả chụp phim thành công
+    </div>
+    <% } %>
+      <!-- <% if(Error){ %>
+    <div class="alert alert-danger">
+        <strong>Error!</strong> <%=     Error  %> </div>
+<% } %> -->
+      <div class="container">
+        <main role="main" class="pb-3" style="margin-top: 100px;">
+          <h1>Kết quả chụp phim</h1>
+          <form action="/BacSi/ThemKQPhim" method="POST">
+            <div class="form-group">
+              <label>Chọn lần chỉ định chụp phim</label>
+              <select class="form-control" name="Phim">
+                <% for ( var i=0; i < DSPhim.length; i++ ) { %>
+                  <option value="<%=JSON.stringify(DSPhim[i])%>">
+                      <%= DSPhim[i].GhiChuChupPhim + " - " + DSPhim[i].ThoiGianKhamBenh %>
+                  </option>
+                  <% } %>
+              </select>
+
+              <label>Kết quả</label>
+              <input type="text" name="KetQua" class="form-control">
+
+            </div>
+            <button class="btn btn-primary w-100">Submit</button>
+          </form>
+        </main>
+
+        <%- include("../partials/footer") %>
+          <%- include("../partials/ending") %>

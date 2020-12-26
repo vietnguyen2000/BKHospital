@@ -155,6 +155,9 @@ router.post("/DSBacSi", Authenticate, (req, res) =>
   if (Loai == "DSBenhNhanThuocGiamDan"){
     return res.redirect("DSBenhNhanThuocGiamDan")
   }
+  if (Loai == "DSBenhNhanCoGhiChuBinhThuong"){
+    return res.redirect("DSBenhNhanCoGhiChuBinhThuong")
+  }
   return res.redirect("DSBenhNhanBatThuong");
 });
 
@@ -1189,6 +1192,109 @@ router.post("/DSBenhNhanThuocGiamDan", Authenticate, (req, res) =>
     }
   )
   
+})
+
+router.get("/DSBenhNhanCoGhiChuBinhThuong", Authenticate, (req, res) =>
+{
+  var sql = "SELECT * FROM ChiSoXN;";
+  mysql.query(sql,(err,ChiSo)=>{
+    res.render('BacSi/DSBenhNhanCoGhiChuBinhThuong',{
+      DSChiSo: ChiSo,
+      MaChiSo: null,
+      DSBenhNhan: null,
+    })
+  })
+});
+router.post("/DSBenhNhanCoGhiChuBinhThuong", Authenticate, (req, res) =>
+{
+  const{
+    MaChiSo
+  } = req.body
+  var sql = "call DSBenhNhan_PhuTrach_All(?)"
+  var accepts = []
+  mysql.query(
+    sql, [req.user.MaNhanVien], (err, BenhNhan) =>
+    {
+      if (err) return res.render("err", { err: err });
+      BenhNhan[0].forEach((bn,index,array) =>
+      {
+        sql = "SELECT * FROM hospital.view_ghichu_chiso WHERE MaBenhNhan = ? and MaChiSoXetNghiem = ? ORDER BY ThoiGianKhamBenh;"
+        mysql.query(sql, [bn.MaBenhNhan, MaChiSo], (err, ChiSo) =>
+        {
+          
+          if (err) return res.render("err", { err: err });
+          flag = false;
+          for( let i = 0 ; i < ChiSo.length; i++){
+            
+            if(ChiSo[i].GhiChu == "Bất Thường"){
+              flag = true;
+            }
+            if (flag && i == ChiSo.length-1 && ChiSo[i].GhiChu == "Bình Thường"){
+              accepts.push(bn.MaBenhNhan);
+            }
+          }
+          if (index == array.length-1){
+            var sql = "SELECT * FROM ChiSoXN;";
+            mysql.query(sql,(err,ChiSo)=>{
+              res.render('BacSi/DSBenhNhanCoGhiChuBinhThuong',{
+                DSChiSo: ChiSo,
+                MaChiSo: null,
+                DSBenhNhan: BenhNhan[0],
+                BenhNhanThoa: accepts
+              })
+            })
+          }
+        });
+        
+      })
+      
+    }
+  )
+  
+})
+
+router.get("/ThemKQPhim", Authenticate, (req, res) =>
+{
+  var sql = "SELECT * FROM Phim natural join BenhNhanView WHERE MaNhanVienThucHien = ?;";
+  mysql.query(sql,[req.user.MaNhanVien],(err,Phim)=>{
+    if (err) return res.render("err", { err: err });
+    res.render('BacSi/ThemKQPhim',{
+      DSPhim: Phim,
+      MaPhim: null,
+      DSBenhNhan: null,
+      Flag: false,
+    })
+  })
+});
+router.post("/ThemKQPhim", Authenticate, (req,res)=>{
+  const{
+    Phim,
+    KetQua
+  } = req.body
+  PhimInfor = JSON.parse(Phim)
+  console.log(PhimInfor)
+  var sql = 'call ThucHienChupPhim(?,?,?,?,?)'
+  mysql.query(sql, 
+    [
+      KetQua,
+      PhimInfor.MaNhanVien,
+      PhimInfor.MaBenhNhan,
+      PhimInfor.ThoiGianKhamBenh,
+      PhimInfor.GhiChuChupPhim
+    ],(err,result)=>{
+      if (err) return res.render("err", { err: err });
+      var sql = "SELECT * FROM Phim natural join BenhNhanView WHERE MaNhanVienThucHien = ?;";
+      mysql.query(sql,[req.user.MaNhanVien],(err,Phim)=>{
+        if (err) return res.render("err", { err: err });
+        res.render('BacSi/ThemKQPhim',{
+          DSPhim: Phim,
+          MaPhim: null,
+          DSBenhNhan: null,
+          Flag: true,
+        })
+      })
+
+    })
 })
 
 // TODO: Viết router.get và router.post mỗi chức năng mà đề yêu cầu, vui lòng đọc qua hết các chức năng cần hiện thực và gom nhóm các chức năng lại một cách gọn gàng nhất.
