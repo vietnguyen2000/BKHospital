@@ -1,0 +1,48 @@
+<%- include("../partials/header") %> 
+<div class="container">
+	<main role="main" class="pb-3" style="margin-top: 100px;">
+		<h1>Số lượng bệnh nhân ngoại trú</h1>
+		<form action="/BSQuanLy/tongSoBenhNhanNgoaiTru" method="POST">
+			<div class="form-group">
+				<label>Khoa điều trị</label>
+				<select class="form-control" name="CaTruc[KhoaDieuTri]">
+					<option value="**">Tất cả các khoa</option>
+					<% if(KhoaDieuTri){
+						KhoaDieuTri.forEach(element => {%>
+								<option value = <%= element.MaKhoaDieuTri %> <% if (element.MaKhoaDieuTri == user.MaKhoaDieuTri) {%> selected <%}%>><%=element.TenKhoa%></option>
+						<%});
+					}%>
+				</select>
+				<label>Ngày trực</label>
+				<input type = "date" class = "form-control" name="CaTruc[NgayTruc]" placeholder="Date" id="_today">
+				<label>Ca trực</label>
+				<select class="form-control" name="CaTruc[CaTruc]">
+					<!-- <option value="*">Cả ngày</option> -->
+					<option value="Buổi sáng">Buổi sáng</option>
+					<option value="Buổi trưa">Buổi trưa</option>
+					<option value="Buổi chiều">Buổi chiều</option>
+					<option value="Buổi tối">Buổi tối</option>
+				</select>
+			</div>
+			<button class="btn btn-primary w-100">Submit</button>
+		</form>
+		<% if(tongSoBenhNhanNgoaiTru) { %>
+				<div class="table-responsive">
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th>Tổng số bệnh nhân</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+							<td><%=tongSoBenhNhanNgoaiTru[0].TongBenhNhan %></td>
+						</tbody>
+					</table>
+				</div>
+		<%}%>
+	</main>
+</div>
+<%- include("../partials/footer") %> 
+
+<%- include("../partials/ending") %>

@@ -1,6 +1,7 @@
 <%- include("../partials/header") %> 
 <div class="container">
 	<main role="main" class="pb-3" style="margin-top: 100px;">
+		<h1>Tra cứu lịch trực</h1>
 		<form action="/BSQuanLy/findDoctor" method="POST">
 			<div class="form-group">
 				<label>Khoa điều trị</label>
@@ -12,9 +13,9 @@
 						<%});
 					}%>
 				</select>
-				<label>NgayTruc</label>
+				<label>Ngày trực</label>
 				<input type = "date" class = "form-control" name="CaTruc[NgayTruc]" placeholder="Date" id="_today">
-				<label>CaTruc</label>
+				<label>Ca trực</label>
 				<select class="form-control" name="CaTruc[CaTruc]">
 					<option value="*">Cả ngày</option>
 					<option value="Buổi sáng">Buổi sáng</option>
