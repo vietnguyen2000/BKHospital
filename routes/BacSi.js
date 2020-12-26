@@ -203,8 +203,7 @@ router.post("/ThemKetQuaBenh", Authenticate, (req, res) =>
 
 router.get("/KhambenhBacSiBenhNhan", Authenticate, (req, res) =>
 {
-  var sql = `select b.MaBenhNhan, n.HoVaTenLot, n.Ten from BenhNhan b join NguoiDung n
-  on b.TaiKhoan = n.TaiKhoan`;
+  var sql = `select * from BenhNhanView`;
   mysql.query(
     sql,
     (err, result) =>
@@ -226,8 +225,7 @@ router.post("/KhambenhBacSiBenhNhan", Authenticate, (req, res) =>
     {
       if (err) return res.render("err", { err: err });
 
-      sql = `select b.MaBenhNhan, n.HoVaTenLot, n.Ten from BenhNhan b join NguoiDung n
-      on b.TaiKhoan = n.TaiKhoan`;
+      sql = `select * from BenhNhanView`;
       mysql.query(
         sql,
         (err, result) =>
@@ -250,29 +248,41 @@ router.get("/DuaRaKQ", Authenticate, (req, res) =>
     (err, ListBenhNhan) =>
     {
       if (err) return res.render("err", { err: err });
-      sql = "select * from KhamBenh WHERE (ThoiGianKhamBenh,MaNhanVien,MaBenhNhan) NOT IN (SELECT ThoiGianKhamBenh,MaNhanVien,MaBenhNhan FROM kqchandoan)";
+      sql = "select * from KhamBenhView WHERE (ThoiGianKhamBenh,MaNhanVien,MaBenhNhan) NOT IN (SELECT ThoiGianKhamBenh,MaNhanVien,MaBenhNhan FROM kqchandoan)";
       mysql.query(sql,
         (err, KhamBenh) =>
         {
           if (err) return res.render("err", { err: err });
           sql = "SELECT * FROM Thuoc;";
-          mysql.query(sql ,(err,Thuoc)=>{
+          mysql.query(sql, (err, Thuoc) =>
+          {
+            if (err) return res.render("err", { err: err });
             sql = "SELECT * FROM CDDDUONG;";
-            mysql.query(sql ,(err,CDDDuong)=>{
+            mysql.query(sql, (err, CDDDuong) =>
+            {
+              if (err) return res.render("err", { err: err });
               sql = "SELECT * FROM Benh;";
-              mysql.query(sql ,(err,Benh)=>{
-                res.render("BacSi/duaraKQBacSiBenhNhan", {
-                  KhamBenh,
-                  ListBenhNhan: ListBenhNhan[0],
-                  Thuoc,
-                  CDDDuong,
-                  Benh,
-                  Flag: false
+              mysql.query(sql, (err, Benh) =>
+              {
+                if (err) return res.render("err", { err: err });
+                sql = "SELECT * FROM NhanVienView;";
+                mysql.query(sql, (err, NhanVien) =>
+                {
+                  if (err) return res.render("err", { err: err });
+                  res.render("BacSi/duaraKQBacSiBenhNhan", {
+                    KhamBenh,
+                    ListBenhNhan: ListBenhNhan[0],
+                    Thuoc,
+                    CDDDuong,
+                    Benh,
+                    NhanVien,
+                    Flag: false
+                  });
                 });
               })
             })
           })
-          
+
         })
     }
   );
@@ -280,7 +290,7 @@ router.get("/DuaRaKQ", Authenticate, (req, res) =>
 
 router.post("/DuaRaKQ", Authenticate, (req, res) =>
 {
-  const{
+  const {
     ListBenh,
     ListCDDDuong,
     ListThuoc,
@@ -289,69 +299,121 @@ router.post("/DuaRaKQ", Authenticate, (req, res) =>
     ThoiGianRaKQ,
     Thuoc,
     BenhAn,
-    BenhAnCheck
+    BenhAnCheck,
+    XetNghiem,
+    ChupPhim,
+    ListXetNghiem,
+    ListChupPhim
   } = req.body
   console.log(req.body);
-  if (ListBenh != '') 
+  if (ListBenh != '')
     listMaBenh = ListBenh.split(',');
   else listMaBenh = [];
-  if (ListCDDDuong != '') 
+  if (ListCDDDuong != '')
     listMaCDDDuong = ListCDDDuong.split(',');
   else listMaCDDDuong = [];
-  if (ListThuoc != '') 
+  if (ListThuoc != '')
     listMaThuoc = ListThuoc.split(',');
   else listMaThuoc = [];
+  if (ListXetNghiem != '')
+    listXetNghiem = ListXetNghiem.split(',');
+  else listXetNghiem = [];
+  if (ListChupPhim != '')
+    listChupPhim = ListChupPhim.split(',');
+  else listChupPhim = [];
   ThongTinKhamBenh = JSON.parse(KhamBenh);
   BenhAnInfor = BenhAn;
   BenhNhan = JSON.parse(MaBenhNhan);
 
   sql = 'Call DuaRaKQ_BacSi_BenhNhan(?,?,?,?)';
-  mysql.query(sql,[ThongTinKhamBenh.MaNhanVien,ThongTinKhamBenh.MaBenhNhan,ThongTinKhamBenh.ThoiGianKhamBenh,ThoiGianRaKQ],(err,result)=>{
+  mysql.query(sql, [ThongTinKhamBenh.MaNhanVien, ThongTinKhamBenh.MaBenhNhan, ThongTinKhamBenh.ThoiGianKhamBenh, ThoiGianRaKQ], (err, result) =>
+  {
     if (err) return res.render("err", { err: err });
   })
-  console.log(listMaBenh,listMaCDDDuong,listMaThuoc,ThongTinKhamBenh,BenhAnInfor,BenhNhan);
-    sql = 'call ThemKQBenh(?,?,?,?,?);'
-    listMaBenh.forEach(MaBenh => {
-      mysql.query(sql,[
-        ThongTinKhamBenh.MaNhanVien,
-        ThongTinKhamBenh.MaBenhNhan,
-        ThongTinKhamBenh.ThoiGianKhamBenh,
+  console.log(listMaBenh, listMaCDDDuong, listMaThuoc, ThongTinKhamBenh, BenhAnInfor, BenhNhan);
+  sql = 'call ThemKQBenh(?,?,?,?,?);'
+  listMaBenh.forEach(MaBenh =>
+  {
+    mysql.query(sql, [
+      ThongTinKhamBenh.MaNhanVien,
+      ThongTinKhamBenh.MaBenhNhan,
+      ThongTinKhamBenh.ThoiGianKhamBenh,
+      ThoiGianRaKQ,
+      MaBenh],
+      (err, result) =>
+      {
+        if (err) return res.render("err", { err: err });
+      })
+  });
+
+  sql = 'call ThemKQCDDDuong(?,?,?,?,?);'
+  listMaCDDDuong.forEach(MaCDDDuong =>
+  {
+    mysql.query(sql,
+      [ThongTinKhamBenh.MaNhanVien,
+      ThongTinKhamBenh.MaBenhNhan,
+      ThongTinKhamBenh.ThoiGianKhamBenh,
+        ThoiGianRaKQ, MaCDDDuong],
+      (err, result) =>
+      {
+        if (err) return res.render("err", { err: err });
+      })
+  });
+
+  sql = 'call ThemKQThuoc(?,?,?,?,?,?,?,?);'
+  listMaThuoc.forEach((MaThuoc, index) =>
+  {
+    mysql.query(sql,
+      [ThongTinKhamBenh.MaNhanVien,
+      ThongTinKhamBenh.MaBenhNhan,
+      ThongTinKhamBenh.ThoiGianKhamBenh,
         ThoiGianRaKQ,
-        MaBenh],
-        (err,result)=>{
+        MaThuoc,
+      Thuoc[index].LieuDung,
+      Thuoc[index].CachDung,
+      Thuoc[index].ThoiGianDung],
+      (err, result) =>
+      {
         if (err) return res.render("err", { err: err });
       })
-    });
+  });
+  sql = 'call TaoXetNghiem(?,?,?,?,?,?);'
+  listXetNghiem.forEach((xn, index) =>
+  {
+    mysql.query(sql,
+      [ThongTinKhamBenh.MaNhanVien,
+      ThongTinKhamBenh.MaBenhNhan,
+      ThongTinKhamBenh.ThoiGianKhamBenh,
+        xn,
+      XetNghiem[xn].NVThucHien,
+        ThoiGianRaKQ
+      ],
+      (err, result) =>
+      {
+        if (err) return res.render("err", { err: err });
+      })
+  });
 
-    sql = 'call ThemKQCDDDuong(?,?,?,?,?);'
-    listMaCDDDuong.forEach(MaCDDDuong => {
-      mysql.query(sql,
-        [ThongTinKhamBenh.MaNhanVien,
-          ThongTinKhamBenh.MaBenhNhan,
-          ThongTinKhamBenh.ThoiGianKhamBenh,
-          ThoiGianRaKQ,MaCDDDuong],
-        (err,result)=>{
+  sql = 'call TaoPhim(?,?,?,?,?,?);'
+  listChupPhim.forEach((cp, index) =>
+  {
+    mysql.query(sql,
+      [ThongTinKhamBenh.MaNhanVien,
+      ThongTinKhamBenh.MaBenhNhan,
+      ThongTinKhamBenh.ThoiGianKhamBenh,
+      ChupPhim[cp].NVThucHien,
+        cp,
+        ThoiGianRaKQ
+      ],
+      (err, result) =>
+      {
         if (err) return res.render("err", { err: err });
       })
-    });
-
-    sql = 'call ThemKQThuoc(?,?,?,?,?,?,?,?);'
-    listMaThuoc.forEach((MaThuoc,index) => {
-      mysql.query(sql,
-        [ThongTinKhamBenh.MaNhanVien,
-          ThongTinKhamBenh.MaBenhNhan,
-          ThongTinKhamBenh.ThoiGianKhamBenh,
-          ThoiGianRaKQ,
-          MaThuoc,
-          Thuoc[index].LieuDung,
-          Thuoc[index].CachDung,
-          Thuoc[index].ThoiGianDung],
-        (err,result)=>{
-        if (err) return res.render("err", { err: err });
-      })
-    });
-  if (BenhAnCheck == 'on'){
-    if (BenhNhan.Loai == "Nội Trú"){ 
+  });
+  if (BenhAnCheck == 'on')
+  {
+    if (BenhNhan.Loai == "Nội Trú")
+    {
       // Xuất viện
       sql = 'call XuatVien(?,?,?,?,?,?,?,?);';
       mysql.query(sql,
@@ -365,24 +427,27 @@ router.post("/DuaRaKQ", Authenticate, (req, res) =>
           ThongTinKhamBenh.ThoiGianKhamBenh,
           ThoiGianRaKQ
         ],
-        (err,result)=>{
+        (err, result) =>
+        {
           if (err) return res.render("err", { err: err });
         })
     }
-    else{
+    else
+    {
       // Nhập viện
       sql = 'call NhapVien(?,?,?,?,?,?,?,?);'
       mysql.query(sql,
         [ThongTinKhamBenh.MaNhanVien,
-          ThongTinKhamBenh.MaBenhNhan,
-          ThongTinKhamBenh.ThoiGianKhamBenh,
+        ThongTinKhamBenh.MaBenhNhan,
+        ThongTinKhamBenh.ThoiGianKhamBenh,
           ThoiGianRaKQ,
           ThoiGianRaKQ,
-          BenhAnInfor.SoGiuong,
-          BenhAnInfor.SoBuong,
-          BenhAnInfor.TinhTrangNhapVien
+        BenhAnInfor.SoGiuong,
+        BenhAnInfor.SoBuong,
+        BenhAnInfor.TinhTrangNhapVien
         ],
-        (err,result)=>{
+        (err, result) =>
+        {
           if (err) return res.render("err", { err: err });
         })
     }
@@ -393,29 +458,41 @@ router.post("/DuaRaKQ", Authenticate, (req, res) =>
     (err, ListBenhNhan) =>
     {
       if (err) return res.render("err", { err: err });
-      sql = "select * from KhamBenh WHERE (ThoiGianKhamBenh,MaNhanVien,MaBenhNhan) NOT IN (SELECT ThoiGianKhamBenh,MaNhanVien,MaBenhNhan FROM kqchandoan)";
+      sql = "select * from KhamBenhView WHERE (ThoiGianKhamBenh,MaNhanVien,MaBenhNhan) NOT IN (SELECT ThoiGianKhamBenh,MaNhanVien,MaBenhNhan FROM kqchandoan)";
       mysql.query(sql,
         (err, KhamBenh) =>
         {
           if (err) return res.render("err", { err: err });
           sql = "SELECT * FROM Thuoc;";
-          mysql.query(sql ,(err,Thuoc)=>{
+          mysql.query(sql, (err, Thuoc) =>
+          {
+            if (err) return res.render("err", { err: err });
             sql = "SELECT * FROM CDDDUONG;";
-            mysql.query(sql ,(err,CDDDuong)=>{
+            mysql.query(sql, (err, CDDDuong) =>
+            {
+              if (err) return res.render("err", { err: err });
               sql = "SELECT * FROM Benh;";
-              mysql.query(sql ,(err,Benh)=>{
-                res.render("BacSi/duaraKQBacSiBenhNhan", {
-                  KhamBenh,
-                  ListBenhNhan: ListBenhNhan[0],
-                  Thuoc,
-                  CDDDuong,
-                  Benh,
-                  Flag: true
+              mysql.query(sql, (err, Benh) =>
+              {
+                if (err) return res.render("err", { err: err });
+                sql = "SELECT * FROM NhanVienView;";
+                mysql.query(sql, (err, NhanVien) =>
+                {
+                  if (err) return res.render("err", { err: err });
+                  res.render("BacSi/duaraKQBacSiBenhNhan", {
+                    KhamBenh,
+                    ListBenhNhan: ListBenhNhan[0],
+                    Thuoc,
+                    CDDDuong,
+                    Benh,
+                    NhanVien,
+                    Flag: true
+                  });
                 });
               })
             })
           })
-          
+
         })
     }
   );
@@ -582,457 +659,9 @@ router.get("/ThemKQBenh", Authenticate, (req, res) =>
   );
 });
 
-router.post("/ThemKQBenh", Authenticate, (req, res) =>
-{
-  var sql = "call ThemKQBenh(?,?,?,?,?)";
-  mysql.query(
-    sql,
-    [req.user.MaNhanVien, ...Object.values(req.body)],
-    (err, result) =>
-    {
-      if (err) return res.render("err", { err: err });
-      var sql = `select BenhNhan.MaBenhNhan, NguoiDung.HoVaTenLot, NguoiDung.Ten from BenhNhan join NguoiDung 
-      on BenhNhan.TaiKhoan = NguoiDung.TaiKhoan where BenhNhan.TaiKhoan like 'bn%'`;
-      mysql.query(
-        sql,
-        (err, ListBenhNhan) =>
-        {
-          if (err) return res.render("err", { err: err });
-          sql = "select ThoiGianKhamBenh from KhamBenh";
-          mysql.query(sql,
-            (err, ListThoiGianKhamBenh) =>
-            {
-              if (err) return res.render("err", { err: err });
-              const convertA = ListThoiGianKhamBenh.map((e) => formatDate(JSON.stringify(e.ThoiGianKhamBenh)))
-              sql = "select ThoiGianKhamBenh from KQBenh"
-              mysql.query(sql, (err, ListThoiGianRaKQ) =>
-              {
-                if (err) return res.render("err", { err: err });
-                const convertB = ListThoiGianRaKQ.map((e) => formatDate(JSON.stringify(e.ThoiGianKhamBenh)))
-                sql = "select * from Benh"
-                mysql.query(sql, (err, ListBenh) =>
-                {
-                  if (err) return res.render("err", { err: err });
-                  res.render("BacSi/ThemKQBenh", {
-                    ListBenhNhan,
-                    ListBenh,
-                    ListThoiGianRaKQ: convertB,
-                    ListThoiGianKhamBenh: convertA,
-                    Flag: true
-                  });
-                })
-              })
-            })
-        }
-      );
-    }
-  );
-});
-
-router.get("/ThemKQThuoc", Authenticate, (req, res) =>
-{
-  res.render("BacSi/ThemKQThuoc", { Flag: false, Error: false });
-});
-
-router.post("/ThemKQThuoc", Authenticate, (req, res) =>
-{
-  const { value, error } = Joi.validate(req.body, ThemKQThuoc);
-  if (error)
-  {
-    res.render("BacSi/ThemKQThuoc", {
-      Flag: false,
-      Error: error.details[0].message,
-    });
-  }
-  var sql = "call ThemKQThuoc(?,?,?,?,?,?,?,?)";
-  mysql.query(
-    sql,
-    [req.user.MaNhanVien, ...Object.values(value)],
-    (err, result) =>
-    {
-      if (err) return res.render("err", { err: err });
-      sql = `select BenhNhan.MaBenhNhan, NguoiDung.HoVaTenLot, NguoiDung.Ten from BenhNhan join NguoiDung 
-      on BenhNhan.TaiKhoan = NguoiDung.TaiKhoan where BenhNhan.TaiKhoan like 'bn%'`;
-      mysql.query(
-        sql,
-        (err, ListBenhNhan) =>
-        {
-          if (err) return res.render("err", { err: err });
-          sql = "select ThoiGianKhamBenh from KhamBenh";
-          mysql.query(sql,
-            (err, ListThoiGianKhamBenh) =>
-            {
-              if (err) return res.render("err", { err: err });
-              const convertA = ListThoiGianKhamBenh.map((e) => formatDate(JSON.stringify(e.ThoiGianKhamBenh)))
-              sql = "select ThoiGianKhamBenh from KQBenh"
-              mysql.query(sql, (err, ListThoiGianRaKQ) =>
-              {
-                if (err) return res.render("err", { err: err });
-                const convertB = ListThoiGianRaKQ.map((e) => formatDate(JSON.stringify(e.ThoiGianKhamBenh)))
-                sql = "select * from Thuoc"
-                mysql.query(sql, (err, ListThuoc) =>
-                {
-                  if (err) return res.render("err", { err: err });
-                  res.render("BacSi/ThemKQThuoc", {
-                    ListBenhNhan,
-                    ListThuoc,
-                    ListThoiGianRaKQ: convertB,
-                    ListThoiGianKhamBenh: convertA,
-                    Error: false,
-                    Flag: true
-                  });
-                })
-              })
-            })
-        }
-      );
-
-      res.render("BacSi/ThemKQThuoc", { Flag: true, Error: false });
-    }
-  );
-});
-
-
-
-
-
-router.get("/ThemCDDDuong", Authenticate, (req, res) =>
-{
-  res.render("BacSi/ThemCDDDuong", { Flag: false });
-});
-
-router.post("/ThemCDDDuong", Authenticate, (req, res) =>
-{
-  var sql = "call ThemCDDDuong(?)";
-  mysql.query(sql, [...Object.values(req.body)], (err, result) =>
-  {
-    if (err) return res.render("err", { err: err });
-    res.render("BacSi/ThemCDDDuong", { Flag: true });
-  });
-});
-
-
-
-
-
-
-
-router.get("/ThemKQCDDDuong", Authenticate, (req, res) =>
-{
-  var sql = `select k.MaBenhNhan, n.HoVaTenLot, n.Ten from KQChanDoan k join BenhNhan b on 
-  b.MaBenhNhan = k.MaBenhNhan join NguoiDung n on b.TaiKhoan = n.TaiKhoan`;
-  mysql.query(
-    sql,
-    (err, ListBenhNhan) =>
-    {
-      if (err) return res.render("err", { err: err });
-      sql = "select ThoiGianKhamBenh from KQChanDoan";
-      mysql.query(sql,
-        (err, ListThoiGianKhamBenh) =>
-        {
-          if (err) return res.render("err", { err: err });
-          const convertA = ListThoiGianKhamBenh.map((e) => formatDate(JSON.stringify(e.ThoiGianKhamBenh)))
-          sql = "select ThoiGianRaKQ from KQChanDoan"
-          mysql.query(sql, (err, ListThoiGianRaKQ) =>
-          {
-            if (err) return res.render("err", { err: err });
-            const convertB = ListThoiGianRaKQ.map((e) => formatDate(JSON.stringify(e.ThoiGianRaKQ)))
-            sql = "select * from CDDDuong"
-            mysql.query(sql, (err, ListCDDDuong) =>
-            {
-              if (err) return res.render("err", { err: err });
-              res.render("BacSi/ThemKQCDDDuong", {
-                ListBenhNhan,
-                ListCDDDuong,
-                ListThoiGianRaKQ: convertB,
-                ListThoiGianKhamBenh: convertA,
-                Flag: false
-              });
-            })
-          })
-        })
-    }
-  );
-});
-
-router.post("/ThemKQCDDDuong", Authenticate, (req, res) =>
-{
-  var sql = "call ThemKQCDDDuong(?,?,?,?,?)";
-  mysql.query(
-    sql,
-    [req.user.MaNhanVien, ...Object.values(req.body)],
-    (err, result) =>
-    {
-      if (err) return res.render("err", { err: err });
-      var sql = `select k.MaBenhNhan, n.HoVaTenLot, n.Ten from KQChanDoan k join BenhNhan b on 
-      b.MaBenhNhan = k.MaBenhNhan join NguoiDung n on b.TaiKhoan = n.TaiKhoan`;
-      mysql.query(
-        sql,
-        (err, ListBenhNhan) =>
-        {
-          if (err) return res.render("err", { err: err });
-          sql = "select ThoiGianKhamBenh from KQChanDoan";
-          mysql.query(sql,
-            (err, ListThoiGianKhamBenh) =>
-            {
-              if (err) return res.render("err", { err: err });
-              const convertA = ListThoiGianKhamBenh.map((e) => formatDate(JSON.stringify(e.ThoiGianKhamBenh)))
-              sql = "select ThoiGianRaKQ from KQChanDoan"
-              mysql.query(sql, (err, ListThoiGianRaKQ) =>
-              {
-                if (err) return res.render("err", { err: err });
-                const convertB = ListThoiGianRaKQ.map((e) => formatDate(JSON.stringify(e.ThoiGianRaKQ)))
-                sql = "select * from CDDDuong"
-                mysql.query(sql, (err, ListCDDDuong) =>
-                {
-                  if (err) return res.render("err", { err: err });
-                  res.render("BacSi/ThemKQCDDDuong", {
-                    ListBenhNhan,
-                    ListCDDDuong,
-                    ListThoiGianRaKQ: convertB,
-                    ListThoiGianKhamBenh: convertA,
-                    Flag: true
-                  });
-                })
-              })
-            })
-        }
-      );
-    }
-  );
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-router.get("/ThemBenhAn", Authenticate, (req, res) =>
-{
-
-  var sql = `select k.MaBenhNhan, n.HoVaTenLot, n.Ten from KQChanDoan k join BenhNhan b on 
-  b.MaBenhNhan = k.MaBenhNhan join NguoiDung n on b.TaiKhoan = n.TaiKhoan`;
-  mysql.query(
-    sql,
-    (err, ListBenhNhan) =>
-    {
-      if (err) return res.render("err", { err: err });
-      sql = "select ThoiGianKhamBenh from KQChanDoan";
-      mysql.query(sql,
-        (err, ListThoiGianKhamBenh) =>
-        {
-          if (err) return res.render("err", { err: err });
-          const convertA = ListThoiGianKhamBenh.map((e) => formatDate(JSON.stringify(e.ThoiGianKhamBenh)))
-          sql = "select ThoiGianRaKQ from KQChanDoan"
-          mysql.query(sql, (err, ListThoiGianRaKQ) =>
-          {
-            if (err) return res.render("err", { err: err });
-            const convertB = ListThoiGianRaKQ.map((e) => formatDate(JSON.stringify(e.ThoiGianRaKQ)))
-            sql = `select k.MaNhanVien, n.HoVaTenLot, n.Ten from KQChanDoan k join NhanVien v on 
-              v.MaNhanVien = k.MaNhanVien join NguoiDung n on v.TaiKhoan = n.TaiKhoan`;
-            mysql.query(sql, (err, ListNhanVien) =>
-            {
-              if (err) return res.render("err", { err: err });
-              res.render("BacSi/ThemBenhAn", {
-                ListNhanVien,
-                ListBenhNhan,
-                ListThoiGianRaKQ: convertB,
-                ListThoiGianKhamBenh: convertA,
-                Flag: false
-              });
-            })
-
-          })
-        })
-    })
-
-});
-
-router.post("/ThemBenhAn", Authenticate, (req, res) =>
-{
-  var sql = "call ThemBenhAn(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-  mysql.query(sql, [...Object.values(req.body)], (err, result) =>
-  {
-    if (err) return res.render("err", { err: err });
-    var sql = `select k.MaBenhNhan, n.HoVaTenLot, n.Ten from KQChanDoan k join BenhNhan b on 
-    b.MaBenhNhan = k.MaBenhNhan join NguoiDung n on b.TaiKhoan = n.TaiKhoan`;
-    mysql.query(
-      sql,
-      (err, ListBenhNhan) =>
-      {
-        if (err) return res.render("err", { err: err });
-        sql = "select ThoiGianKhamBenh from KQChanDoan";
-        mysql.query(sql,
-          (err, ListThoiGianKhamBenh) =>
-          {
-            if (err) return res.render("err", { err: err });
-            const convertA = ListThoiGianKhamBenh.map((e) => formatDate(JSON.stringify(e.ThoiGianKhamBenh)))
-            sql = "select ThoiGianRaKQ from KQChanDoan"
-            mysql.query(sql, (err, ListThoiGianRaKQ) =>
-            {
-              if (err) return res.render("err", { err: err });
-              const convertB = ListThoiGianRaKQ.map((e) => formatDate(JSON.stringify(e.ThoiGianRaKQ)))
-              sql = `select k.MaNhanVien, n.HoVaTenLot, n.Ten from KQChanDoan k join NhanVien v on 
-                v.MaNhanVien = k.MaNhanVien join NguoiDung n on v.TaiKhoan = n.TaiKhoan`;
-              mysql.query(sql, (err, ListNhanVien) =>
-              {
-                if (err) return res.render("err", { err: err });
-                res.render("BacSi/ThemBenhAn", {
-                  ListNhanVien,
-                  ListBenhNhan,
-                  ListThoiGianRaKQ: convertB,
-                  ListThoiGianKhamBenh: convertA,
-                  Flag: true
-                });
-              })
-
-            })
-          })
-      })
-
-  });
-});
-
-router.get("/NhapVien", Authenticate, (req, res) =>
-{
-  var sql = `select k.MaBenhNhan, n.HoVaTenLot, n.Ten from KQChanDoan k join BenhNhan b on 
-  b.MaBenhNhan = k.MaBenhNhan join NguoiDung n on b.TaiKhoan = n.TaiKhoan`;
-  mysql.query(
-    sql,
-    (err, ListBenhNhan) =>
-    {
-      if (err) return res.render("err", { err: err });
-      sql = "select ThoiGianKhamBenh from KQChanDoan";
-      mysql.query(sql,
-        (err, ListThoiGianKhamBenh) =>
-        {
-          if (err) return res.render("err", { err: err });
-          const convertA = ListThoiGianKhamBenh.map((e) => formatDate(JSON.stringify(e.ThoiGianKhamBenh)))
-          sql = "select ThoiGianRaKQ from KQChanDoan"
-          mysql.query(sql, (err, ListThoiGianRaKQ) =>
-          {
-            if (err) return res.render("err", { err: err });
-            const convertB = ListThoiGianRaKQ.map((e) => formatDate(JSON.stringify(e.ThoiGianRaKQ)))
-            res.render("BacSi/NhapVien", {
-              ListBenhNhan,
-              ListThoiGianRaKQ: convertB,
-              ListThoiGianKhamBenh: convertA,
-              Flag: false
-            });
-          })
-        })
-    })
-}
-);
-
-
-router.post("/NhapVien", Authenticate, (req, res) =>
-{
-  var sql = "call NhapVien(?,?,?,?,?,?,?,?)";
-  mysql.query(
-    sql,
-    [req.user.MaNhanVien, ...Object.values(req.body)],
-    (err, result) =>
-    {
-      if (err) return res.render("err", { err: err });
-      var sql = `select k.MaBenhNhan, n.HoVaTenLot, n.Ten from KQChanDoan k join BenhNhan b on 
-      b.MaBenhNhan = k.MaBenhNhan join NguoiDung n on b.TaiKhoan = n.TaiKhoan`;
-      mysql.query(
-        sql,
-        (err, ListBenhNhan) =>
-        {
-          if (err) return res.render("err", { err: err });
-          sql = "select ThoiGianKhamBenh from KQChanDoan";
-          mysql.query(sql,
-            (err, ListThoiGianKhamBenh) =>
-            {
-              if (err) return res.render("err", { err: err });
-              const convertA = ListThoiGianKhamBenh.map((e) => formatDate(JSON.stringify(e.ThoiGianKhamBenh)))
-              sql = "select ThoiGianRaKQ from KQChanDoan"
-              mysql.query(sql, (err, ListThoiGianRaKQ) =>
-              {
-                if (err) return res.render("err", { err: err });
-                const convertB = ListThoiGianRaKQ.map((e) => formatDate(JSON.stringify(e.ThoiGianRaKQ)))
-                res.render("BacSi/NhapVien", {
-                  ListBenhNhan,
-                  ListThoiGianRaKQ: convertB,
-                  ListThoiGianKhamBenh: convertA,
-                  Flag: true
-                });
-              })
-            })
-        })
-    }
-  );
-});
-
-router.get("/XuatVien", Authenticate, (req, res) =>
-{
-  res.render("BacSi/XuatVien", { Flag: false, Error: false });
-});
-
-router.post("/XuatVien", Authenticate, (req, res) =>
-{
-  const { value, error } = Joi.validate(req.body, XuatVien);
-  if (error)
-  {
-    res.render("BacSi/XuatVien", {
-      Flag: false,
-      Error: error.details[0].message,
-    });
-  }
-  const {
-    NVMaNhanVien,
-    NVMaBenhNhan,
-    NVThoiGianKhamBenh,
-    NVThoiGianRaKQ,
-    ThoiGianNhapVien,
-    ThoiGianXuatVien,
-    TinhTrangXuatVien,
-    GhiChuXuatVien,
-    MaBenhNhan,
-    ThoiGianKhamBenh,
-    ThoiGianRaKQ,
-  } = value;
-  var sql = "call XuatVien(?,?,?,?,?,?,?,?,?,?,?,?)";
-  mysql.query(
-    sql,
-    [
-      NVMaNhanVien,
-      NVMaBenhNhan,
-      NVThoiGianKhamBenh,
-      NVThoiGianRaKQ,
-      ThoiGianNhapVien,
-      ThoiGianXuatVien,
-      TinhTrangXuatVien,
-      GhiChuXuatVien,
-      req.user.MaNhanVien,
-      MaBenhNhan,
-      ThoiGianKhamBenh,
-      ThoiGianRaKQ,
-    ],
-    (err, result) =>
-    {
-      if (err) return res.render("err", { err: err });
-      res.render("BacSi/XuatVien", { Flag: true, Error: false });
-    }
-  );
-});
-
-
-
 router.get("/DsBenhNhanPhuTrach", Authenticate, (req, res) =>
 {
-  var sql = "select Distinct Date(ThoiGianKhamBenh) as ThoiGianKhamBenh from KhamBenh where MaNhanVien = ?"
+  var sql = "select Distinct Date(ThoiGianKhamBenh) as ThoiGianKhamBenh from KhamBenhView where MaNhanVien = ?"
   res.render("BacSi/DsBenhNhanPhuTrach", {
     DsBenhNhanPhuTrach: null,
     Ngay: null
@@ -1147,93 +776,20 @@ router.post("/DsThuocBacSi", Authenticate, (req, res) =>
     })
 })
 
-
-router.get("/TaoXN", Authenticate, (req, res) =>
+router.get("/ThemCDDDuong", Authenticate, (req, res) =>
 {
-  var sql = `select k.MaBenhNhan, n.HoVaTenLot, n.Ten from KhamBenh k join BenhNhan b on 
-  b.MaBenhNhan = k.MaBenhNhan join NguoiDung n on b.TaiKhoan = n.TaiKhoan`;
-  mysql.query(sql, (err, MaBenhNhan) =>
-  {
-    if (err) return res.render("err", { err: err });
-    sql = "select ThoiGianKhamBenh from KhamBenh"
-    mysql.query(sql, (err, ThoiGianKhamBenh) =>
-    {
-      const convert = ThoiGianKhamBenh.map((e) => formatDate(JSON.stringify(e.ThoiGianKhamBenh)))
-      if (err) return res.render("err", { err: err });
-      sql = `select k.MaNhanVien, n.HoVaTenLot, n.Ten from KhamBenh k join NhanVien v on 
-      v.MaNhanVien = k.MaNhanVien join NguoiDung n on v.TaiKhoan = n.TaiKhoan`;
-      mysql.query(sql, (err, MaNhanVien) =>
-      {
-        if (err) return res.render("err", { err: err });
-        sql = `select b.MaNhanVien, n.HoVaTenLot, n.Ten from BacSi b join NhanVien v on 
-        v.MaNhanVien = b.MaNhanVien join NguoiDung n on v.TaiKhoan = n.TaiKhoan`;
-        mysql.query(sql, (err, MaNhanVienThucHien) =>
-        {
-          if (err) return res.render("err", { err: err });
-          res.render("BacSi/TaoPhim", {
-            Flag: false,
-            ThoiGianKhamBenh: convert,
-            MaBenhNhan,
-            MaNhanVien,
-            MaNhanVienThucHien
-          });
-        })
-
-      })
-    })
-  })
-})
-
-
-
-router.post("/TaoXN", Authenticate, (req, res) =>
-{
-  const { value, error } = Joi.validate(req.body, TaoXetNghiem);
-
-  if (error)
-  {
-    res.render("BacSi/TaoXN", { Flag: false, Error: error.details[0].message });
-  }
-  var sql = "call taoXetNghiem(?,?,?,?,?,?)";
-  mysql.query(sql, [...Object.values(value)], (err, result) =>
-  {
-    if (err) return res.render("err", { err: err });
-
-    var sql = `select k.MaBenhNhan, n.HoVaTenLot, n.Ten from KhamBenh k join BenhNhan b on 
-    b.MaBenhNhan = k.MaBenhNhan join NguoiDung n on b.TaiKhoan = n.TaiKhoan`;
-    mysql.query(sql, (err, MaBenhNhan) =>
-    {
-      if (err) return res.render("err", { err: err });
-      sql = "select ThoiGianKhamBenh from KhamBenh"
-      mysql.query(sql, (err, ThoiGianKhamBenh) =>
-      {
-        const convert = ThoiGianKhamBenh.map((e) => formatDate(JSON.stringify(e.ThoiGianKhamBenh)))
-        if (err) return res.render("err", { err: err });
-        sql = `select k.MaNhanVien, n.HoVaTenLot, n.Ten from KhamBenh k join NhanVien v on 
-        v.MaNhanVien = k.MaNhanVien join NguoiDung n on v.TaiKhoan = n.TaiKhoan`;
-        mysql.query(sql, (err, MaNhanVien) =>
-        {
-          if (err) return res.render("err", { err: err });
-          sql = `select b.MaNhanVien, n.HoVaTenLot, n.Ten from BacSi b join NhanVien v on 
-          v.MaNhanVien = b.MaNhanVien join NguoiDung n on v.TaiKhoan = n.TaiKhoan`;
-          mysql.query(sql, (err, MaNhanVienThucHien) =>
-          {
-            if (err) return res.render("err", { err: err });
-            res.render("BacSi/TaoPhim", {
-              Flag: true,
-              ThoiGianKhamBenh: convert,
-              MaBenhNhan,
-              MaNhanVien,
-              MaNhanVienThucHien
-            });
-          })
-
-        })
-      })
-    })
-  });
+  res.render("BacSi/ThemCDDDuong", { Flag: false });
 });
 
+router.post("/ThemCDDDuong", Authenticate, (req, res) =>
+{
+  var sql = "call ThemCDDDuong(?)";
+  mysql.query(sql, [...Object.values(req.body)], (err, result) =>
+  {
+    if (err) return res.render("err", { err: err });
+    res.render("BacSi/ThemCDDDuong", { Flag: true });
+  });
+});
 router.get("/TaoChiSoXN", Authenticate, (req, res) =>
 {
   res.render("BacSi/TaoChiSoXN", { Flag: false, Error: false });

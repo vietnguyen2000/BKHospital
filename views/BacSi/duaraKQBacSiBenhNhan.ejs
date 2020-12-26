@@ -76,7 +76,7 @@
                       <% } %>
                   </select>
                   <input type="text" name="ListBenh" id = "ListBenh" readonly hidden>
-                  <a class="btn btn-outline-primary" href="#" role="button" onclick="ThemBenh()">Thêm</a>
+                  <a class="btn btn-outline-primary ml-2" href="#!" role="button" onclick="ThemBenh()">Thêm</a>
                 </div>
                 
               </div>
@@ -96,7 +96,7 @@
                       <% } %>
                   </select>
                   <input type="text" name="ListCDDDuong" id = "ListCDDDuong" readonly hidden>
-                  <a class="btn btn-outline-primary" href="#" role="button" onclick="ThemCDDDuong()">Thêm</a>
+                  <a class="btn btn-outline-primary ml-2" href="#!" role="button" onclick="ThemCDDDuong()">Thêm</a>
                 </div>
                 
               </div>
@@ -112,10 +112,48 @@
                       <% } %>
                   </select>
                   <input type="text" name="ListThuoc" id = "ListThuoc" readonly hidden>
-                  <a class="btn btn-outline-primary" href="#" role="button" onclick="ThemThuoc()">Thêm</a>
+                  <a class="btn btn-outline-primary ml-2" href="#!" role="button" onclick="ThemThuoc()">Thêm</a>
                 </div>
                 <div id="CacThuoc" class = "py-2">
                   
+                </div>
+              </div>
+
+              <div class = "form-group mx-sm-3 mb-2">
+                <label id = "XetNghiem"> Chỉ định xét nghiệm </label>
+                <div class = "form-inline">
+                  <select class="form-control" id = "NhanVienThucHienXetNghiem">
+                    <% for ( var i=0; i < NhanVien.length; i++ ) { %>
+                      <option value="<%=NhanVien[i].MaNhanVien%>">
+                        <%= NhanVien[i].MaNhanVien + ' - ' + NhanVien[i].HoVaTenLot + ' ' + NhanVien[i].Ten%>
+                      </option>
+                      <% } %>
+                  </select>
+                  <input class="form-control ml-2" type="text" id="TenXetNghiem" placeholder="Tên xét nghiệm">
+                  <input type="text" name="ListXetNghiem" id = "ListXetNghiem" readonly hidden>
+                  <a class="btn btn-outline-primary ml-2" href="#!" role="button" onclick="ChiDinhXetNghiem()" >Chỉ định xét nghiệm</a>
+                </div>
+                <div id="CacXetNghiem" class = "form-inline py-2">
+
+                </div>
+              </div>
+
+              <div class = "form-group mx-sm-3 mb-2">
+                <label id = "ChupPhim"> Chỉ định chụp phim</label>
+                <div class = "form-inline">
+                  <select class="form-control" id = "NhanVienThucHienChupPhim">
+                    <% for ( var i=0; i < NhanVien.length; i++ ) { %>
+                      <option value="<%=NhanVien[i].MaNhanVien%>">
+                        <%= NhanVien[i].MaNhanVien + ' - ' + NhanVien[i].HoVaTenLot + ' ' + NhanVien[i].Ten%>
+                      </option>
+                      <% } %>
+                  </select>
+                  <input class="form-control ml-2" type="text" id="TenChupPhim" placeholder="Tên chụp phim">
+                  <input type="text" name="ListChupPhim" id = "ListChupPhim" readonly hidden>
+                  <a class="btn btn-outline-primary ml-2" href="#!" role="button" onclick="ChiDinhChupPhim()" >Chỉ định xét nghiệm</a>
+                </div>
+                <div id="CacChupPhim" class = "form-inline py-2">
+
                 </div>
               </div>
 
@@ -205,11 +243,12 @@
               if (listBenh.includes(String($(selection).val()))){
                 console.log("đã thêm bệnh này rồi")
                 return;
+                
               }
                 
               listBenh.push($(selection).val());
               $(input).val(listBenh.toString());
-              ele = '<a class="btn btn-outline-danger ml-1" href="#" role="button" at= ' + $(selection).val() +' onclick="XoaBenh($(this))">'+ $(selected).text() +'</a>'
+              ele = '<a class="btn btn-outline-danger ml-1" href="#!" role="button" at= ' + $(selection).val() +' onclick="XoaBenh($(this))">'+ $(selected).text() +'</a>'
               $(parent).append(ele);
             }
             function XoaBenh(ele){
@@ -222,6 +261,7 @@
               listBenh = listBenh.filter(item => item != ele.attr('at'))
               $(input).val(listBenh.toString());
               ele.remove();
+              
             }
 
             function ThemCDDDuong(){
@@ -240,8 +280,9 @@
                 
               list.push($(selection).val());
               $(input).val(list.toString());
-              ele = '<a class="btn btn-outline-danger ml-1" href="#" role="button" at= ' + $(selection).val() +' onclick="XoaCDDDuong($(this))">'+ $(selected).text() +'</a>'
+              ele = '<a class="btn btn-outline-danger ml-1" href="#!" role="button" at= ' + $(selection).val() +' onclick="XoaCDDDuong($(this))">'+ $(selected).text() +'</a>'
               $(parent).append(ele);
+              
             }
             function XoaCDDDuong(ele){
               selection = "#LoaiCDDDuong"
@@ -274,7 +315,7 @@
               ele = ` 
               <div class = "border py-3 px-3 mb-1"> 
                 <div class = mb-2>
-                  <a class="btn btn-outline-danger" href="#" role="button" at= ` + $(selection).val() +` onclick="XoaThuoc($(this))">`+ $(selected).text() +`</a> 
+                  <a class="btn btn-outline-danger" href="#!" role="button" at= ` + $(selection).val() +` onclick="XoaThuoc($(this))">`+ $(selected).text() +`</a> 
                 </div>
                 <div class = "form-row">
                   <div class = "form-group col-md-8">
@@ -292,6 +333,7 @@
                 </div>
               </div> `;
               $(parent).append(ele);
+              
             }
             function XoaThuoc(ele){
               selection = "#LoaiThuoc"
@@ -304,4 +346,117 @@
               $(input).val(list.toString());
               ele.parent().parent().remove();
             }
+
+            function ChiDinhXetNghiem(){
+              selection = "#NhanVienThucHienXetNghiem"
+              selected = selection + ' option:selected';
+              tenXN = "#TenXetNghiem"
+              parent = '#CacXetNghiem';
+              input = '#ListXetNghiem';
+              if (String($(TenXetNghiem).val()) == '') return;
+              if ($(input).val())
+                list = String($(input).val()).split(',');
+              else
+                list = [];
+              if (list.includes(String($(TenXetNghiem).val()))){
+                console.log("đã thêm bệnh này rồi")
+                return;
+              }
+                
+              list.push($(TenXetNghiem).val());
+              $(input).val(list.toString());
+              ele = ` 
+                    <div class = mb-2>
+                      <a class="btn btn-outline-danger" href="#!" role="button" at = "`+ $(TenXetNghiem).val()+`"onclick="XoaChiDinhXetNghiem($(this))">Xét nghiệm: `+ $(TenXetNghiem).val()+ ` - Nhân viên thực hiện:` + $(selected).text() + `</a> 
+
+                      <input name="XetNghiem[`+ $(TenXetNghiem).val()+`][Ten]" readonly value ="`+ $(TenXetNghiem).val()+`" hidden>
+                      <input name="XetNghiem[`+ $(TenXetNghiem).val()+`][NVThucHien]" readonly value ="`+ $(selection).val() + `" hidden>
+                    </div>`;
+              $(parent).append(ele);
+              
+            }
+            function XoaChiDinhXetNghiem(ele){
+              selection = "#NhanVienThucHienXetNghiem"
+              selected = selection + ' option:selected';
+              tenXN = "#TenXetNghiem"
+              parent = '#CacXetNghiem';
+              input = '#ListXetNghiem';
+              list = String($(input).val()).split(',');
+              console.log(ele.attr('at'));
+              list = list.filter(item => item != ele.attr('at'))
+              $(input).val(list.toString());
+              ele.parent().remove();
+            }
+            function ThemChiSo(TenXetnghiem){
+              selection = '#MaChiSo_' + TenXetnghiem;
+              selected = selection + ' option:selected';
+              parent = '#CacChiSo_' + TenXetnghiem;
+              input = '#ListChiSo_' + TenXetnghiem;
+              if ($(input).val())
+                list = String($(input).val()).split(',');
+              else
+                list = [];
+              if (list.includes(String($(selection).val()))){
+                console.log("đã thêm bệnh này rồi")
+                return;
+              }
+                
+              list.push($(selection).val());
+              $(input).val(list.toString());
+              ele = '<a class="btn btn-outline-danger ml-1" href="#!" role="button" at="' + $(selection).val() +`" onclick="XoaChiSo($(this),'`+TenXetnghiem +`')">`+ $(selected).text() +'</a>'
+              $(parent).append(ele);
+            }
+            function XoaChiSo(ele, TenXetnghiem){
+              selection = '#MaChiSo_' + TenXetnghiem;
+              selected = selection + ' option:selected';
+              parent = '#CacChiSo_' + TenXetnghiem;
+              input = '#ListChiSo_' + TenXetnghiem;
+              list = String($(input).val()).split(',');
+              console.log(ele.attr('at'));
+              list = list.filter(item => item != ele.attr('at'))
+              $(input).val(list.toString());
+              ele.remove();
+            }
+            
+            function ChiDinhChupPhim(){
+              selection = "#NhanVienThucHienChupPhim"
+              selected = selection + ' option:selected';
+              tenXN = "#TenChupPhim"
+              parent = '#CacChupPhim';
+              input = '#ListChupPhim';
+              if (String($(TenChupPhim).val()) == '') return;
+              if ($(input).val())
+                list = String($(input).val()).split(',');
+              else
+                list = [];
+              if (list.includes(String($(TenChupPhim).val()))){
+                console.log("đã thêm bệnh này rồi")
+                return;
+              }
+                
+              list.push($(TenChupPhim).val());
+              $(input).val(list.toString());
+              ele = ` 
+                    <div class = mb-2>
+                      <a class="btn btn-outline-danger" href="#!" role="button" at = "`+ $(TenChupPhim).val()+`"onclick="XoaChiDinhChupPhim($(this))">Chụp Phim: `+ $(TenChupPhim).val()+ ` - Nhân viên thực hiện:` + $(selected).text() + `</a> 
+
+                      <input name="ChupPhim[`+ $(TenChupPhim).val()+`][Ten]" readonly value ="`+ $(TenChupPhim).val()+`" hidden>
+                      <input name="ChupPhim[`+ $(TenChupPhim).val()+`][NVThucHien]" readonly value ="`+ $(selection).val() + `" hidden>
+                    </div>`;
+              $(parent).append(ele);
+              
+            }
+            function XoaChiDinhChupPhim(ele){
+              selection = "#NhanVienThucHienChupPhim"
+              selected = selection + ' option:selected';
+              tenXN = "#TenChupPhim"
+              parent = '#CacChupPhim';
+              input = '#ListChupPhim';
+              list = String($(input).val()).split(',');
+              console.log(ele.attr('at'));
+              list = list.filter(item => item != ele.attr('at'))
+              $(input).val(list.toString());
+              ele.parent().remove();
+            }
+            
           </script>
