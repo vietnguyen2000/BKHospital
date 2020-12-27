@@ -1,0 +1,59 @@
+<%- include("../partials/header") %> 
+<% if(Flag){ %>
+    <div class="alert alert-success">
+            <strong>Success!</strong>  Bạn đã tạo tài khoản thành công
+          </div>
+ <% } %>
+ <% if(Error){ %>
+    <div class="alert alert-danger">
+        <strong>Error!</strong> <%=     Error  %> </div>
+<% } %>
+<div class="container">
+    <main role="main" class="pb-3" style="margin-top: 100px;">
+        <h1>Tạo tài khoản</h1>
+        <form action="/Authentication/taoBenhNhan" method="POST">
+			<div class="form-group">
+                    <label>Tài khoản</label>
+                        <input type="text"  name="TaiKhoan" class="form-control">
+                    <label>Mật khẩu</label>
+                        <input type="password"  name="MatKhau" class="form-control">
+                    <label>Họ và tên đệm</label>
+                        <input type="text"  name="HoVaTenLot" class="form-control">
+                    <label>Tên</label>
+                        <input type="text"  name="Ten" class="form-control">
+                    <label>Email</label>
+                        <input type="text"  name="Email" class="form-control">
+                    <label>Số điện thoại</label>
+						<input type="text"  name="SDT" class="form-control">
+					<label>Giới tính</label>
+                        <select class="form-control" name="GioiTinh">
+                            <option value=1>Nam</option> 
+                            <option value=0>Nữ</option>
+                        </select>
+					<label>Ngày sinh</label>
+                        <input type="date"  name="NgaySinh" class="form-control">
+					<label>Dân tộc</label>
+						<input type="text"  name="DanToc" class="form-control">
+                        
+            </div>
+			<button class="btn btn-primary w-100">Submit</button>
+		</form>
+	</main>
+
+<%- include("../partials/footer") %>
+<%- include("../partials/ending") %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

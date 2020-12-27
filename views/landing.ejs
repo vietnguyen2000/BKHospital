@@ -2,11 +2,12 @@
   <div class="container">
     <main role="main" class="pb-3" style="margin-top: 100px;">
 
-      <h1>Home Page</h1>
+      <h1>Trang chủ</h1>
 
-      <p>Welcome to our BK Hopital Site</p>
+      <p>Chào mừng bạn đến với BK Hospital, mời bạn đăng nhập để có thể sử dụng ứng dụng</p>
       <% if (!isLoged) {%>
-        <a href="/Authentication/login" class="btn btn-primary">Login</a>
+        <a href="/Authentication/login" class="btn btn-primary">Đăng nhập</a>
+        <a href="/Authentication/taoBenhNhan" class="btn btn-primary">Đăng ký tài khoản</a><br><br>
       <%}%>
 
     </main>

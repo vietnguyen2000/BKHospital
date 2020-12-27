@@ -51,4 +51,42 @@ router.post('/login', isAuth, (req,res)=>{
   }
 
 })
+
+router.get("/taoBenhNhan", isAuth, (req, res) => {
+  res.render("Authentication/taoBenhNhan", { Flag: false, Error: false });
+});
+
+router.post("/taoBenhNhan", isAuth, (req, res) => {
+  const {
+    TaiKhoan,
+    MatKhau,
+    HoVaTenLot,
+    Ten,
+    Email,
+    SDT,
+    GioiTinh,
+    NgaySinh,
+    DanToc,
+  } = req.body;
+  var sql = "call taoBenhNhan(?,?,?,?,?,?,?,?,?)";
+  mysql.query(
+    sql,
+    [
+      TaiKhoan,
+      MatKhau,
+      HoVaTenLot,
+      Ten,
+      Email,
+      SDT,
+      GioiTinh,
+      NgaySinh,
+      DanToc,
+    ],
+    (err, result) => {
+      if (err) return res.render("err", { err: err });
+
+      res.render("Authentication/taoBenhNhan", { Flag: true, Error: false });
+    }
+  );
+});
 module.exports = router;
