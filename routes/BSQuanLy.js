@@ -237,7 +237,11 @@ router.post("/themKhoaMoi", Authenticate, (req, res) => {
 
 // (iii.0b). Thêm tài khoản bác sĩ
 router.get("/taoBacSi", Authenticate, (req, res) => {
-  res.render("BSQuanLy/taoBacSi", { Flag: false, Error: false });
+  var sql = 'SELECT * FROM KhoaDieuTri'
+  mysql.query(sql,(err,result)=>{
+    res.render("BSQuanLy/taoBacSi", { Flag: false, Error: false, Khoa:result });
+  })
+  
 });
 
 router.post("/taoBacSi", Authenticate, (req, res) => {
@@ -276,7 +280,10 @@ router.post("/taoBacSi", Authenticate, (req, res) => {
     (err, result) => {
       if (err) return res.render("err", { err: err });
 
-      res.render("BSQuanLy/taoBacSi", { Flag: true, Error: false });
+      var sql = 'SELECT * FROM KhoaDieuTri'
+  mysql.query(sql,(err,result)=>{
+    res.render("BSQuanLy/taoBacSi", { Flag: true, Error: false, Khoa:result });
+  })
     }
   );
 });

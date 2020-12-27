@@ -18,6 +18,15 @@ const {
   DB_PASSWORD_LOCAL_QUANLY,
   ACCESS_TOKEN_SECRET,
 } = process.env;
+console.log(DB_HOST_LOCAL,
+  DB_USER_LOCAL_ANDANH,
+  DB_PASSWORD_LOCAL_ANDANH,
+  DB_USER_LOCAL_BENHNHAN,
+  DB_PASSWORD_LOCAL_BENHNHAN,
+  DB_USER_LOCAL_BACSI,
+  DB_PASSWORD_LOCAL_BACSI,
+  DB_USER_LOCAL_QUANLY,
+  DB_PASSWORD_LOCAL_QUANLY);
 
 const dbconfigAzure = {
   host: DB_HOST,
@@ -34,6 +43,7 @@ const dbconfigLocalAnDanh = {
   user: DB_USER_LOCAL_ANDANH,
   password: DB_PASSWORD_LOCAL_ANDANH,
   database: "hospital",
+  ssl: true,
   dateStrings: true
 };
 const dbconfigLocalBenhNhan = {
@@ -41,6 +51,7 @@ const dbconfigLocalBenhNhan = {
   user: DB_USER_LOCAL_BENHNHAN,
   password: DB_PASSWORD_LOCAL_BENHNHAN,
   database: "hospital",
+  ssl: true,
   dateStrings: true
 };
 const dbconfigLocalBacSi = {
@@ -48,7 +59,7 @@ const dbconfigLocalBacSi = {
   user: DB_USER_LOCAL_BACSI,
   password: DB_PASSWORD_LOCAL_BACSI,
   database: "hospital",
-  timezone: "utc",
+  ssl: true,
   dateStrings: true
 };
 const dbconfigLocalQuanLy = {
@@ -56,6 +67,7 @@ const dbconfigLocalQuanLy = {
   user: DB_USER_LOCAL_QUANLY,
   password: DB_PASSWORD_LOCAL_QUANLY,
   database: "hospital",
+  ssl: true,
   dateStrings: true
 };
 function selectDbconfig() {

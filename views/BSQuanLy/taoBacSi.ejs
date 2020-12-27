@@ -25,12 +25,23 @@
                         <input type="text"  name="Email" class="form-control">
                     <label>Số điện thoại</label>
 						<input type="text"  name="SDT" class="form-control">
-					<label>Giới tính (Nhập 1 nếu là Nam, 0 nếu là Nữ)</label>
-						<input type="boolean" name="GioiTinh" class="form-control">
+                    <label>Giới tính</label>
+                        <select name ="GioiTinh" class = "form-control">
+                            <option value=1>Nam</option>
+                            <option value=0>Nữ</option>
+                        </select>
 					<label>Ngày sinh</label>
                         <input type="date"  name="NgaySinh" class="form-control">
-					<label>Mã khoa điều trị</label>
-						<input type="number"  name="MaKhoaDieuTri" class="form-control">
+                    <label>Mã khoa điều trị</label>
+                        <select name ="MaKhoaDieuTri" class = "form-control">
+                            <% for (let i = 0; i < Khoa.length; i++){%>
+                                <% if (Khoa[i].MaKhoaDieuTri == user.MaKhoaDieuTri) {%>
+                                  <option value= <%=Khoa[i].MaKhoaDieuTri%> selected ><%=Khoa[i].TenKhoa%></option>
+                                <%}else{%>
+                                  <option value= <%=Khoa[i].MaKhoaDieuTri%> ><%=Khoa[i].TenKhoa%></option>
+                                <%}%>
+                            <%}%>
+                        </select>
                         
             </div>
 			<button class="btn btn-primary w-100">Submit</button>

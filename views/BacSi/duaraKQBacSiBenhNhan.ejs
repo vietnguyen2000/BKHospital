@@ -124,10 +124,12 @@
                 <div class = "form-inline">
                   <select class="form-control" id = "NhanVienThucHienXetNghiem">
                     <% for ( var i=0; i < NhanVien.length; i++ ) { %>
-                      <option value="<%=NhanVien[i].MaNhanVien%>">
-                        <%= NhanVien[i].MaNhanVien + ' - ' + NhanVien[i].HoVaTenLot + ' ' + NhanVien[i].Ten%>
-                      </option>
+                      <% if (NhanVien[i].MaNhanVien != user.MaNhanVien) {%>
+                        <option value="<%=NhanVien[i].MaNhanVien%>">
+                          <%= NhanVien[i].MaNhanVien + ' - ' + NhanVien[i].HoVaTenLot + ' ' + NhanVien[i].Ten%>
+                        </option>
                       <% } %>
+                    <% } %>
                   </select>
                   <input class="form-control ml-2" type="text" id="TenXetNghiem" placeholder="Tên xét nghiệm">
                   <input type="text" name="ListXetNghiem" id = "ListXetNghiem" readonly hidden>
@@ -143,10 +145,12 @@
                 <div class = "form-inline">
                   <select class="form-control" id = "NhanVienThucHienChupPhim">
                     <% for ( var i=0; i < NhanVien.length; i++ ) { %>
-                      <option value="<%=NhanVien[i].MaNhanVien%>">
-                        <%= NhanVien[i].MaNhanVien + ' - ' + NhanVien[i].HoVaTenLot + ' ' + NhanVien[i].Ten%>
-                      </option>
+                      <% if (NhanVien[i].MaNhanVien != user.MaNhanVien) {%>
+                        <option value="<%=NhanVien[i].MaNhanVien%>">
+                          <%= NhanVien[i].MaNhanVien + ' - ' + NhanVien[i].HoVaTenLot + ' ' + NhanVien[i].Ten%>
+                        </option>
                       <% } %>
+                    <% } %>
                   </select>
                   <input class="form-control ml-2" type="text" id="TenChupPhim" placeholder="Tên chụp phim">
                   <input type="text" name="ListChupPhim" id = "ListChupPhim" readonly hidden>
